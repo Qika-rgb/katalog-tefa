@@ -1,0 +1,180 @@
+/* Mengatur Font & Background Utama */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    
+    /* Ganti dengan transparan agar video di belakangnya terlihat */
+    background: transparent;
+    
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Styling Kotak Putih (Card) */
+.card {
+    background-color: white;
+    border: 2.5px solid #000;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 380px;
+    padding: 40px 30px;
+    box-sizing: border-box;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+/* Avatar Bulat di Atas */
+.avatar {
+    width: 65px;
+    height: 65px;
+    background: radial-gradient(circle, #e2e8f0 0%, #cbd5e1 100%);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 15px auto;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+    font-size: 28px;
+    color: #334155;
+}
+
+/* Teks Judul & Deskripsi */
+.card h2 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 700;
+    color: #000;
+}
+.card p.subtitle {
+    font-size: 12px;
+    font-weight: 600;
+    color: #000;
+    margin: 5px 0 25px 0;
+    line-height: 1.4;
+}
+
+/* Styling Input Form (Email, Username & Password) */
+.input-group {
+    position: relative;
+    margin-bottom: 15px;
+}
+.input-group input {
+    width: 100%;
+    height: 45px;
+    border: 2px solid #000;
+    border-radius: 10px;
+    padding: 0 40px; /* Memberi ruang untuk ikon di kiri & kanan */
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    outline: none;
+}
+.input-group input::placeholder {
+    color: #999;
+}
+
+/* Posisi Ikon di dalam Input */
+.input-group .icon-left {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: #000;
+}
+.input-group .icon-right {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: #000;
+    cursor: pointer;
+}
+
+/* Teks Link di bawah Input */
+.links {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+.links .text-green { color: #28a745; text-decoration: none; }
+.links .text-black { color: #000; text-decoration: none; }
+
+/* Tombol Hitam Utama */
+.btn-main {
+    width: 100%;
+    background-color: #000;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 0;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    margin-bottom: 15px;
+}
+
+/* Garis Pemisah (Atau sign up with) */
+.divider {
+    font-size: 11px;
+    color: #888;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+/* Tombol Sosial Media (Google, Facebook, Apple) */
+.social-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+.btn-social {
+    flex: 1;
+    height: 40px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+/* Warna spesifik untuk ikon sosmed */
+.btn-social .fa-google { color: #DB4437; }
+.btn-social .fa-facebook { color: #1877F2; }
+.btn-social .fa-apple { color: #000; }
+
+/* BACKGROUND VIDEO UNTUK LOGIN & REGISTER */
+.bg-video {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: -2; 
+    object-fit: cover; 
+}
+
+.video-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    
+    background-color: rgba(181, 175, 175, 0.215); /* Efek gelap agar form login lebih menonjol */
+    /* background-color: transparent; */
+    z-index: -1;
+}
