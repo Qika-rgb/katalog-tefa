@@ -68,3 +68,19 @@ Route::get('/status', function () {
 Route::get('/status/detail', function () {
     return view('status-detail');
 });
+
+Route::get('/admin-jurusan', function () {
+    return view('admin-jurusan');
+});
+
+Route::get('/admin-jurusan/products', function () {
+    return view('admin-products');
+});
+
+Route::get('/admin-pusat/status', function () {
+    return view('admin-pusat-status');
+});
+
+Route::get('/admin-pusat/chat', function () {
+    return view('admin-pusat-chat');
+});
