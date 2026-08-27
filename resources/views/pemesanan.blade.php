@@ -76,12 +76,19 @@
                     <input type="text" class="input-telepon" placeholder="ISI NOMOR TELEPON MU!">
 
                     <!-- Tombol Aksi -->
-                    <div class="action-buttons">
-                        <button class="btn-outline-blue">
-                            <i class="fa-solid fa-cart-arrow-down"></i> MASUKAN KERANJANG
-                        </button>
-                        <button class="btn-solid-blue">BUY</button>
-                    </div>
+                  <div class="action-buttons">
+    <form action="/keranjang/tambah/{{ $produk->id }}" method="POST">
+        @csrf
+
+        <input type="hidden" name="jumlah" id="jumlahForm" value="1">
+
+        <button type="submit" class="btn-outline-blue">
+            <i class="fa-solid fa-cart-arrow-down"></i> MASUKAN KERANJANG
+        </button>
+    </form>
+
+    <button type="button" class="btn-solid-blue">BUY</button>
+</div>
                     
                 </div>
 
@@ -109,19 +116,24 @@
 
     <!-- JavaScript Interaktif untuk Tombol Plus/Minus -->
     <script>
-        const btnMinus = document.getElementById('btnMinus');
-        const btnPlus = document.getElementById('btnPlus');
-        const qtyInput = document.getElementById('qtyInput');
+    const btnMinus = document.getElementById('btnMinus');
+    const btnPlus = document.getElementById('btnPlus');
+    const qtyInput = document.getElementById('qtyInput');
+    const jumlahForm = document.getElementById('jumlahForm');
 
-        btnPlus.addEventListener('click', function() {
-            qtyInput.value = parseInt(qtyInput.value) + 1;
-        });
+    btnPlus.addEventListener('click', function() {
+        qtyInput.value = parseInt(qtyInput.value) + 1;
+        jumlahForm.value = qtyInput.value;
+    });
 
-        btnMinus.addEventListener('click', function() {
-            if (parseInt(qtyInput.value) > 1) {
-                qtyInput.value = parseInt(qtyInput.value) - 1;
-            }
-        });
-    </script>
+    btnMinus.addEventListener('click', function() {
+        if (parseInt(qtyInput.value) > 1) {
+            qtyInput.value = parseInt(qtyInput.value) - 1;
+            jumlahForm.value = qtyInput.value;
+        }
+    });
+</script>
+</body>
+</html>
 </body>
 </html>

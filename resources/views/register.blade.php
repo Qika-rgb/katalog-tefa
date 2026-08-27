@@ -32,16 +32,17 @@
         <h2>Sign up with email</h2>
         <p class="subtitle">make a new doc to bring your words, data<br>and teams together.for free</p>
 
-        <form>
+       <form action="#" method="POST">
+    @csrf
             <div class="input-group">
                 <i class="fa-regular fa-envelope icon-left"></i>
-                <input type="email" placeholder="your email">
+                <input type="email" name="email" placeholder="your email">
             </div>
 
             <div class="input-group">
                 <i class="fa-solid fa-key icon-left"></i>
                 <!-- Tambahkan id="password" di sini -->
-                <input type="password" id="password" placeholder="your password">
+                <input type="password" name="password" id="password" placeholder="your password">
                 <!-- Tambahkan id="togglePassword" di sini -->
                 <i class="fa-regular fa-eye-slash icon-right" id="togglePassword"></i>
             </div>

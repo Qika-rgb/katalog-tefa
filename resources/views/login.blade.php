@@ -30,17 +30,18 @@
             <i class="fa-solid fa-user"></i>
         </div>
 
-        <form>
+        <form action="#" method="POST">
+    @csrf
             <!-- Input Username/Email -->
             <div class="input-group">
                 <i class="fa-solid fa-user icon-left"></i>
-                <input type="text" placeholder="username or email">
+               <input type="text" name="email" placeholder="username or email">
             </div>
 
             <div class="input-group">
                 <i class="fa-solid fa-key icon-left"></i>
                 <!-- Tambahkan id="password" di sini -->
-                <input type="password" id="password" placeholder="your password">
+                <input type="password" name="password" id="password" placeholder="your password">
                 <!-- Tambahkan id="togglePassword" di sini -->
                 <i class="fa-regular fa-eye-slash icon-right" id="togglePassword"></i>
             </div>

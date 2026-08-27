@@ -21,11 +21,12 @@
         <h2>Forgot Password?</h2>
         <p class="subtitle">Enter your email address and we'll send you a link to reset your password.</p>
 
-        <form>
+       <form action="#" method="POST">
+    @csrf
             <!-- Input Email -->
             <div class="input-group">
                 <i class="fa-regular fa-envelope icon-left"></i>
-                <input type="email" placeholder="your email">
+               <input type="email" name="email" placeholder="your email">
             </div>
 
             <button type="submit" class="btn-main">Send Reset Link</button>
