@@ -1,32 +1,31 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Models\Produk;
+use App\Http\Controllers\KatalogController;
+use App\Http\Controllers\KeranjangController;
+use App\Http\Controllers\CheckoutController;
+use App\Models\Pesanan;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
-
+// =========================
+// HALAMAN UTAMA
+// =========================
 Route::get('/', function () {
-    return view('welcome');
+    return view('home');
 });
 
-// Ini route baru untuk halaman Katalog TEFA
-Route::get('/katalog', function () {
-    // Mengambil semua data produk dari database
-    $produks = Produk::all(); 
-    
-    // Mengirim data tersebut ke file katalog.blade.php
-    return view('katalog', compact('produks'));
-});
+// =========================
+// KATALOG
+// =========================
+Route::get('/katalog', [KatalogController::class, 'index']);
 
+// =========================
+// PEMESANAN / DETAIL PRODUK
+// =========================
+Route::get('/pemesanan/{id}', [KatalogController::class, 'detail']);
+
+// =========================
+// LOGIN & REGISTER
+// =========================
 Route::get('/login', function () {
     return view('login');
 });
@@ -39,32 +38,30 @@ Route::get('/forgot-password', function () {
     return view('forgot-password');
 });
 
-Route::get('/', function () {
-    return view('home');
-});
+// =========================
+// KERANJANG
+// =========================
+Route::get('/keranjang', [KeranjangController::class, 'index']);
+Route::post('/keranjang/tambah/{id}', [KeranjangController::class, 'tambah']);
 
-Route::get('/pemesanan', function () {
-    return view('pemesanan');
-});
-
-Route::get('/pemesanan/{id}', function ($id) {
-    // Mencari produk di database berdasarkan ID
-    $produk = Produk::findOrFail($id); 
-    
-    // Mengirim data $produk ke halaman pemesanan
-    return view('pemesanan', compact('produk'));
-});
-
-Route::get('/keranjang', function () {
-    return view('keranjang');
-});
-
-// Rute untuk halaman Daftar Status Pesanan
+// =========================
+// STATUS PESANAN
+// =========================
 Route::get('/status', function () {
-    return view('status');
+    $pesanans = Pesanan::with('detailPesanans.produk')
+        ->latest()
+        ->get();
+
+    return view('status', compact('pesanans'));
 });
 
-// Rute untuk halaman Detail Status Pesanan (Tracking)
-Route::get('/status/detail', function () {
-    return view('status-detail');
+Route::get('/status/detail', function (Illuminate\Http\Request $request) {
+
+    $pesanan = Pesanan::with('detailPesanans.produk')
+        ->findOrFail($request->pesanan_id);
+
+    return view('status-detail', compact('pesanan'));
 });
+
+Route::get('/checkout', [CheckoutController::class, 'index']);
+Route::post('/checkout', [CheckoutController::class, 'store']);
