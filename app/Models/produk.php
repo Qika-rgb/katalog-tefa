@@ -9,6 +9,11 @@ class produk extends Model
 {
     use HasFactory;
 
+<<<<<<< HEAD
+=======
+    protected $table = 'produks';
+
+>>>>>>> a894e0da890fef75c47b6927a37dd077cff026f1
     protected $fillable = [
         'nama_produk',
         'deskripsi',
@@ -16,4 +21,8 @@ class produk extends Model
         'foto',
         'kategori_id',
     ];
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> a894e0da890fef75c47b6927a37dd077cff026f1

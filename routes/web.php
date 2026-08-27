@@ -55,8 +55,8 @@ Route::get('/status', function () {
     return view('status', compact('pesanans'));
 });
 
+// Rute untuk halaman Detail Status Pesanan (Tracking) dengan Logic Pesanan
 Route::get('/status/detail', function (Illuminate\Http\Request $request) {
-
     $pesanan = Pesanan::with('detailPesanans.produk')
         ->findOrFail($request->pesanan_id);
 
@@ -65,3 +65,20 @@ Route::get('/status/detail', function (Illuminate\Http\Request $request) {
 
 Route::get('/checkout', [CheckoutController::class, 'index']);
 Route::post('/checkout', [CheckoutController::class, 'store']);
+
+// Rute Admin dari Teman
+Route::get('/admin-jurusan', function () {
+    return view('admin-jurusan');
+});
+
+Route::get('/admin-jurusan/products', function () {
+    return view('admin-products');
+});
+
+Route::get('/admin-pusat/status', function () {
+    return view('admin-pusat-status');
+});
+
+Route::get('/admin-pusat/chat', function () {
+    return view('admin-pusat-chat');
+});
