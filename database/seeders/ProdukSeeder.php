@@ -116,7 +116,7 @@ class ProdukSeeder extends Seeder
                 'nama_produk' => 'Jasa Edit',
                 'deskripsi' => 'Jasa editing foto atau video.',
                 'harga' => 100000,
-                'foto' => 'jasa-edit.jpg',
+                'foto' => 'jasa_edit.png',
                 'kategori_id' => 3,
                 'created_at' => now(),
                 'updated_at' => now(),

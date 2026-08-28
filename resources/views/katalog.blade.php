@@ -86,7 +86,7 @@
         {
             title: "WELCOME TO TEFA DKV",
             bg: "linear-gradient(to right, #dc2626, #991b1b)", // Merah DKV
-            img: "{{ asset('images/icon_dkv1.png') }}"
+            img: "{{ asset('images/icon_dkv2.png') }}"
         },
         {
             title: "WELCOME TO TEFA PENGEMBANGAN GIM",
