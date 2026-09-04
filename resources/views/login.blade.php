@@ -1,113 +1,169 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Memanggil CSS yang sama dengan halaman Register! -->
-    <link rel="stylesheet" href="{{ asset('css/auth.css') }}">
+
+    <title>Login - TEFA</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 </head>
-<body>
 
-    <!-- ========================================== -->
-    <!-- KODE BACKGROUND VIDEO MULAI DI SINI        -->
-    <!-- ========================================== -->
-    <video autoplay loop muted playsinline class="bg-video">
-        <!-- Pastikan file bg-login.mp4 sudah ada di dalam folder public/videos/ -->
-        <source src="{{ asset('videos/bg-login.mp4') }}" type="video/mp4">
-    </video>
-    <div class="video-overlay"></div>
-    <!-- ========================================== -->
+<body class="login-body">
 
-    <!-- Tambahkan style inline z-index agar kartu login berada di atas video -->
-    <div class="card" style="position: relative; z-index: 1;">
-        
-        <!-- Avatar (jarak bawah diperbesar karena tidak ada judul) -->
-        <div class="avatar" style="margin-bottom: 35px;">
-            <i class="fa-solid fa-user"></i>
-        </div>
+    <div class="login-page">
 
-        <form action="#" method="POST">
-    @csrf
-            <!-- Input Username/Email -->
-            <div class="input-group">
-                <i class="fa-solid fa-user icon-left"></i>
-               <input type="text" name="email" placeholder="username or email">
+        <div class="login-card">
+
+            <!-- ICON USER -->
+            <div class="login-avatar">
+                <i class="fa-solid fa-user"></i>
             </div>
 
-            <div class="input-group">
-                <i class="fa-solid fa-key icon-left"></i>
-                <!-- Tambahkan id="password" di sini -->
-                <input type="password" name="password" id="password" placeholder="your password">
-                <!-- Tambahkan id="togglePassword" di sini -->
-                <i class="fa-regular fa-eye-slash icon-right" id="togglePassword"></i>
+            <!-- JUDUL -->
+            <h1>login</h1>
+
+            <!-- FORM LOGIN -->
+            <form action="#" method="POST">
+
+                @csrf
+
+                <!-- USERNAME / EMAIL -->
+                <div class="login-input-box">
+
+                    <i class="fa-solid fa-user"></i>
+
+                    <input
+                        type="text"
+                        name="email"
+                        placeholder="username or email"
+                        required
+                    >
+
+                </div>
+
+                <!-- PASSWORD -->
+                <div class="login-input-box">
+
+                    <i class="fa-solid fa-key"></i>
+
+                    <input
+                        type="password"
+                        name="password"
+                        id="loginPassword"
+                        placeholder="your password"
+                        required
+                    >
+
+                    <i
+                        class="fa-regular fa-eye"
+                        id="toggleLoginPassword"
+                    ></i>
+
+                </div>
+
+                <!-- REMEMBER + FORGOT -->
+                <div class="login-options">
+
+                    <label class="remember-me">
+
+                        <input
+                            type="checkbox"
+                            name="remember"
+                        >
+
+                        <span>remember me</span>
+
+                    </label>
+
+                    <a href="/forgot-password">
+                        forgot password?
+                    </a>
+
+                </div>
+
+                <!-- LOGIN BUTTON -->
+                <button
+                    type="submit"
+                    class="login-button"
+                >
+                    login
+                </button>
+
+            </form>
+
+            <!-- OR -->
+            <div class="or-login">
+                or continue with
             </div>
 
-            <!-- Remember me & Forget password -->
-            <div class="links" style="align-items: center;">
-                <label style="display: flex; align-items: center; gap: 5px; cursor: pointer; color: #888;">
-                    <!-- Checkbox asli disembunyikan pakai CSS, tapi tetap bisa diklik berkat tag <label> -->
-                    <input type="checkbox" id="rememberCheckbox" style="display: none;" checked>
-                    
-                    <!-- Ikon ini yang akan kita ubah-ubah dengan JS -->
-                    <i class="fa-solid fa-circle-check" id="rememberIcon" style="color: #28a745; font-size: 16px;"></i> 
-                    remember me
-                </label>
-                
-                <a href="/forgot-password" class="text-black">forget password?</a>
+            <!-- SOCIAL LOGIN -->
+            <div class="social-login">
+
+                <button type="button">
+                    <i class="fa-brands fa-google google-icon"></i>
+                </button>
+
+                <button type="button">
+                    <i class="fa-brands fa-facebook facebook-icon"></i>
+                </button>
+
+                <button type="button">
+                    <i class="fa-brands fa-apple apple-icon"></i>
+                </button>
+
             </div>
 
-            <button type="submit" class="btn-main">login</button>
-        </form>
+            <!-- REGISTER -->
+            <div class="register-link">
 
-        <div class="divider">or continue with</div>
+                <span>Don't have an account?</span>
 
-        <div class="social-buttons" style="margin-bottom: 25px;">
-            <button class="btn-social"><i class="fa-brands fa-google"></i></button>
-            <button class="btn-social"><i class="fa-brands fa-facebook"></i></button>
-            <button class="btn-social"><i class="fa-brands fa-apple"></i></button>
+                <a href="/register">
+                    sign up here
+                </a>
+
+            </div>
+
         </div>
 
-        <!-- Teks Link Bawah (Warna Hijau dan Oranye) -->
-        <div style="font-size: 11px; font-weight: 700; display: flex; justify-content: space-between;">
-            <a href="/register" style="color: #28a745; text-decoration: none;">don't have account yet?</a>
-            <a href="/register" style="color: #ff5722; text-decoration: none;">or sign in here</a>
-        </div>
     </div>
 
+
+    <!-- JAVASCRIPT PASSWORD -->
     <script>
-        const togglePassword = document.querySelector('#togglePassword');
-        const password = document.querySelector('#password');
 
-        togglePassword.addEventListener('click', function (e) {
-            // Ubah tipe input dari password ke text, dan sebaliknya
-            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
-            password.setAttribute('type', type);
-            
-            // Ubah ikon mata (silang ke terbuka)
-            this.classList.toggle('fa-eye');
-            this.classList.toggle('fa-eye-slash');
-        });
+        const toggleLoginPassword =
+            document.getElementById('toggleLoginPassword');
 
-        // --- KODE BARU UNTUK REMEMBER ME ---
-        const rememberCheckbox = document.querySelector('#rememberCheckbox');
-        const rememberIcon = document.querySelector('#rememberIcon');
+        const loginPassword =
+            document.getElementById('loginPassword');
 
-        // Mendengarkan perubahan pada checkbox tersembunyi
-        rememberCheckbox.addEventListener('change', function () {
-            if (this.checked) {
-                // Jika dicentang: ikon hijau dan centang
-                rememberIcon.className = 'fa-solid fa-circle-check';
-                rememberIcon.style.color = '#28a745'; // warna hijau
+        toggleLoginPassword.addEventListener('click', function () {
+
+            if (loginPassword.type === 'password') {
+
+                loginPassword.type = 'text';
+
+                this.classList.remove('fa-eye');
+                this.classList.add('fa-eye-slash');
+
             } else {
-                // Jika tidak dicentang: ikon abu-abu dan bulat kosong
-                rememberIcon.className = 'fa-regular fa-circle';
-                rememberIcon.style.color = '#999'; // warna abu-abu
+
+                loginPassword.type = 'password';
+
+                this.classList.remove('fa-eye-slash');
+                this.classList.add('fa-eye');
+
             }
+
         });
+
     </script>
 
 </body>
