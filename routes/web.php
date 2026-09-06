@@ -82,3 +82,19 @@ Route::get('/admin-pusat/status', function () {
 Route::get('/admin-pusat/chat', function () {
     return view('admin-pusat-chat');
 });
+
+Route::get('/admin-pusat/verifikasi', function () {
+    return view('admin-pusat-verifikasi');
+});
+
+Route::get('/admin-pusat/status-pesanan', function () {
+    return view('admin-pusat-status-pesanan');
+});
+
+Route::get('/admin-pusat/done', function () {
+    return view('admin-pusat-done');
+});
+
+Route::get('/customer-service', function () {
+    return view('customer-service');
+});

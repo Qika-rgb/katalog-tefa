@@ -12,11 +12,11 @@
 
     <!-- SIDEBAR -->
     <div class="admin-sidebar">
-        <img src="{{ asset('images/logo_tefa.png') }}" alt="Logo" class="admin-logo">
+        <a href="/">
+            <img src="{{ asset('images/logo_tefa.png') }}" alt="Logo" class="admin-logo">
+        </a>
         <ul class="admin-nav">
-            <!-- Navigasi Analytics tidak aktif -->
             <li><a href="/admin-jurusan">ANALYTICS REPORTS</a></li>
-            <!-- Navigasi Products sekarang aktif -->
             <li><a href="/admin-jurusan/products" class="active">PRODUCTS</a></li>
         </ul>
     </div>
@@ -45,14 +45,12 @@
         <!-- KOTAK PUTIH UNTUK DAFTAR PRODUK -->
         <div class="admin-white-box">
             
-            <!-- Kita pakai class product-grid yang sama dengan halaman katalog -->
             <div class="product-grid">
                 
                 <!-- KARTU 1 -->
                 <div class="product-card">
                     <div class="product-img-wrapper">
                         <img src="{{ asset('images/produk_dkv2.png') }}" alt="Graphic Design">
-                        <!-- Tombol Update -->
                         <a href="#" class="btn-update">UPDATE NOW</a>
                     </div>
                     <div class="product-info">
@@ -113,9 +111,8 @@
                     </div>
                 </div>
 
-                <!-- KARTU ADD NEW (Khusus Admin) -->
-                <!-- Nantinya link href ini diarahkan ke form /tambah-produk -->
-                <a href="#" class="add-new-box">
+                <!-- KARTU ADD NEW (DI SINI ID DITAMBAHKAN) -->
+                <a href="#" class="add-new-box" id="btnAddNew">
                     <div class="add-new-icon-wrapper">
                         <i class="fa-solid fa-plus"></i>
                     </div>
@@ -128,5 +125,174 @@
 
     </div> <!-- End Main Content -->
 
+    <!-- OVERLAY MODAL TAMBAH PRODUK (DI SINI ID DITAMBAHKAN) -->
+    <div class="modal-overlay" id="modalAddProduct">
+        <div class="modal-card">
+            
+            <!-- Tombol Back (DI SINI ID DITAMBAHKAN) -->
+            <button class="btn-back" id="btnBackModal"><i class="fa-solid fa-chevron-left"></i> BACK</button>
+
+            <div class="modal-body">
+                <!-- Bagian Kiri: Gambar -->
+                <div class="modal-left">
+                    <div class="image-upload-box">
+                        <img src="{{ asset('images/icon_gallery.png') }}" alt="Upload Gambar">
+                    </div>
+                    <span class="upload-label">TAMBAHKAN GAMBAR</span>
+                </div>
+
+                <!-- Bagian Kanan: Form Utama -->
+                <div class="modal-right">
+                    
+                    <div class="form-group">
+                        <label>NAMA</label>
+                        <input type="text" class="form-input">
+                    </div>
+
+                    <div class="form-group">
+                        <label>TIPE PENJUALAN</label>
+                        <select class="form-input">
+                            <option>BARANG</option>
+                            <option>JASA</option>
+                        </select>
+                    </div>
+
+                    <!-- Baris STOK & KODE PENJUALAN -->
+                    <div class="row-stok-kode">
+                        <div class="form-group col-stok">
+                            <label>STOK</label>
+                            <input type="number" class="form-input">
+                        </div>
+                        
+                        <div class="form-group col-kode">
+                            <label>KODE PENJUALAN</label>
+                            <div class="kode-input-wrapper">
+                                <input type="text" class="form-input">
+                                <button type="button" class="btn-refresh"><i class="fa-solid fa-rotate"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-harga">
+                        <label>HARGA JUAL</label>
+                        <input type="text" class="form-input">
+                    </div>
+
+                    <button type="button" class="btn-simpan">SIMPAN</button>
+                    
+                </div> <!-- End Right -->
+            </div> <!-- End Body -->
+        </div>
+    </div>
+
+    <!-- OVERLAY MODAL UPDATE PRODUK -->
+    <div class="modal-overlay" id="modalUpdateProduct">
+        <div class="modal-card">
+            
+            <!-- Tombol Back Khusus Update -->
+            <button class="btn-back" id="btnBackUpdate"><i class="fa-solid fa-chevron-left"></i> BACK</button>
+
+            <div class="modal-body">
+                <!-- Bagian Kiri: Gambar -->
+                <div class="modal-left">
+                    <div class="image-upload-box">
+                        <img src="{{ asset('images/produk_dkv2.png') }}" alt="Edit Gambar">
+                    </div>
+                    <span class="upload-label">UBAH GAMBAR</span>
+                </div>
+
+                <!-- Bagian Kanan: Form Utama -->
+                <div class="modal-right">
+                    
+                    <div class="form-group">
+                        <label>NAMA</label>
+                        <input type="text" class="form-input" value="Design creation services">
+                    </div>
+
+                    <div class="form-group">
+                        <label>TIPE PENJUALAN</label>
+                        <select class="form-input">
+                            <option>BARANG</option>
+                            <option selected>JASA</option>
+                        </select>
+                    </div>
+
+                    <!-- Baris STOK & KODE PENJUALAN -->
+                    <div class="row-stok-kode">
+                        <div class="form-group col-stok">
+                            <label>STOK</label>
+                            <input type="number" class="form-input" value="10">
+                        </div>
+                        
+                        <div class="form-group col-kode">
+                            <label>KODE PENJUALAN</label>
+                            <div class="kode-input-wrapper">
+                                <input type="text" class="form-input" value="DKV-001">
+                                <button type="button" class="btn-refresh"><i class="fa-solid fa-rotate"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-harga">
+                        <label>HARGA JUAL</label>
+                        <input type="text" class="form-input" value="2000000">
+                    </div>
+
+                    <button type="button" class="btn-simpan">SIMPAN PERUBAHAN</button>
+                    
+                </div> <!-- End Right -->
+            </div> <!-- End Body -->
+        </div>
+    </div>
+
+<!-- SCRIPT JAVASCRIPT UNTUK POP-UP (VERSI INSTAN) -->
+<script>
+        // --- 1. LOGIKA UNTUK MODAL ADD NEW ---
+        const modalAdd = document.getElementById('modalAddProduct');
+        const btnAddNew = document.getElementById('btnAddNew');
+        const btnBackAdd = document.getElementById('btnBackModal');
+
+        if(btnAddNew) {
+            btnAddNew.addEventListener('click', function(e) {
+                e.preventDefault(); 
+                modalAdd.style.display = 'flex'; 
+            });
+        }
+        if(btnBackAdd) {
+            btnBackAdd.addEventListener('click', function() {
+                modalAdd.style.display = 'none'; 
+            });
+        }
+
+        // --- 2. LOGIKA UNTUK MODAL UPDATE ---
+        const modalUpdate = document.getElementById('modalUpdateProduct');
+        // Gunakan querySelectorAll karena tombol Update ada banyak
+        const btnUpdates = document.querySelectorAll('.btn-update'); 
+        const btnBackUpdate = document.getElementById('btnBackUpdate');
+
+        // Looping ke semua tombol UPDATE NOW
+        btnUpdates.forEach(function(btn) {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                modalUpdate.style.display = 'flex';
+            });
+        });
+
+        if(btnBackUpdate) {
+            btnBackUpdate.addEventListener('click', function() {
+                modalUpdate.style.display = 'none';
+            });
+        }
+
+        // --- 3. TUTUP MODAL JIKA AREA LUAR DIKLIK ---
+        window.addEventListener('click', function(event) {
+            if (event.target === modalAdd) {
+                modalAdd.style.display = 'none';
+            }
+            if (event.target === modalUpdate) {
+                modalUpdate.style.display = 'none';
+            }
+        });
+    </script>
 </body>
 </html>
