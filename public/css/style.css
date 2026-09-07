@@ -1475,160 +1475,112 @@ body.bg-light {
     padding: 0;
     min-height: 100vh;
     font-family: 'Poppins', sans-serif;
+    background: #ffffff;
 }
 
-
-/* BACKGROUND */
-
+/* BACKGROUND LOGIN */
 .login-page {
     min-height: 100vh;
-
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-
-    padding: 20px;
-
     box-sizing: border-box;
-
-    background:
-        radial-gradient(
-            ellipse at 20% 20%,
-            #6685ee 0%,
-            #6685ee 9%,
-            transparent 10%
-        ),
-        radial-gradient(
-            ellipse at 80% 25%,
-            #6685ee 0%,
-            #6685ee 9%,
-            transparent 10%
-        ),
-        radial-gradient(
-            ellipse at 30% 80%,
-            #6685ee 0%,
-            #6685ee 10%,
-            transparent 11%
-        ),
-        radial-gradient(
-            ellipse at 80% 75%,
-            #6685ee 0%,
-            #6685ee 10%,
-            transparent 11%
-        ),
-        #f8f8f8;
-
+    position: relative;
     overflow: hidden;
+    background: #ffffff;
 }
 
+/*
+   POLA BIRU ORGANIK
+   Satu bidang SVG utuh, bukan background yang di-repeat.
+   Dengan begitu tidak ada garis/seam pemisah antar pola.
+*/
+.login-background {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-color: #ffffff;
+
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1400 900' preserveAspectRatio='none'%3E%3Cg fill='none' stroke='%23758AEF' stroke-width='46' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M-80 110 C20 40 90 45 135 105 C180 165 245 175 285 115 C325 55 395 65 410 130 C425 195 370 235 300 225'/%3E%3Cpath d='M520 -70 C465 10 485 85 560 105 C635 125 670 190 625 245 C580 300 505 285 485 350 C465 415 535 455 610 430'/%3E%3Cpath d='M900 -60 C845 25 875 95 950 110 C1025 125 1065 195 1020 250 C975 305 900 285 885 350 C870 415 940 455 1015 430'/%3E%3Cpath d='M1250 -40 C1200 40 1230 105 1300 125 C1370 145 1405 205 1370 260 C1340 305 1290 315 1250 300'/%3E%3Cpath d='M-100 390 C-35 320 55 335 85 410 C115 485 75 535 15 570 C-45 605 -20 675 55 690 C130 705 185 650 220 585'/%3E%3Cpath d='M350 395 C300 470 330 535 405 550 C480 565 515 630 470 690 C425 750 350 735 330 795 C310 855 375 900 445 875'/%3E%3Cpath d='M780 390 C730 465 760 530 835 545 C910 560 945 625 900 685 C855 745 780 730 760 790 C740 850 805 895 875 870'/%3E%3Cpath d='M1180 400 C1130 475 1160 540 1235 555 C1310 570 1345 635 1300 695 C1255 755 1180 740 1160 800 C1140 860 1205 905 1275 880'/%3E%3Cpath d='M520 930 C470 850 500 790 575 775 C650 760 685 695 640 640'/%3E%3Cpath d='M1030 930 C980 850 1010 790 1085 775 C1160 760 1195 695 1150 640'/%3E%3C/g%3E%3C/svg%3E");
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    pointer-events: none;
+}
 
 /* CARD */
-
 .login-card {
-    width: 330px;
-    min-height: 490px;
-
+    width: 320px;
     background: #ffffff;
-
-    border: 2px solid #111111;
-
-    border-radius: 18px;
-
-    padding: 28px 25px;
-
+    border: 2px solid #222222;
+    border-radius: 15px;
+    padding: 24px 22px;
     box-sizing: border-box;
-
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.12);
     text-align: center;
+    position: relative;
+    z-index: 5;
 }
 
-
 /* AVATAR */
-
 .login-avatar {
     width: 58px;
     height: 58px;
-
-    margin: 0 auto 12px;
-
+    margin: 0 auto 10px;
     display: flex;
     justify-content: center;
     align-items: center;
-
     border-radius: 50%;
-
-    background: #dfe7f1;
-
+    background: #edf2f8;
     color: #26364a;
-
     font-size: 23px;
-
-    box-shadow:
-        0 5px 12px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.10);
 }
 
-
 /* TITLE */
-
+.login-title h1,
 .login-card h1 {
-    margin: 0 0 20px;
-
+    margin: 0 0 19px;
     font-size: 24px;
-
+    line-height: 1;
     font-weight: 800;
-
     color: #111111;
 }
 
-
 /* INPUT */
-
 .login-input-box {
     width: 100%;
-    height: 43px;
-
+    height: 42px;
     display: flex;
     align-items: center;
-
     box-sizing: border-box;
-
-    border: 2px solid #111111;
-
+    border: 2px solid #222222;
     border-radius: 9px;
-
     padding: 0 10px;
-
-    margin-bottom: 13px;
-
+    margin-bottom: 12px;
     background: #ffffff;
 }
 
 .login-input-box > i:first-child {
     width: 20px;
-
+    flex-shrink: 0;
     font-size: 14px;
-
     color: #111111;
 }
 
 .login-input-box input {
     flex: 1;
-
-    width: 100%;
-
+    min-width: 0;
+    height: 100%;
     border: none;
-
     outline: none;
-
     background: transparent;
-
     font-family: 'Poppins', sans-serif;
-
     font-size: 11px;
-
-    font-weight: 600;
-
+    font-weight: 500;
     padding: 0 7px;
 }
 
@@ -1637,52 +1589,39 @@ body.bg-light {
 }
 
 #toggleLoginPassword {
+    flex-shrink: 0;
     font-size: 14px;
-
     color: #555555;
-
     cursor: pointer;
 }
 
-
 /* REMEMBER + FORGOT */
-
 .login-options {
     width: 100%;
-
     display: flex;
-
     justify-content: space-between;
-
     align-items: center;
-
     margin: 3px 0 17px;
-
     font-size: 9px;
-
     font-weight: 700;
 }
 
 .remember-me {
     display: flex;
-
     align-items: center;
-
     gap: 4px;
-
     cursor: pointer;
 }
 
 .remember-me input {
     width: 12px;
     height: 12px;
-
+    margin: 0;
     accent-color: #16c76a;
 }
 
 .login-options a {
     color: #111111;
-
     text-decoration: none;
 }
 
@@ -1690,85 +1629,56 @@ body.bg-light {
     text-decoration: underline;
 }
 
-
 /* LOGIN BUTTON */
-
 .login-button {
     width: 100%;
-
-    height: 43px;
-
+    height: 42px;
     border: none;
-
     border-radius: 7px;
-
     background: #000000;
-
     color: #ffffff;
-
     font-family: 'Poppins', sans-serif;
-
     font-size: 13px;
-
     font-weight: 800;
-
     cursor: pointer;
-
     transition: 0.2s;
 }
 
 .login-button:hover {
-    transform: translateY(-1px);
-
-    opacity: 0.85;
+    background: #222222;
 }
 
-
 /* OR */
-
 .or-login {
-    margin: 15px 0 12px;
-
+    margin: 14px 0 11px;
     color: #999999;
-
     font-size: 10px;
-
     font-weight: 600;
 }
 
-
-/* SOCIAL BUTTON */
-
+/* SOCIAL */
 .social-login {
     display: flex;
-
     gap: 8px;
-
     width: 100%;
 }
 
-.social-login button {
+.social-login button,
+.social-button {
     flex: 1;
-
     height: 37px;
-
-    border: 1px solid #d8d8d8;
-
+    border: 1px solid #dddddd;
     border-radius: 8px;
-
     background: #ffffff;
-
     cursor: pointer;
-
     font-size: 17px;
+    transition: 0.2s;
 }
 
-.social-login button:hover {
-    background: #f5f5f5;
+.social-login button:hover,
+.social-button:hover {
+    background: #f7f7f7;
 }
-
-
-/* SOCIAL ICON */
 
 .google-icon {
     color: #4285f4;
@@ -1782,14 +1692,14 @@ body.bg-light {
     color: #000000;
 }
 
-
 /* REGISTER */
-
 .register-link {
-    margin-top: 15px;
-
+    margin-top: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
     font-size: 9px;
-
     font-weight: 600;
 }
 
@@ -1798,12 +1708,8 @@ body.bg-light {
 }
 
 .register-link a {
-    margin-left: 4px;
-
     color: #e53935;
-
     font-weight: 800;
-
     text-decoration: none;
 }
 
@@ -1811,19 +1717,13 @@ body.bg-light {
     text-decoration: underline;
 }
 
-
 /* RESPONSIVE */
-
-@media (max-width: 480px) {
-
-    .login-page {
-        padding: 15px;
-    }
-
+@media (max-width: 600px) {
     .login-card {
-        width: 100%;
-
-        max-width: 330px;
+        width: min(320px, calc(100vw - 30px));
     }
 
+    .login-background {
+        background-size: 430px 300px;
+    }
 }

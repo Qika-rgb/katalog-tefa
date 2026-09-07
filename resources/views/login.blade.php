@@ -6,34 +6,66 @@
 
     <title>Login - TEFA</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- FONT POPPINS -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
 
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- FONT AWESOME -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    >
 
+    <!-- CSS UTAMA -->
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 </head>
 
 <body class="login-body">
 
+    <!-- =========================================
+         LOGIN PAGE
+    ========================================== -->
+
     <div class="login-page">
+
+        <!-- BACKGROUND PATTERN -->
+        <div class="login-background"></div>
+
+
+        <!-- =====================================
+             LOGIN CARD
+        ====================================== -->
 
         <div class="login-card">
 
-            <!-- ICON USER -->
+            <!-- USER ICON -->
             <div class="login-avatar">
                 <i class="fa-solid fa-user"></i>
             </div>
 
-            <!-- JUDUL -->
-            <h1>login</h1>
 
-            <!-- FORM LOGIN -->
+            <!-- =================================
+                 TITLE
+            ================================== -->
+
+            <div class="login-title">
+                <h1>login</h1>
+            </div>
+
+
+            <!-- =================================
+                 LOGIN FORM
+            ================================== -->
+
             <form action="#" method="POST">
 
                 @csrf
 
+
                 <!-- USERNAME / EMAIL -->
+
                 <div class="login-input-box">
 
                     <i class="fa-solid fa-user"></i>
@@ -42,12 +74,15 @@
                         type="text"
                         name="email"
                         placeholder="username or email"
+                        autocomplete="username"
                         required
                     >
 
                 </div>
 
+
                 <!-- PASSWORD -->
+
                 <div class="login-input-box">
 
                     <i class="fa-solid fa-key"></i>
@@ -57,17 +92,25 @@
                         name="password"
                         id="loginPassword"
                         placeholder="your password"
+                        autocomplete="current-password"
                         required
                     >
+
+                    <!-- SHOW PASSWORD -->
 
                     <i
                         class="fa-regular fa-eye"
                         id="toggleLoginPassword"
+                        title="Show password"
                     ></i>
 
                 </div>
 
-                <!-- REMEMBER + FORGOT -->
+
+                <!-- =================================
+                     REMEMBER & FORGOT PASSWORD
+                ================================== -->
+
                 <div class="login-options">
 
                     <label class="remember-me">
@@ -77,9 +120,12 @@
                             name="remember"
                         >
 
-                        <span>remember me</span>
+                        <span>
+                            remember me
+                        </span>
 
                     </label>
+
 
                     <a href="/forgot-password">
                         forgot password?
@@ -87,7 +133,11 @@
 
                 </div>
 
-                <!-- LOGIN BUTTON -->
+
+                <!-- =================================
+                     LOGIN BUTTON
+                ================================== -->
+
                 <button
                     type="submit"
                     class="login-button"
@@ -97,32 +147,73 @@
 
             </form>
 
-            <!-- OR -->
+
+            <!-- =================================
+                 OR CONTINUE WITH
+            ================================== -->
+
             <div class="or-login">
-                or continue with
+                <span>or continue with</span>
             </div>
 
-            <!-- SOCIAL LOGIN -->
+
+            <!-- =================================
+                 SOCIAL LOGIN
+            ================================== -->
+
             <div class="social-login">
 
-                <button type="button">
+
+                <!-- GOOGLE -->
+
+                <button
+                    type="button"
+                    class="social-button"
+                    aria-label="Login with Google"
+                >
+
                     <i class="fa-brands fa-google google-icon"></i>
+
                 </button>
 
-                <button type="button">
+
+                <!-- FACEBOOK -->
+
+                <button
+                    type="button"
+                    class="social-button"
+                    aria-label="Login with Facebook"
+                >
+
                     <i class="fa-brands fa-facebook facebook-icon"></i>
+
                 </button>
 
-                <button type="button">
+
+                <!-- APPLE -->
+
+                <button
+                    type="button"
+                    class="social-button"
+                    aria-label="Login with Apple"
+                >
+
                     <i class="fa-brands fa-apple apple-icon"></i>
+
                 </button>
 
             </div>
 
-            <!-- REGISTER -->
+
+            <!-- =================================
+                 REGISTER
+            ================================== -->
+
             <div class="register-link">
 
-                <span>Don't have an account?</span>
+                <span>
+                    Don't have an account?
+                </span>
 
                 <a href="/register">
                     sign up here
@@ -135,7 +226,10 @@
     </div>
 
 
-    <!-- JAVASCRIPT PASSWORD -->
+    <!-- =========================================
+         SHOW / HIDE PASSWORD
+    ========================================== -->
+
     <script>
 
         const toggleLoginPassword =
@@ -144,25 +238,51 @@
         const loginPassword =
             document.getElementById('loginPassword');
 
-        toggleLoginPassword.addEventListener('click', function () {
 
-            if (loginPassword.type === 'password') {
+        if (toggleLoginPassword && loginPassword) {
 
-                loginPassword.type = 'text';
+            toggleLoginPassword.addEventListener(
+                'click',
+                function () {
 
-                this.classList.remove('fa-eye');
-                this.classList.add('fa-eye-slash');
+                    if (loginPassword.type === 'password') {
 
-            } else {
+                        // UBAH MENJADI TEXT
+                        loginPassword.type = 'text';
 
-                loginPassword.type = 'password';
+                        // UBAH ICON
+                        this.classList.remove('fa-eye');
 
-                this.classList.remove('fa-eye-slash');
-                this.classList.add('fa-eye');
+                        this.classList.add('fa-eye-slash');
 
-            }
+                        // TITLE
+                        this.setAttribute(
+                            'title',
+                            'Hide password'
+                        );
 
-        });
+                    } else {
+
+                        // UBAH KEMBALI MENJADI PASSWORD
+                        loginPassword.type = 'password';
+
+                        // UBAH ICON
+                        this.classList.remove('fa-eye-slash');
+
+                        this.classList.add('fa-eye');
+
+                        // TITLE
+                        this.setAttribute(
+                            'title',
+                            'Show password'
+                        );
+
+                    }
+
+                }
+            );
+
+        }
 
     </script>
 
