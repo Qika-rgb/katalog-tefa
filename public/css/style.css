@@ -21,8 +21,21 @@ body, html {
     top: 0;
     z-index: 100;
 }
+
+/* KODE BARU: Memaksa pembungkus logo rata tengah */
+.nav-brand {
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+.nav-brand a {
+    display: flex;
+    align-items: center;
+}
 .nav-brand img {
-    height: 70px; }
+    height: 70px; 
+    transform: translateY(14px);
+}
 
 .nav-menu {
     display: flex;

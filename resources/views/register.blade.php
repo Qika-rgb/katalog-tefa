@@ -32,7 +32,7 @@
         <h2>Sign up with email</h2>
         <p class="subtitle">make a new doc to bring your words, data<br>and teams together.for free</p>
 
-       <form action="#" method="POST">
+    <form action="#" method="POST">
     @csrf
             <div class="input-group">
                 <i class="fa-regular fa-envelope icon-left"></i>

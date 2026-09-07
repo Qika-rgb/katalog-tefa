@@ -13,7 +13,9 @@
     <!-- SIDEBAR -->
     <div class="admin-sidebar">
         <!-- Pakai logo yang sudah kamu punya -->
-        <img src="{{ asset('images/logo_tefa.png') }}" alt="Logo" class="admin-logo">
+        <a href="/">
+            <img src="{{ asset('images/logo_tefa.png') }}" alt="Logo" class="admin-logo">
+        </a>
         <ul class="admin-nav">
             <li><a href="#" class="active">ANALYTICS REPORTS</a></li>
             <li><a href="admin-jurusan/products">PRODUCTS</a></li>

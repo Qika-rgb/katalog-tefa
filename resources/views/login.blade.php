@@ -163,7 +163,6 @@
 
             <div class="social-login">
 
-
                 <!-- GOOGLE -->
 
                 <button
@@ -247,15 +246,11 @@
 
                     if (loginPassword.type === 'password') {
 
-                        // UBAH MENJADI TEXT
                         loginPassword.type = 'text';
 
-                        // UBAH ICON
                         this.classList.remove('fa-eye');
-
                         this.classList.add('fa-eye-slash');
 
-                        // TITLE
                         this.setAttribute(
                             'title',
                             'Hide password'
@@ -263,15 +258,11 @@
 
                     } else {
 
-                        // UBAH KEMBALI MENJADI PASSWORD
                         loginPassword.type = 'password';
 
-                        // UBAH ICON
                         this.classList.remove('fa-eye-slash');
-
                         this.classList.add('fa-eye');
 
-                        // TITLE
                         this.setAttribute(
                             'title',
                             'Show password'
