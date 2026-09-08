@@ -16,7 +16,7 @@
             <img src="{{ asset('images/logo_tefa.png') }}" alt="Logo" class="admin-logo">
         </a>
         <ul class="admin-nav">
-            <li><a href="/admin-pusat/status">PRODUCT REPORT</a></li>
+            <li><a href="/admin-pusat/product-report">PRODUCT REPORT</a></li>
             <li>
                 <div class="red-dot"></div>
                 <a href="/admin-pusat/chat" class="active-cs active-black-line">CUSTOMER SERVICE</a>
