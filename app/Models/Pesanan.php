@@ -25,4 +25,10 @@ class Pesanan extends Model
     {
         return $this->belongsTo(Produk::class, 'produk_id');
     }
+
+    // Relasi ke model User (menggunakan customer_id)
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'customer_id');
+    }
 }

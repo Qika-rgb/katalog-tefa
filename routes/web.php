@@ -5,8 +5,8 @@ use App\Http\Controllers\KatalogController;
 use App\Http\Controllers\AdminPusatController;
 use App\Http\Controllers\KeranjangController;
 use App\Http\Controllers\CheckoutController;
-use App\Models\Pesanan;
 use App\Http\Controllers\ChatController;
+use App\Models\Pesanan;
 
 // =========================
 // HALAMAN UTAMA & KATALOG
@@ -56,7 +56,7 @@ Route::get('/status/detail', function (Illuminate\Http\Request $request) {
 });
 
 // =========================
-// ROUTE ADMIN PUSAT (TUGAS QIKA)
+// ROUTE ADMIN PUSAT
 // =========================
 Route::prefix('admin-pusat')->group(function () {
     // STEP 1: Product Report
@@ -75,6 +75,9 @@ Route::prefix('admin-pusat')->group(function () {
 
     // STEP 7: DONE
     Route::get('/done', [AdminPusatController::class, 'done'])->name('admin.done');
+
+    // CHAT ADMIN
+    Route::get('/chat', [ChatController::class, 'adminChat']);
 });
 
 // =========================
@@ -86,24 +89,6 @@ Route::get('/admin-jurusan', function () {
 
 Route::get('/admin-jurusan/products', function () {
     return view('admin-products');
-});
-
-Route::get('/admin-pusat/status', function () {
-    return view('admin-pusat-status');
-});
-
-Route::get('/admin-pusat/chat', [ChatController::class, 'adminChat']);
-
-Route::get('/admin-pusat/verifikasi', function () {
-    return view('admin-pusat-verifikasi');
-});
-
-Route::get('/admin-pusat/status-pesanan', function () {
-    return view('admin-pusat-status-pesanan');
-});
-
-Route::get('/admin-pusat/done', function () {
-    return view('admin-pusat-done');
 });
 
 Route::get('/customer-service', [ChatController::class, 'customerService']);

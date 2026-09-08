@@ -9,29 +9,32 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
-    {
-        Schema::create('pesanans', function (Blueprint $table) {
-            $table->id();
+   public function up(): void
+{
+    Schema::create('pesanans', function (Blueprint $table) {
+        $table->id();
 
-            $table->unsignedBigInteger('produk_id')->nullable();
-            $table->unsignedBigInteger('customer_id')->nullable();
+        $table->unsignedBigInteger('produk_id')->nullable();
+        $table->unsignedBigInteger('customer_id')->nullable();
 
-            $table->string('no_telepon')->nullable();
-            $table->integer('jumlah')->default(1);
+        $table->string('no_telepon')->nullable();
+        $table->integer('jumlah')->default(1);
 
-            $table->enum('status', [
-                'Tahap Pembuatan',
-                'Pengemasan',
-                'Siap Diambil',
-                'Sudah Diambil'
-            ])->default('Tahap Pembuatan');
+        // Opsi 'Pending' dan 'Ditolak' sudah ditambahkan di sini:
+        $table->enum('status', [
+            'Pending',
+            'Tahap Pembuatan',
+            'Pengemasan',
+            'Siap Diambil',
+            'Sudah Diambil',
+            'Ditolak'
+        ])->default('Pending');
 
-            $table->date('estimasi_selesai')->nullable();
+        $table->date('estimasi_selesai')->nullable();
 
-            $table->timestamps();
-        });
-    }
+        $table->timestamps();
+    });
+}
 
     /**
      * Reverse the migrations.
