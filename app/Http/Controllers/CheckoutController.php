@@ -30,42 +30,44 @@ class CheckoutController extends Controller
         // Ambil keranjang
         $keranjang = session()->get('keranjang', []);
 
-        // Kalau keranjang kosong
+        // Jika keranjang kosong
         if (empty($keranjang)) {
             return redirect('/keranjang')
                 ->with('error', 'Keranjang masih kosong.');
         }
 
-        // Hitung total harga
-        $total = collect($keranjang)->sum(function ($item) {
-            return $item['harga'] * $item['jumlah'];
-        });
+        DB::transaction(function () use ($request, $keranjang) {
 
-        // Simpan pesanan dan detailnya
-        DB::transaction(function () use ($request, $keranjang, $total) {
+            // Ambil item pertama dari keranjang terlepas dari key-nya
+            $firstKey = array_key_first($keranjang);
+            $produkPertama = $keranjang[$firstKey];
 
-            // Simpan data utama pesanan
+            // Hitung total jumlah barang
+            $totalJumlah = collect($keranjang)->sum(function ($item) {
+                return $item['jumlah'] ?? 1;
+            });
+
+            // Simpan pesanan utama dengan status 'Pending' untuk verifikasi Admin
             $pesanan = Pesanan::create([
-                'nama' => $request->nama,
-                'telepon' => $request->telepon,
-                'alamat' => $request->alamat,
-                'total' => $total,
-                'status' => 'Menunggu',
+                'produk_id'  => $produkPertama['id'] ?? $produkPertama['produk_id'] ?? $firstKey,
+                'customer_id' => null,
+                'no_telepon'  => $request->telepon,
+                'jumlah'      => $totalJumlah,
+               'status' => 'Tahap Pembuatan',
             ]);
 
-            // Simpan setiap produk yang dipesan
-            foreach ($keranjang as $item) {
-
+            // Simpan setiap produk ke detail pesanan
+            foreach ($keranjang as $produkId => $item) {
                 DetailPesanan::create([
                     'pesanan_id' => $pesanan->id,
-                    'produk_id' => $item['id'],
-                    'jumlah' => $item['jumlah'],
-                    'harga' => $item['harga'],
+                    'produk_id'  => $item['id'] ?? $item['produk_id'] ?? $produkId,
+                    'jumlah'     => $item['jumlah'] ?? 1,
+                    'harga'      => $item['harga'] ?? 0,
                 ]);
             }
         });
 
-        // Kosongkan keranjang setelah pesanan berhasil
+        // Kosongkan keranjang
         session()->forget('keranjang');
 
         // Kembali ke halaman status

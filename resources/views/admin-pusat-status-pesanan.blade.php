@@ -16,7 +16,7 @@
             <img src="{{ asset('images/logo_tefa.png') }}" alt="Logo" class="admin-logo">
         </a>
         <ul class="admin-nav">
-            <li><a href="/admin-pusat/status">PRODUCT REPORT</a></li>
+            <li><a href="/admin-pusat/product-report">PRODUCT REPORT</a></li>
             <li>
                 <div class="red-dot"></div>
                 <a href="/admin-pusat/chat" class="active-cs">CUSTOMER SERVICE</a>
@@ -48,119 +48,123 @@
             </div>
         </div>
 
-        <!-- ==========================================
-            DAFTAR KARTU PESANAN (UBAH STATUS)
-            ========================================== -->
-            
-        <!-- KARTU PESANAN 1 -->
-        <div class="admin-order-card">
-            <img src="{{ asset('images/produk_dkv2.png') }}" alt="Graphic Design" class="admin-order-img">
-            
-            <div class="admin-order-info">
-                <h3>Informasi pemesanan & layanan</h3>
-                <p>NAMA PEMESAN : <strong>MAHADIR BAMBANG SUDIOMO</strong></p>
-                <p>ID PESANAN: <strong>#ORD-2026-001</strong></p>
-                <p>JENIS LAYANAN / PAKET: <strong>GRAPHIC DESIGN - FEED INSTAGRAM</strong></p>
-                <p>STATUS SAAT INI: <span class="status-text">MENUNGGU KONFIRMASI</span></p>
+        @if(session('success'))
+            <div style="background: #d4edda; color: #155724; padding: 12px; border-radius: 8px; margin-bottom: 20px;">
+                {{ session('success') }}
             </div>
+        @endif
 
-            <!-- Tombol Ubah Status di Kanan Bawah -->
-            <button class="btn-outline-blue-capsule">UBAH STATUS</button>
-        </div>
+        <!-- DAFTAR KARTU PESANAN DALAM PROSES -->
+        @forelse($pesanans as $pesanan)
+            <div class="admin-order-card">
+                <img 
+                    src="{{ asset('images/' . ($pesanan->produk->foto ?? 'default.png')) }}" 
+                    alt="{{ $pesanan->produk->nama_produk ?? 'Produk DKV' }}" 
+                    class="admin-order-img"
+                >
 
-        <!-- KARTU PESANAN 2 -->
-        <div class="admin-order-card">
-            <img src="{{ asset('images/produk_dkv3.png') }}" alt="Web Services" class="admin-order-img">
-            
-            <div class="admin-order-info">
-                <h3>Informasi pemesanan & layanan</h3>
-                <p>NAMA PEMESAN : <strong>MAHADIR BAMBANG SUDIOMO</strong></p>
-                <p>ID PESANAN: <strong>#ORD-2026-002</strong></p>
-                <p>JENIS LAYANAN / PAKET: <strong>WEB SERVICES</strong></p>
-                <p>STATUS SAAT INI: <span class="status-text">SEDANG DI PROSES</span></p>
+                <div class="admin-order-info">
+                    <h3>Informasi Pesanan #{{ $pesanan->id }}</h3>
+
+                    <p>
+                        NAMA PRODUK :
+                        <strong>{{ $pesanan->produk->nama_produk ?? 'Produk DKV' }}</strong>
+                    </p>
+
+                    <p>
+                        JUMLAH :
+                        <strong>{{ $pesanan->jumlah }} Item</strong>
+                    </p>
+
+                    <p>
+                        NO. TELEPON :
+                        <strong>{{ $pesanan->no_telepon }}</strong>
+                    </p>
+
+                    <p>
+                        STATUS SAAT INI :
+                        <strong style="color: #007bff;">{{ strtoupper($pesanan->status) }}</strong>
+                    </p>
+                </div>
+
+                <button 
+                    class="btn-outline-blue-capsule btn-buka-modal" 
+                    data-id="{{ $pesanan->id }}"
+                    data-nama="{{ $pesanan->produk->nama_produk ?? 'Produk DKV' }}"
+                    data-status="{{ $pesanan->status }}"
+                    data-foto="{{ asset('images/' . ($pesanan->produk->foto ?? 'default.png')) }}"
+                >
+                    UBAH STATUS
+                </button>
             </div>
-
-            <button class="btn-outline-blue-capsule">UBAH STATUS</button>
-        </div>
+        @empty
+            <div style="text-align: center; padding: 40px; background: #fff; border-radius: 10px;">
+                <p>Tidak ada pesanan yang sedang dalam proses.</p>
+            </div>
+        @endforelse
 
     </div> <!-- End Main Content -->
 
-    <!-- ==========================================
-        OVERLAY MODAL UBAH STATUS (TOGGLE)
-        ========================================== -->
-    <div class="modal-status-overlay" id="modalUbahStatus">
+    <!-- OVERLAY MODAL UBAH STATUS -->
+    <div class="modal-status-overlay" id="modalUbahStatus" style="display: none;">
         <div class="modal-status-card">
             
             <button class="btn-back" id="btnBackStatus"><i class="fa-solid fa-chevron-left"></i> BACK</button>
 
             <div class="modal-status-header">
-                <img src="{{ asset('images/produk_dkv2.png') }}" alt="Graphic Design" class="modal-status-img">
+                <img id="modalFotoProduk" src="" alt="Produk" class="modal-status-img">
                 <div class="modal-status-title">
-                    <h2>Jasa Pembuatan Graphic Design - Feed Instagram</h2>
+                    <h2 id="modalNamaProduk">Nama Produk</h2>
                     <div class="modal-status-profile">
                         <img src="{{ asset('images/foto_profil.png') }}" alt="Avatar"> TEFA DKV
                     </div>
                 </div>
             </div>
 
-            <!-- Tombol Toggles -->
-            <div class="toggle-wrapper">
-                <div class="toggle-item">
-                    <div class="toggle-switch" onclick="this.classList.toggle('active')">
-                        <div class="toggle-option no">NO</div>
-                        <div class="toggle-option yes">YES</div>
-                    </div>
-                    <span class="toggle-label">SEDANG TAHAP PEMBUATAN</span>
+            <!-- Form Perubahan Status -->
+            <form id="formUbahStatus" method="POST" action="">
+                @csrf
+                <div style="margin-top: 20px; text-align: center;">
+                    <p style="margin-bottom: 15px;">Klik tombol di bawah ini untuk memperbarui status ke tahap selanjutnya:</p>
+                    <button type="submit" class="btn-solid-blue" style="padding: 12px 24px; font-weight: bold; border-radius: 20px;">
+                        LANJUTKAN STATUS PESANAN
+                    </button>
                 </div>
-
-                <div class="toggle-item">
-                    <div class="toggle-switch" onclick="this.classList.toggle('active')">
-                        <div class="toggle-option no">NO</div>
-                        <div class="toggle-option yes">YES</div>
-                    </div>
-                    <span class="toggle-label">TAHAP PENGEMASAN</span>
-                </div>
-
-                <div class="toggle-item">
-                    <div class="toggle-switch" onclick="this.classList.toggle('active')">
-                        <div class="toggle-option no">NO</div>
-                        <div class="toggle-option yes">YES</div>
-                    </div>
-                    <span class="toggle-label">JASA SUDAH DISELESAIKAN</span>
-                </div>
-
-                <div class="toggle-item">
-                    <div class="toggle-switch" onclick="this.classList.toggle('active')">
-                        <div class="toggle-option no">NO</div>
-                        <div class="toggle-option yes">YES</div>
-                    </div>
-                    <span class="toggle-label">HASIL JASA DITERIMA</span>
-                </div>
-            </div>
+            </form>
 
         </div>
     </div>
 
-    <!-- SCRIPT UNTUK MEMUNCULKAN MODAL -->
+    <!-- SCRIPT UNTUK MODAL DINAMIS -->
     <script>
         const modalStatus = document.getElementById('modalUbahStatus');
-        const btnUbahStatus = document.querySelectorAll('.btn-outline-blue-capsule');
+        const btnBukaModal = document.querySelectorAll('.btn-buka-modal');
         const btnBackStatus = document.getElementById('btnBackStatus');
+        const formUbahStatus = document.getElementById('formUbahStatus');
+        const modalNamaProduk = document.getElementById('modalNamaProduk');
+        const modalFotoProduk = document.getElementById('modalFotoProduk');
 
-        // Buka Modal saat tombol Ubah Status diklik
-        btnUbahStatus.forEach(btn => {
+        btnBukaModal.forEach(btn => {
             btn.addEventListener('click', function(e) {
                 e.preventDefault();
+                const pesananId = this.getAttribute('data-id');
+                const namaProduk = this.getAttribute('data-nama');
+                const fotoProduk = this.getAttribute('data-foto');
+
+                modalNamaProduk.textContent = namaProduk;
+                modalFotoProduk.src = fotoProduk;
+                formUbahStatus.action = `/admin-pusat/ubah-status/${pesananId}`;
+
                 modalStatus.style.display = 'flex';
             });
         });
 
-        // Tutup Modal
-        if(btnBackStatus) {
+        if (btnBackStatus) {
             btnBackStatus.addEventListener('click', () => modalStatus.style.display = 'none');
         }
+
         window.addEventListener('click', function(e) {
-            if(e.target === modalStatus) modalStatus.style.display = 'none';
+            if (e.target === modalStatus) modalStatus.style.display = 'none';
         });
     </script>
 </body>

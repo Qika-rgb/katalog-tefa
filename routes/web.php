@@ -2,30 +2,24 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\KatalogController;
+use App\Http\Controllers\AdminPusatController;
 use App\Http\Controllers\KeranjangController;
 use App\Http\Controllers\CheckoutController;
 use App\Models\Pesanan;
 use App\Http\Controllers\ChatController;
 
 // =========================
-// HALAMAN UTAMA
+// HALAMAN UTAMA & KATALOG
 // =========================
 Route::get('/', function () {
     return view('home');
 });
 
-// =========================
-// KATALOG
-// =========================
 Route::get('/katalog', [KatalogController::class, 'index']);
-
-// =========================
-// PEMESANAN / DETAIL PRODUK
-// =========================
 Route::get('/pemesanan/{id}', [KatalogController::class, 'detail']);
 
 // =========================
-// LOGIN & REGISTER
+// AUTH (LOGIN & REGISTER)
 // =========================
 Route::get('/login', function () {
     return view('login');
@@ -40,34 +34,52 @@ Route::get('/forgot-password', function () {
 });
 
 // =========================
-// KERANJANG
+// KERANJANG & CHECKOUT
 // =========================
 Route::get('/keranjang', [KeranjangController::class, 'index']);
 Route::post('/keranjang/tambah/{id}', [KeranjangController::class, 'tambah']);
 
-// =========================
-// STATUS PESANAN
-// =========================
-Route::get('/status', function () {
-    $pesanans = Pesanan::with('detailPesanans.produk')
-        ->latest()
-        ->get();
-
-    return view('status', compact('pesanans'));
-});
-
-// Rute untuk halaman Detail Status Pesanan (Tracking) dengan Logic Pesanan
-Route::get('/status/detail', function (Illuminate\Http\Request $request) {
-    $pesanan = Pesanan::with('detailPesanans.produk')
-        ->findOrFail($request->pesanan_id);
-
-    return view('status-detail', compact('pesanan'));
-});
-
 Route::get('/checkout', [CheckoutController::class, 'index']);
 Route::post('/checkout', [CheckoutController::class, 'store']);
 
-// Rute Admin dari Teman
+// =========================
+// STATUS PESANAN (CUSTOMER)
+// =========================
+Route::get('/status', function () {
+    $pesanans = Pesanan::with('produk')->latest()->get();
+    return view('status', compact('pesanans'));
+});
+
+Route::get('/status/detail', function (Illuminate\Http\Request $request) {
+    $pesanan = Pesanan::with('produk')->findOrFail($request->pesanan_id);
+    return view('status-detail', compact('pesanan'));
+});
+
+// =========================
+// ROUTE ADMIN PUSAT (TUGAS QIKA)
+// =========================
+Route::prefix('admin-pusat')->group(function () {
+    // STEP 1: Product Report
+    Route::get('/product-report', [AdminPusatController::class, 'productReport'])->name('admin.product-report');
+
+    // STEP 2: Verifikasi Pesanan
+    Route::get('/verifikasi', [AdminPusatController::class, 'verifikasi'])->name('admin.verifikasi');
+
+    // STEP 3 & 4: ACCEPT & DECLINE
+    Route::post('/accept/{id}', [AdminPusatController::class, 'accept'])->name('admin.accept');
+    Route::post('/decline/{id}', [AdminPusatController::class, 'decline'])->name('admin.decline');
+
+    // STEP 5 & 6: Status Pesanan & Ubah Status
+    Route::get('/status-pesanan', [AdminPusatController::class, 'statusPesanan'])->name('admin.status-pesanan');
+    Route::post('/ubah-status/{id}', [AdminPusatController::class, 'ubahStatus'])->name('admin.ubah-status');
+
+    // STEP 7: DONE
+    Route::get('/done', [AdminPusatController::class, 'done'])->name('admin.done');
+});
+
+// =========================
+// ROUTE LAINNYA (JURUSAN & CS)
+// =========================
 Route::get('/admin-jurusan', function () {
     return view('admin-jurusan');
 });

@@ -9,17 +9,20 @@ class Pesanan extends Model
 {
     use HasFactory;
 
-    // Menggunakan struktur tabel terbaru dari tim backend
+    protected $table = 'pesanans';
+
     protected $fillable = [
         'produk_id',
         'customer_id',
         'no_telepon',
         'jumlah',
         'status',
+        'estimasi_selesai',
     ];
 
-    public function detailPesanans()
+    // Relasi ke model Produk
+    public function produk()
     {
-        return $this->hasMany(DetailPesanan::class);
+        return $this->belongsTo(Produk::class, 'produk_id');
     }
 }
