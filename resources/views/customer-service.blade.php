@@ -35,27 +35,47 @@
                     Boleh minta Tolong jelaskan kendala yang kamu alami?</p>
                     
                     <!-- Pilihan Pertanyaan -->
-                    <button class="cs-preset-btn">Kenapa status pemesanan saya belum berubah?</button>
-                    <button class="cs-preset-btn">Bagaimana cara saya mau meng update no lama saya ke nomor yang baru</button>
-                    <button class="cs-preset-btn">Mengapa saya tidak bisa login ke akun lama saya?</button>
+                    <button type="button" class="cs-preset-btn" onclick="kirimPreset(this)">Kenapa status pemesanan saya belum berubah?</button>
+                    <button type="button" class="cs-preset-btn" onclick="kirimPreset(this)">Bagaimana cara saya mau meng update no lama saya ke nomor yang baru</button>
+                    <button type="button" class="cs-preset-btn" onclick="kirimPreset(this)">Mengapa saya tidak bisa login ke akun lama saya?</button>
                 </div>
 
-                <!-- Pesan Balasan User -->
-                <div class="cs-user-msg">
-                    kenapa status pemesanan saya belum berubah?
-                </div>
-                
+               @foreach($messages as $message)
+            <div class="{{ $message->sender === 'admin' ? 'cs-bot-msg' : 'cs-user-msg' }}">
+                {{ $message->message }}
+            </div>
+                @endforeach  
             </div>
 
             <!-- INPUT CHAT (FOOTER) -->
-            <div class="user-cs-footer">
-                <button class="add-btn"><i class="fa-solid fa-plus"></i></button>
-                <input type="text" placeholder="selamat datang! ada yang bisa saya bantu ??">
-                <button class="send-btn"><i class="fa-regular fa-paper-plane"></i></button>
-            </div>
+            <form action="/chat/send" method="POST" class="user-cs-footer">
+                @csrf
+
+                <button type="button" class="add-btn"><i class="fa-solid fa-plus"></i></button>
+
+                <input
+                    type="text"
+                    name="message"
+                    placeholder="selamat datang! ada yang bisa saya bantu ??"
+                    autocomplete="off"
+                    required
+                >
+
+                <button type="submit" class="send-btn"><i class="fa-regular fa-paper-plane"></i></button>
+
+            </form>
 
         </div>
     </div>
+
+    <script>
+    function kirimPreset(btn) {
+        const teks = btn.innerText;
+        const input = document.querySelector('.user-cs-footer input[name="message"]');
+        input.value = teks;
+        document.querySelector('.user-cs-footer').submit();
+    }
+    </script>
 
 </body>
 </html>

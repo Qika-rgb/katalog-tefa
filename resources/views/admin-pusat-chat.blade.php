@@ -29,7 +29,7 @@
 
     <!-- MAIN CONTENT -->
     <div class="admin-main">
-        
+
         <!-- Top Profile -->
         <div class="admin-top-profile">
             <div class="profile-pill">
@@ -50,7 +50,7 @@
 
         <!-- WADAH UTAMA CHAT -->
         <div class="chat-wrapper">
-            
+
             <!-- KIRI: Daftar Pelanggan -->
             <div class="chat-sidebar">
                 <div class="contact-item">
@@ -67,26 +67,61 @@
 
             <!-- KANAN: Jendela Obrolan -->
             <div class="chat-main">
+
                 <div class="chat-header">
                     <img src="{{ asset('images/foto_profil.png') }}" alt="Avatar" class="contact-avatar">
                     <span class="contact-name">CUSTOMER TOTE BAG</span>
                 </div>
 
                 <div class="chat-body">
-                    <div class="chat-bubble bubble-left">
-                        <img src="{{ asset('images/foto_profil.png') }}" alt="Avatar" class="contact-avatar">
-                        <div class="chat-text">
-                            kenapa status pemesanan saya belum berubah?
+                    @foreach($messages as $message)
+                        <div class="chat-bubble {{ $message->sender === 'admin' ? 'bubble-right' : 'bubble-left' }}">
+
+                            <img
+                                src="{{ asset('images/foto_profil.png') }}"
+                                alt="Avatar"
+                                class="contact-avatar"
+                            >
+
+                            <div class="chat-text">
+                                {{ $message->message }}
+                            </div>
+
                         </div>
-                    </div>
+                    @endforeach
                 </div>
 
-                <div class="chat-input-area">
-                    <input type="text" class="chat-input" placeholder="TYPE HERE">
-                    <button class="btn-send"><i class="fa-regular fa-paper-plane"></i></button>
-                </div>
+                <form action="/chat/send" method="POST" class="chat-input-area">
+                    @csrf
+
+                    <input
+                        type="text"
+                        name="message"
+                        class="chat-input"
+                        placeholder="TYPE HERE"
+                        autocomplete="off"
+                        required
+                    >
+
+                    <input
+                        type="hidden"
+                        name="sender"
+                        value="admin"
+                    >
+
+                    <button type="submit" class="btn-send">
+                        <i class="fa-regular fa-paper-plane"></i>
+                    </button>
+                </form>
+
             </div>
-        </div> 
-    </div> 
+            <!-- chat-main ditutup di sini, SETELAH form -->
+
+        </div>
+        <!-- chat-wrapper ditutup di sini -->
+
+    </div>
+    <!-- admin-main ditutup di sini -->
+
 </body>
 </html>

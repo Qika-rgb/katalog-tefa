@@ -5,6 +5,7 @@ use App\Http\Controllers\KatalogController;
 use App\Http\Controllers\KeranjangController;
 use App\Http\Controllers\CheckoutController;
 use App\Models\Pesanan;
+use App\Http\Controllers\ChatController;
 
 // =========================
 // HALAMAN UTAMA
@@ -79,9 +80,7 @@ Route::get('/admin-pusat/status', function () {
     return view('admin-pusat-status');
 });
 
-Route::get('/admin-pusat/chat', function () {
-    return view('admin-pusat-chat');
-});
+Route::get('/admin-pusat/chat', [ChatController::class, 'adminChat']);
 
 Route::get('/admin-pusat/verifikasi', function () {
     return view('admin-pusat-verifikasi');
@@ -95,6 +94,5 @@ Route::get('/admin-pusat/done', function () {
     return view('admin-pusat-done');
 });
 
-Route::get('/customer-service', function () {
-    return view('customer-service');
-});
+Route::get('/customer-service', [ChatController::class, 'customerService']);
+Route::post('/chat/send', [ChatController::class, 'sendMessage']);
