@@ -7,6 +7,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    
+    {{-- Refresh halaman otomatis setiap 15 detik agar status selalu terupdate --}}
+    <meta http-equiv="refresh" content="15">
 </head>
 
 <body class="bg-light">
@@ -44,17 +47,21 @@
             @if ($pesanan->detailPesanans && $pesanan->detailPesanans->count() > 0)
 
                 @foreach ($pesanan->detailPesanans as $detail)
+                    @php
+                        $produk = $detail->produk;
+                        $foto = $produk->foto ?? 'default.png';
+                        $imgSrc = file_exists(public_path('images/' . $foto)) 
+                            ? asset('images/' . $foto) 
+                            : (file_exists(public_path('storage/' . $foto)) ? asset('storage/' . $foto) : asset('images/logo_tefa.png'));
+                    @endphp
+
                     <div class="status-card-box border-blue">
                         <!-- BAGIAN KIRI -->
                         <div class="status-info-left">
-                            <img
-                                src="{{ asset('images/' . ($detail->produk->foto ?? 'default.png')) }}"
-                                alt="{{ $detail->produk->nama_produk ?? 'Produk' }}"
-                                class="status-img"
-                            >
+                            <img src="{{ $imgSrc }}" alt="{{ $produk->nama_produk ?? 'Produk' }}" class="status-img">
 
                             <div class="status-text">
-                                <h4>{{ $detail->produk->nama_produk ?? 'Produk' }}</h4>
+                                <h4>{{ $produk->nama_produk ?? 'Produk' }}</h4>
                                 <h5>TEFA DKV</h5>
                                 <p>Jumlah: <strong>{{ $detail->jumlah }}</strong></p>
                                 <p>Harga: <strong>RP {{ number_format($detail->harga ?? 0, 0, ',', '.') }}</strong></p>
@@ -72,20 +79,23 @@
                     </div>
                 @endforeach
 
-            {{-- FALLBACK: JIKA DETAIL PESANAN NULL / MENGGUNAKAN RELASI PRODUK LANGSUNG --}}
+            {{-- FALLBACK: JIKA DETAIL PESANAN NULL / RELASI PRODUK LANGSUNG --}}
             @else
+                @php
+                    $produk = $pesanan->produk;
+                    $foto = $produk->foto ?? 'default.png';
+                    $imgSrc = file_exists(public_path('images/' . $foto)) 
+                        ? asset('images/' . $foto) 
+                        : (file_exists(public_path('storage/' . $foto)) ? asset('storage/' . $foto) : asset('images/logo_tefa.png'));
+                @endphp
 
                 <div class="status-card-box border-blue">
                     <!-- BAGIAN KIRI -->
                     <div class="status-info-left">
-                        <img
-                            src="{{ asset('images/' . ($pesanan->produk->foto ?? 'default.png')) }}"
-                            alt="{{ $pesanan->produk->nama_produk ?? 'Produk' }}"
-                            class="status-img"
-                        >
+                        <img src="{{ $imgSrc }}" alt="{{ $produk->nama_produk ?? 'Produk' }}" class="status-img">
 
                         <div class="status-text">
-                            <h4>{{ $pesanan->produk->nama_produk ?? 'Produk DKV' }}</h4>
+                            <h4>{{ $produk->nama_produk ?? 'Produk DKV' }}</h4>
                             <h5>TEFA DKV</h5>
                             <p>Jumlah: <strong>{{ $pesanan->jumlah }}</strong></p>
                             <a href="/status/detail?pesanan_id={{ $pesanan->id }}" class="btn-lihat-detail">
