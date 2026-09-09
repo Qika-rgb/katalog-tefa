@@ -36,7 +36,7 @@
                 <i class="fa-regular fa-user"></i>
             </a>
             <a href="/customer-service" style="color: inherit; text-decoration: none;">
-                    <i class="fa-solid fa-headset"></i>
+                <i class="fa-solid fa-headset"></i>
             </a>
         </div>
 
@@ -57,49 +57,62 @@
                 ========================== -->
                 <div class="cart-item-wrapper">
 
-                    <div class="cart-item-box">
+                    <div class="cart-item-box" style="display: flex; align-items: center; justify-content: space-between;">
 
-                        <!-- FOTO PRODUK -->
-                        <img
-                            src="{{ asset('images/' . $item['foto']) }}"
-                            alt="{{ $item['nama_produk'] }}"
-                            class="cart-item-img"
-                        >
-
-
-                        <!-- DETAIL PRODUK -->
-                        <div class="cart-item-details">
-
-                            <h4>
-                                {{ $item['nama_produk'] }}
-                            </h4>
-
-                            <h5>
-                                TEFA DKV
-                            </h5>
-
-                            <p class="cart-item-price">
-                                RP {{ number_format($item['harga'], 0, ',', '.') }}
-                            </p>
-
-                            <input
-                                type="text"
-                                placeholder="ISI NOMOR TELEPON MU!"
-                                class="cart-input-phone"
+                        <!-- BAGIAN KIRI: FOTO & DETAIL -->
+                        <div style="display: flex; gap: 20px; align-items: center;">
+                            <!-- FOTO PRODUK -->
+                            <img
+                                src="{{ asset('images/' . $item['foto']) }}"
+                                alt="{{ $item['nama_produk'] }}"
+                                class="cart-item-img"
                             >
 
+                            <!-- DETAIL PRODUK -->
+                            <div class="cart-item-details">
+
+                                <h4>
+                                    {{ $item['nama_produk'] }}
+                                </h4>
+
+                                <h5>
+                                    TEFA DKV
+                                </h5>
+
+                                <p class="cart-item-price">
+                                    RP {{ number_format($item['harga'], 0, ',', '.') }}
+                                </p>
+
+                                <input
+                                    type="text"
+                                    placeholder="ISI NOMOR TELEPON MU!"
+                                    class="cart-input-phone"
+                                    value="{{ $item['no_telepon'] ?? '' }}"
+                                >
+
+                            </div>
                         </div>
 
+                        <!-- BAGIAN KANAN: JUMLAH & TOMBOL HAPUS -->
+                        <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 15px;">
+                            
+                            <!-- TOMBOL HAPUS (Sudah disiapkan untuk Backend) -->
+                            <form action="/keranjang/hapus/{{ $item['id'] ?? 0 }}" method="POST" style="margin: 0;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" style="background: transparent; border: none; color: #dc2626; font-size: 1.2rem; cursor: pointer; transition: 0.3s;" title="Hapus Produk" onmouseover="this.style.color='#991b1b'" onmouseout="this.style.color='#dc2626'">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
+                            </form>
 
-                        <!-- JUMLAH PRODUK -->
-                        <div class="cart-item-qty">
-
-                            Total
-
-                            <strong>
-                                {{ $item['jumlah'] }}
-                            </strong>
-
+                            <!-- JUMLAH PRODUK -->
+                            <div class="cart-item-qty">
+                                Total
+                                <strong>
+                                    {{ $item['jumlah'] }}
+                                </strong>
+                            </div>
+                            
                         </div>
 
                     </div>
@@ -153,7 +166,6 @@
                     </span>
 
                     <span class="total-price">
-
                         RP
                         {{ number_format(
                             collect($keranjang)->sum(function ($item) {
@@ -163,11 +175,9 @@
                             ',',
                             '.'
                         ) }}
-
                     </span>
 
                 </div>
-
 
                 <a href="/checkout" class="btn-checkout" style="text-decoration: none; display: inline-block;">
                 Get Started
