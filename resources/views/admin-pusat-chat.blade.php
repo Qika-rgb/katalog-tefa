@@ -16,7 +16,7 @@
             <img src="{{ asset('images/logo_tefa.png') }}" alt="Logo" class="admin-logo">
         </a>
         <ul class="admin-nav">
-            <li><a href="/admin-pusat/status">PRODUCT REPORT</a></li>
+            <li><a href="/admin-pusat/product-report">PRODUCT REPORT</a></li>
             <li>
                 <div class="red-dot"></div>
                 <a href="/admin-pusat/chat" class="active-cs active-black-line">CUSTOMER SERVICE</a>
@@ -48,18 +48,13 @@
             </div>
         </div>
 
-        <!-- WADAH UTAMA CHAT -->
+<!-- WADAH UTAMA CHAT -->
         <div class="chat-wrapper">
 
             <!-- KIRI: Daftar Pelanggan -->
             <div class="chat-sidebar">
+                <!-- Sisa 1 kontak saja, titik merah dan totebag sudah hilang -->
                 <div class="contact-item">
-                    <img src="{{ asset('images/foto_profil.png') }}" alt="Avatar" class="contact-avatar">
-                    <span class="contact-name">CUSTOMER TOTE BAG</span>
-                </div>
-
-                <div class="contact-item">
-                    <div class="chat-red-dot"></div>
                     <img src="{{ asset('images/foto_profil.png') }}" alt="Avatar" class="contact-avatar">
                     <span class="contact-name">CUSTOMER WEB</span>
                 </div>
@@ -68,41 +63,38 @@
             <!-- KANAN: Jendela Obrolan -->
             <div class="chat-main">
 
+                <!-- Header -->
                 <div class="chat-header">
                     <img src="{{ asset('images/foto_profil.png') }}" alt="Avatar" class="contact-avatar">
-                    <span class="contact-name">CUSTOMER TOTE BAG</span>
+                    <span class="contact-name">CUSTOMER WEB</span>
                 </div>
 
+                <!-- Chat Body (Looping dari Database) -->
                 <div class="chat-body">
                     @foreach($messages as $message)
                         <div class="chat-bubble {{ $message->sender === 'admin' ? 'bubble-right' : 'bubble-left' }}">
-
-                            <img
-                                src="{{ asset('images/foto_profil.png') }}"
-                                alt="Avatar"
-                                class="contact-avatar"
-                            >
-
+                            <img src="{{ asset('images/foto_profil.png') }}" alt="Avatar" class="contact-avatar">
                             <div class="chat-text">
                                 {{ $message->message }}
                             </div>
-
                         </div>
                     @endforeach
                 </div>
 
+                <!-- Form Input Chat -->
                 <form action="/chat/send" method="POST" class="chat-input-area">
                     @csrf
+                    <input type="text" name="message" class="chat-input" placeholder="TYPE HERE" autocomplete="off" required>
+                    <input type="hidden" name="sender" value="admin">
+                    <button type="submit" class="btn-send">
+                        <i class="fa-regular fa-paper-plane"></i>
+                    </button>
+                </form>
 
-                    <input
-                        type="text"
-                        name="message"
-                        class="chat-input"
-                        placeholder="TYPE HERE"
-                        autocomplete="off"
-                        required
-                    >
+            </div> <!-- Penutup chat-main -->
 
+        </div> <!-- Penutup chat-wrapper -->
+        
                     <input
                         type="hidden"
                         name="sender"

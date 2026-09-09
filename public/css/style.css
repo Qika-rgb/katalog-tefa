@@ -28,15 +28,17 @@ body, html {
     align-items: center;
     height: 100%;
 }
+
 .nav-brand a {
     display: flex;
     align-items: center;
 }
-.nav-brand img {
-    height: 70px; 
-    transform: translateY(14px);
-}
 
+.nav-brand img {
+    height: 50px; /* Sedikit dikecilkan agar proporsional dengan search bar */
+    /* Hapus baris transform: translateY(14px); yang lama */
+    object-fit: contain; 
+}
 .nav-menu {
     display: flex;
     list-style: none;
@@ -1495,43 +1497,18 @@ body.bg-light {
 
 .login-page {
     min-height: 100vh;
-
     display: flex;
     justify-content: center;
     align-items: center;
-
     padding: 20px;
-
     box-sizing: border-box;
-
-    background:
-        radial-gradient(
-            ellipse at 20% 20%,
-            #6685ee 0%,
-            #6685ee 9%,
-            transparent 10%
-        ),
-        radial-gradient(
-            ellipse at 80% 25%,
-            #6685ee 0%,
-            #6685ee 9%,
-            transparent 10%
-        ),
-        radial-gradient(
-            ellipse at 30% 80%,
-            #6685ee 0%,
-            #6685ee 10%,
-            transparent 11%
-        ),
-        radial-gradient(
-            ellipse at 80% 75%,
-            #6685ee 0%,
-            #6685ee 10%,
-            transparent 11%
-        ),
-        #f8f8f8;
-
-    overflow: hidden;
+    
+    /* Ubah background menjadi transparan agar video di belakangnya terlihat */
+    background: transparent;
+    
+    /* Pastikan posisi form tetap di atas video */
+    position: relative;
+    z-index: 1; 
 }
 
 
@@ -1829,9 +1806,17 @@ body.bg-light {
 
 @media (max-width: 480px) {
 
-    .login-page {
-        padding: 15px;
-    }
+.login-page {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+    background: transparent; 
+    position: relative;
+    z-index: 10; /* Angka diperbesar agar kotak login pasti berada di atas video */
+}
 
     .login-card {
         width: 100%;

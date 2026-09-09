@@ -34,22 +34,15 @@
         </div>
 
         <div class="nav-icons">
-
-            <a href="/keranjang"
-               style="color: inherit; text-decoration: none;">
+            <a href="/keranjang" style="color: inherit; text-decoration: none;">
                 <i class="fa-solid fa-cart-shopping"></i>
             </a>
-
-            <a href="/register"
-               style="color: inherit; text-decoration: none;">
+            <a href="/register" style="color: inherit; text-decoration: none;">
                 <i class="fa-regular fa-user"></i>
             </a>
-
-            <a href="#"
-               style="color: inherit; text-decoration: none;">
-                <i class="fa-solid fa-headset"></i>
+            <a href="/customer-service" style="color: inherit; text-decoration: none;">
+                    <i class="fa-solid fa-headset"></i>
             </a>
-
         </div>
 
     </div>
