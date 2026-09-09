@@ -7,6 +7,8 @@ use App\Http\Controllers\KeranjangController;
 use App\Http\Controllers\CheckoutController;
 use App\Models\Pesanan;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\RegisterController;
 
 // =========================
 // HALAMAN UTAMA & KATALOG
@@ -21,13 +23,14 @@ Route::get('/pemesanan/{id}', [KatalogController::class, 'detail']);
 // =========================
 // AUTH (LOGIN & REGISTER)
 // =========================
-Route::get('/login', function () {
-    return view('login');
-});
 
-Route::get('/register', function () {
-    return view('register');
-});
+Route::get('/login', [AuthController::class, 'showLogin']);
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/logout', [AuthController::class, 'logout']);
+
+
+Route::get('/register', [RegisterController::class, 'showRegister']);
+Route::post('/register', [RegisterController::class, 'register']);
 
 Route::get('/forgot-password', function () {
     return view('forgot-password');
