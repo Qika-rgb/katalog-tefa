@@ -9,12 +9,13 @@
         <i class="fa-solid fa-chevron-left banner-arrow" id="prevBanner"></i>
         
         <div class="banner-content" id="bannerBg">
-            <div class="banner-text">
+            <div class="banner-text" id="bannerTextContainer">
+                <!-- Teks judul banner -->
                 <h1 id="bannerTitle">WELCOME TO TEFA REKAYASA PERANGKAT LUNAK</h1>
-                <a href="#" class="btn-banner">READY FOR DIGITAL WORK?</a>
+                <!-- TOMBOL READY FOR DIGITAL WORK SUDAH DIHAPUS DARI SINI -->
             </div>
             
-            <!-- Gambar Banner -->
+            <!-- Gambar Banner Orang -->
             <img src="{{ asset('images/icon_rpl.png') }}" alt="Banner Icon" class="banner-img" id="bannerImg">
         </div>
 
@@ -60,107 +61,117 @@
 
 <!-- SCRIPT UNTUK SLIDER BANNER -->
 <!-- SCRIPT UNTUK SLIDER BANNER & FILTER PRODUK -->
+<!-- SCRIPT UNTUK SLIDER BANNER & SINKRONISASI FILTER -->
+<!-- SCRIPT UNTUK SLIDER BANNER & SINKRONISASI FILTER -->
 <script>
-    // 1. Data Banner (Pastikan nama gambar persis dengan yang ada di foldermu)
+    // 1. Data Banner Khusus "Semua Jurusan"
+    const bannerSemua = {
+        title: "WELCOME TO SMKN 4 TANJUNGPINANG",
+        img: "{{ asset('images/icon_sekolah.png') }}"
+    };
+
+    // 2. Data Banner Jurusan 
     const banners = [
-        {
-            title: "WELCOME TO TEFA REKAYASA PERANGKAT LUNAK",
-            bg: "linear-gradient(to right, #ab6f4f, #e24215)", // Oranye RPL
-            img: "{{ asset('images/icon_rpl.png') }}"
-        },
-        {
-            title: "WELCOME TO TEFA ANIMASI",
-            bg: "linear-gradient(to right, #38bdf8, #08405c)", // Biru muda Animasi
-            img: "{{ asset('images/icon_animasi.png') }}"
-        },
-        {
-            title: "WELCOME TO TEFA TKJ",
-            bg: "linear-gradient(to right, #34d399, #065139)", // Hijau TKJ
-            img: "{{ asset('images/icon_tkj.png') }}"
-        },
-        {
-            title: "WELCOME TO TEFA PSPT",
-            bg: "linear-gradient(to right, #facc15, #573e07)", // Kuning PSPT
-            img: "{{ asset('images/icon_pspt.png') }}"
-        },
-        {
-            title: "WELCOME TO TEFA DKV",
-            bg: "linear-gradient(to right, #dc2626, #991b1b)", // Merah DKV
-            img: "{{ asset('images/icon_dkv2.png') }}"
-        },
-        {
-            title: "WELCOME TO TEFA PENGEMBANGAN GIM",
-            bg: "linear-gradient(to right, #4f46e5, #090542)", // Ungu Game
-            img: "{{ asset('images/icon_gim.png') }}"
-        }
+        { title: "WELCOME TO TEFA REKAYASA PERANGKAT LUNAK", bg: "linear-gradient(to right, #ab6f4f, #e24215)", img: "{{ asset('images/icon_rpl.png') }}" },
+        { title: "WELCOME TO TEFA ANIMASI", bg: "linear-gradient(to right, #38bdf8, #08405c)", img: "{{ asset('images/icon_animasi.png') }}" },
+        { title: "WELCOME TO TEFA TKJ", bg: "linear-gradient(to right, #34d399, #065139)", img: "{{ asset('images/icon_tkj.png') }}" },
+        { title: "WELCOME TO TEFA PSPT", bg: "linear-gradient(to right, #facc15, #573e07)", img: "{{ asset('images/icon_pspt.png') }}" },
+        { title: "WELCOME TO TEFA DKV", bg: "linear-gradient(to right, #dc2626, #991b1b)", img: "{{ asset('images/icon_dkv2.png') }}" },
+        { title: "WELCOME TO TEFA PENGEMBANGAN GIM", bg: "linear-gradient(to right, #4f46e5, #090542)", img: "{{ asset('images/icon_gim.png') }}" }
     ];
 
     let currentIndex = 0;
+    let isSemuaJurusan = false;
 
-    // 2. Ambil elemen dari HTML
+    // 3. Ambil elemen HTML
     const bannerBg = document.getElementById('bannerBg');
     const bannerTitle = document.getElementById('bannerTitle');
     const bannerImg = document.getElementById('bannerImg');
     const btnPrev = document.getElementById('prevBanner');
     const btnNext = document.getElementById('nextBanner');
     const katalogTitle = document.querySelector('.katalog-section-title');
+    const bannerTextContainer = document.getElementById('bannerTextContainer');
 
-    // 3. Fungsi Utama (Mengubah Banner, Judul, dan Filter Produk)
-    function updateBanner(index) {
-        // Ubah Banner
-        bannerBg.style.background = banners[index].bg;
-        bannerTitle.textContent = banners[index].title;
-        bannerImg.src = banners[index].img;
+    // 4. BACA URL SAAT HALAMAN DIMUAT
+    const urlParams = new URLSearchParams(window.location.search);
+    const kategoriParam = urlParams.get('kategori');
 
-        // Ubah Judul Katalog
+    if (kategoriParam === 'all' || kategoriParam === null) {
+        // --- JIKA BERADA DI SEMUA JURUSAN ---
+        isSemuaJurusan = true;
+        
+        // Background menggunakan center 20% agar foto sedikit turun
+        bannerBg.style.background = `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('${bannerSemua.img}') center 20%/cover no-repeat`;
+        bannerTitle.textContent = bannerSemua.title;
+        bannerTitle.style.textShadow = '2px 2px 10px rgba(0,0,0,0.8)';
+        bannerTextContainer.style.textAlign = 'center';
+        bannerTextContainer.style.width = '100%';
+        
+        // Sembunyikan Gambar Icon Orang
+        if(bannerImg) bannerImg.style.display = 'none';
+        
+        if (katalogTitle) katalogTitle.textContent = "CATALOG SEMUA PRODUK";
+
+    } else {
+        // --- JIKA BERADA DI JURUSAN SPESIFIK ---
+        isSemuaJurusan = false;
+        currentIndex = parseInt(kategoriParam);
+        
+        bannerBg.style.background = banners[currentIndex].bg;
+        bannerTitle.textContent = banners[currentIndex].title;
+        bannerTitle.style.textShadow = 'none';
+        bannerTextContainer.style.textAlign = 'left';
+        bannerTextContainer.style.width = 'auto';
+        
+        // Tampilkan Kembali Gambar Icon Orang
+        if(bannerImg) {
+            bannerImg.style.display = 'block';
+            bannerImg.src = banners[currentIndex].img;
+        }
+        
         if (katalogTitle) {
-            const namaJurusan = banners[index].title.replace('WELCOME TO TEFA ', '');
+            const namaJurusan = banners[currentIndex].title.replace('WELCOME TO TEFA ', '');
             katalogTitle.textContent = "CATALOG " + namaJurusan;
         }
-
-        // Filter Produk
-        const products = document.querySelectorAll('.product-card');
-        products.forEach(product => {
-            const kategoriProduk = product.getAttribute('data-kategori');
-            // Tampilkan jika kategori cocok ATAU jika belum ada kategori dari backend
-            if (!kategoriProduk || kategoriProduk == index) {
-                product.style.display = 'flex';
-            } else {
-                product.style.display = 'none';
-            }
-        });
     }
+    
+    // Tampilkan produk
+    const products = document.querySelectorAll('.product-card');
+    products.forEach(product => {
+        product.style.display = 'flex'; 
+    });
 
-    // 4. Fungsi Global untuk dipanggil dari Navbar Search
-    window.goToBanner = function(index) {
-        currentIndex = parseInt(index);
-        updateBanner(currentIndex);
-    };
-
-    // 5. BANGUNKAN JAVASCRIPT SAAT HALAMAN DIMUAT (REFRESH)
-    const urlParams = new URLSearchParams(window.location.search);
-    const requestedBanner = urlParams.get('banner');
-    if (requestedBanner !== null) {
-        goToBanner(requestedBanner); // Jika di-klik dari Home
-    } else {
-        updateBanner(currentIndex); // Jika hanya di-refresh biasa
-    }
-
-    // 6. Logika Klik Panah
+// 5. LOGIKA KLIK PANAH SLIDER (Sudah diperbaiki agar 'Semua Jurusan' ikut berputar)
     btnNext.addEventListener('click', function() {
-        currentIndex++;
-        if (currentIndex >= banners.length) {
-            currentIndex = 0;
+        if (isSemuaJurusan) {
+            // Jika sedang di "Semua Jurusan", lanjut ke RPL (0)
+            window.location.href = `/katalog?kategori=0`;
+        } else {
+            // Jika sedang di jurusan terakhir (Gim), kembali ke "Semua Jurusan"
+            if (currentIndex >= banners.length - 1) {
+                window.location.href = `/katalog?kategori=all`;
+            } else {
+                // Jika di tengah-tengah, lanjut ke jurusan berikutnya
+                currentIndex++;
+                window.location.href = `/katalog?kategori=${currentIndex}`;
+            }
         }
-        updateBanner(currentIndex);
     });
 
     btnPrev.addEventListener('click', function() {
-        currentIndex--;
-        if (currentIndex < 0) {
-            currentIndex = banners.length - 1;
+        if (isSemuaJurusan) {
+            // Jika sedang di "Semua Jurusan", mundur ke jurusan terakhir (Gim)
+            window.location.href = `/katalog?kategori=${banners.length - 1}`;
+        } else {
+            // Jika sedang di jurusan pertama (RPL), mundur ke "Semua Jurusan"
+            if (currentIndex <= 0) {
+                window.location.href = `/katalog?kategori=all`;
+            } else {
+                // Jika di tengah-tengah, mundur ke jurusan sebelumnya
+                currentIndex--;
+                window.location.href = `/katalog?kategori=${currentIndex}`;
+            }
         }
-        updateBanner(currentIndex);
     });
 </script>
 @endsection
