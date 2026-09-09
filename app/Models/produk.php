@@ -18,4 +18,10 @@ class produk extends Model
         'foto',
         'kategori_id',
     ];
+
+    // Relasi ke tabel kategoris
+    public function kategori()
+{
+    return $this->belongsTo(Kategori::class, 'kategori_id');
+}
 }
