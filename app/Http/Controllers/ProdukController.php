@@ -44,10 +44,9 @@ class ProdukController extends Controller
         return redirect()->route('admin-jurusan.dashboard')->with('success', 'Produk berhasil ditambahkan!');
     }
 
-    // Halaman Katalog untuk Customer
     public function indexKatalog()
-    {
-        $produks = Produk::with('kategori')->get();
-        return view('katalog.index', compact('produks'));
-    }
+{
+    $produks = Produk::with('kategori')->get();
+    return view('katalog', compact('produks'));
+}
 }
