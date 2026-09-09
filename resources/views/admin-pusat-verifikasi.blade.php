@@ -130,6 +130,71 @@
             </div>
         @endforelse
 
+        <!-- ========================================= -->
+        <!-- RIWAYAT PESANAN SELESAI (No. 5)            -->
+        <!-- ========================================= -->
+        <div class="admin-header-row" style="margin-top: 40px;">
+            <h1>RIWAYAT PESANAN SELESAI</h1>
+        </div>
+
+        @forelse ($riwayatSelesai as $pesanan)
+            @php
+                $produk = $pesanan->produk;
+
+                $fotoPath = asset('images/logo_tefa.png');
+                if ($produk && $produk->foto) {
+                    if (file_exists(public_path('images/' . $produk->foto))) {
+                        $fotoPath = asset('images/' . $produk->foto);
+                    } elseif (file_exists(public_path('storage/' . $produk->foto))) {
+                        $fotoPath = asset('storage/' . $produk->foto);
+                    }
+                }
+            @endphp
+
+            <div class="admin-order-card">
+
+                <img src="{{ $fotoPath }}" alt="{{ $produk->nama_produk ?? 'Produk DKV' }}" class="admin-order-img">
+
+                <div class="admin-order-info">
+                    <h3>Informasi pemesanan & layanan</h3>
+
+                    <p>
+                        ID PESANAN :
+                        <strong>#{{ $pesanan->id }}</strong>
+                    </p>
+
+                    <p>
+                        NAMA PEMESAN / TELEPON :
+                        <strong>{{ $pesanan->no_telepon ?? 'Customer' }}</strong>
+                    </p>
+
+                    <p>
+                        JENIS LAYANAN / PAKET :
+                        <strong>{{ $produk->nama_produk ?? 'Produk tidak ditemukan' }}</strong>
+                    </p>
+
+                    <p>
+                        JUMLAH :
+                        <strong>{{ $pesanan->jumlah }}</strong>
+                    </p>
+
+                    <p>
+                        STATUS :
+                        <span class="status-text" style="color: #28a745; font-weight: 700;">
+                            {{ strtoupper($pesanan->status) }}
+                        </span>
+                    </p>
+                </div>
+
+            </div>
+        @empty
+            <div class="admin-order-card" style="text-align: center; padding: 40px;">
+                <div class="admin-order-info" style="width: 100%;">
+                    <h3>Belum ada riwayat pesanan selesai</h3>
+                </div>
+            </div>
+        @endforelse
+
     </div> <!-- End Main Content -->
 
 </body>
