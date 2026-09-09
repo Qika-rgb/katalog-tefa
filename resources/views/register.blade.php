@@ -32,32 +32,39 @@
         <h2>Sign up with email</h2>
         <p class="subtitle">make a new doc to bring your words, data<br>and teams together.for free</p>
 
-    <form action="#" method="POST">
+    <form action="/register" method="POST">
     @csrf
-            <div class="input-group">
-                <i class="fa-regular fa-envelope icon-left"></i>
-                <input type="email" name="email" placeholder="your email">
-            </div>
 
-            <div class="input-group">
-                <i class="fa-solid fa-key icon-left"></i>
-                <!-- Tambahkan id="password" di sini -->
-                <input type="password" name="password" id="password" placeholder="your password">
-                <!-- Tambahkan id="togglePassword" di sini -->
-                <i class="fa-regular fa-eye-slash icon-right" id="togglePassword"></i>
-            </div>
+    <!-- NAMA -->
+    <div class="input-group">
+        <i class="fa-regular fa-user icon-left"></i>
+        <input type="text" name="name" placeholder="your name" required>
+    </div>
 
-            <div class="links">
-                <!-- Ubah href="#" menjadi href="/login" -->
-                <a href="/login" class="text-green">Already have account?</a>
-                
-                <!-- Untuk forget password -->
-                <a href="/forgot-password" class="text-black">forget password?</a>
-            </div>
+    <div class="input-group">
+        <i class="fa-regular fa-envelope icon-left"></i>
+        <input type="email" name="email" placeholder="your email" required>
+    </div>
 
-            <button type="submit" class="btn-main">Get Started</button>
-        </form>
+    <div class="input-group">
+        <i class="fa-solid fa-key icon-left"></i>
+        <input type="password" name="password" id="password" placeholder="your password" required>
+        <i class="fa-regular fa-eye-slash icon-right" id="togglePassword"></i>
+    </div>
 
+    <!-- KONFIRMASI PASSWORD -->
+    <div class="input-group">
+        <i class="fa-solid fa-key icon-left"></i>
+        <input type="password" name="password_confirmation" placeholder="confirm your password" required>
+    </div>
+
+    <div class="links">
+        <a href="/login" class="text-green">Already have account?</a>
+        <a href="/forgot-password" class="text-black">forget password?</a>
+    </div>
+
+    <button type="submit" class="btn-main">Get Started</button>
+</form>
         <div class="divider">or sign up with</div>
 
         <div class="social-buttons">

@@ -59,7 +59,13 @@
                  LOGIN FORM
             ================================== -->
 
-            <form action="#" method="POST">
+                @if ($errors->any())
+            <div class="login-error">
+                {{ $errors->first() }}
+            </div>
+                @endif
+
+            <form action="/login" method="POST">
 
                 @csrf
 
