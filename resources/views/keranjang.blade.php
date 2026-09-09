@@ -48,9 +48,22 @@
     ========================== -->
     <div class="pemesanan-card">
 
+        <!-- ALERT NOTIFIKASI SUCCESS/ERROR -->
+        @if(session('success'))
+            <div style="padding: 10px 15px; background-color: #d4edda; color: #155724; border-radius: 8px; margin-bottom: 20px; font-weight: 600;">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        @if(session('error'))
+            <div style="padding: 10px 15px; background-color: #f8d7da; color: #721c24; border-radius: 8px; margin-bottom: 20px; font-weight: 600;">
+                {{ session('error') }}
+            </div>
+        @endif
+
         <div class="cart-container">
 
-            @forelse ($keranjang as $item)
+            @forelse ($keranjangs as $item)
 
                 <!-- =========================
                      ITEM PRODUK
@@ -63,8 +76,8 @@
                         <div style="display: flex; gap: 20px; align-items: center;">
                             <!-- FOTO PRODUK -->
                             <img
-                                src="{{ asset('images/' . $item['foto']) }}"
-                                alt="{{ $item['nama_produk'] }}"
+                                src="{{ asset('images/' . $item->produk->foto) }}"
+                                alt="{{ $item->produk->nama_produk }}"
                                 class="cart-item-img"
                             >
 
@@ -72,7 +85,7 @@
                             <div class="cart-item-details">
 
                                 <h4>
-                                    {{ $item['nama_produk'] }}
+                                    {{ $item->produk->nama_produk }}
                                 </h4>
 
                                 <h5>
@@ -80,24 +93,17 @@
                                 </h5>
 
                                 <p class="cart-item-price">
-                                    RP {{ number_format($item['harga'], 0, ',', '.') }}
+                                    RP {{ number_format($item->produk->harga, 0, ',', '.') }}
                                 </p>
-
-                                <input
-                                    type="text"
-                                    placeholder="ISI NOMOR TELEPON MU!"
-                                    class="cart-input-phone"
-                                    value="{{ $item['no_telepon'] ?? '' }}"
-                                >
 
                             </div>
                         </div>
 
                         <!-- BAGIAN KANAN: JUMLAH & TOMBOL HAPUS -->
                         <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 15px;">
-                            
-                            <!-- TOMBOL HAPUS (Sudah disiapkan untuk Backend) -->
-                            <form action="/keranjang/hapus/{{ $item['id'] ?? 0 }}" method="POST" style="margin: 0;">
+
+                            <!-- TOMBOL HAPUS -->
+                            <form action="/keranjang/hapus/{{ $item->id }}" method="POST" style="margin: 0;">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" style="background: transparent; border: none; color: #dc2626; font-size: 1.2rem; cursor: pointer; transition: 0.3s;" title="Hapus Produk" onmouseover="this.style.color='#991b1b'" onmouseout="this.style.color='#dc2626'">
@@ -109,10 +115,10 @@
                             <div class="cart-item-qty">
                                 Total
                                 <strong>
-                                    {{ $item['jumlah'] }}
+                                    {{ $item->jumlah }}
                                 </strong>
                             </div>
-                            
+
                         </div>
 
                     </div>
@@ -137,14 +143,13 @@
                         Silakan pilih produk terlebih dahulu.
                     </p>
 
-                    <a
-                        href="/katalog"
-                        class="btn-solid-blue"
-                        style="display: inline-block; margin-top: 15px; text-decoration: none;"
-                    >
-                        KEMBALI KE KATALOG
-                    </a>
 
+                  <a href="/katalog"
+    class="btn-solid-blue"
+    style="display: inline-block; margin-top: 15px; text-decoration: none;"
+>
+    KEMBALI KE KATALOG
+</a>
                 </div>
 
             @endforelse
@@ -155,7 +160,7 @@
         <!-- =========================
              CHECKOUT
         ========================== -->
-        @if(count($keranjang) > 0)
+        @if(count($keranjangs) > 0)
 
             <div class="cart-checkout-section">
 
@@ -168,8 +173,8 @@
                     <span class="total-price">
                         RP
                         {{ number_format(
-                            collect($keranjang)->sum(function ($item) {
-                                return $item['harga'] * $item['jumlah'];
+                            $keranjangs->sum(function ($item) {
+                                return $item->produk->harga * $item->jumlah;
                             }),
                             0,
                             ',',

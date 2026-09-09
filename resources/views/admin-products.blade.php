@@ -23,7 +23,7 @@
 
     <!-- MAIN CONTENT -->
     <div class="admin-main">
-        
+
         <!-- Top Profile -->
         <div class="admin-top-profile">
             <div class="profile-pill">
@@ -42,11 +42,28 @@
             </div>
         </div>
 
+        <!-- ALERT NOTIFIKASI SUCCESS/ERROR -->
+        @if(session('success'))
+            <div style="padding: 10px 15px; background-color: #d4edda; color: #155724; border-radius: 8px; margin-bottom: 20px; font-weight: 600;">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        @if($errors->any())
+            <div style="padding: 10px 15px; background-color: #f8d7da; color: #721c24; border-radius: 8px; margin-bottom: 20px; font-weight: 600;">
+                <ul style="margin: 0; padding-left: 20px;">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         <!-- KOTAK PUTIH UNTUK DAFTAR PRODUK -->
         <div class="admin-white-box">
-            
+
             <div class="product-grid">
-                
+
                 <!-- KARTU 1 -->
                 <div class="product-card">
                     <div class="product-img-wrapper">
@@ -128,67 +145,75 @@
     <!-- OVERLAY MODAL TAMBAH PRODUK (DI SINI ID DITAMBAHKAN) -->
     <div class="modal-overlay" id="modalAddProduct">
         <div class="modal-card">
-            
+
             <!-- Tombol Back (DI SINI ID DITAMBAHKAN) -->
-            <button class="btn-back" id="btnBackModal"><i class="fa-solid fa-chevron-left"></i> BACK</button>
+            <button type="button" class="btn-back" id="btnBackModal"><i class="fa-solid fa-chevron-left"></i> BACK</button>
 
-            <div class="modal-body">
-                <!-- Bagian Kiri: Gambar -->
-                <div class="modal-left">
-                    <div class="image-upload-box">
-                        <img src="{{ asset('images/icon_gallery.png') }}" alt="Upload Gambar">
+            <!-- FORM TAMBAH PRODUK (Terhubung ke ProdukController@store) -->
+            <form action="{{ route('admin-jurusan.produk.store') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+
+                <div class="modal-body">
+                    <!-- Bagian Kiri: Gambar -->
+                    <div class="modal-left">
+                        <label for="fotoInput" class="image-upload-box" style="cursor: pointer;">
+                            <img
+                                id="previewFoto"
+                                src="{{ asset('images/icon_gallery.png') }}"
+                                alt="Upload Gambar"
+                            >
+                        </label>
+                        <input
+                            type="file"
+                            id="fotoInput"
+                            name="foto"
+                            accept="image/jpeg,image/png,image/jpg"
+                            style="display: none;"
+                        >
+                        <span class="upload-label">TAMBAHKAN GAMBAR</span>
                     </div>
-                    <span class="upload-label">TAMBAHKAN GAMBAR</span>
-                </div>
 
-                <!-- Bagian Kanan: Form Utama -->
-                <div class="modal-right">
-                    
-                    <div class="form-group">
-                        <label>NAMA</label>
-                        <input type="text" class="form-input">
-                    </div>
+                    <!-- Bagian Kanan: Form Utama -->
+                    <div class="modal-right">
 
-                    <div class="form-group">
-                        <label>TIPE PENJUALAN</label>
-                        <select class="form-input">
-                            <option>BARANG</option>
-                            <option>JASA</option>
-                        </select>
-                    </div>
-
-                    <!-- Baris STOK & KODE PENJUALAN -->
-                    <div class="row-stok-kode">
-                        <div class="form-group col-stok">
-                            <label>STOK</label>
-                            <input type="number" class="form-input">
+                        <div class="form-group">
+                            <label>NAMA</label>
+                            <input type="text" name="nama_produk" class="form-input" required>
                         </div>
-                        
-                        <div class="form-group col-kode">
-                            <label>KODE PENJUALAN</label>
-                            <div class="kode-input-wrapper">
-                                <input type="text" class="form-input">
-                                <button type="button" class="btn-refresh"><i class="fa-solid fa-rotate"></i></button>
-                            </div>
+
+                        <div class="form-group">
+                            <label>DESKRIPSI</label>
+                            <input type="text" name="deskripsi" class="form-input" required>
                         </div>
-                    </div>
 
-                    <div class="form-group col-harga">
-                        <label>HARGA JUAL</label>
-                        <input type="text" class="form-input">
-                    </div>
+                        <div class="form-group">
+                            <label>KATEGORI</label>
+                            <select name="kategori_id" class="form-input" required>
+                                <option value="">-- Pilih Kategori --</option>
+                                @foreach ($kategoris as $kategori)
+                                    <option value="{{ $kategori->id }}">{{ $kategori->nama_kategori }}</option>
+                                @endforeach
+                            </select>
+                        </div>
 
-                    <button type="button" class="btn-simpan">SIMPAN</button>
-                    
-                </div> <!-- End Right -->
-            </div> <!-- End Body -->
+                        <div class="form-group col-harga">
+                            <label>HARGA JUAL</label>
+                            <input type="number" name="harga" class="form-input" required>
+                        </div>
+
+                        <button type="submit" class="btn-simpan">SIMPAN</button>
+
+                    </div> <!-- End Right -->
+                </div> <!-- End Body -->
+            </form>
+
         </div>
     </div>
 
     <!-- OVERLAY MODAL UPDATE PRODUK -->
     <div class="modal-overlay" id="modalUpdateProduct">
         <div class="modal-card">
-            
+
             <!-- Tombol Back Khusus Update -->
             <button class="btn-back" id="btnBackUpdate"><i class="fa-solid fa-chevron-left"></i> BACK</button>
 
@@ -203,7 +228,7 @@
 
                 <!-- Bagian Kanan: Form Utama -->
                 <div class="modal-right">
-                    
+
                     <div class="form-group">
                         <label>NAMA</label>
                         <input type="text" class="form-input" value="Design creation services">
@@ -223,7 +248,7 @@
                             <label>STOK</label>
                             <input type="number" class="form-input" value="10">
                         </div>
-                        
+
                         <div class="form-group col-kode">
                             <label>KODE PENJUALAN</label>
                             <div class="kode-input-wrapper">
@@ -239,7 +264,7 @@
                     </div>
 
                     <button type="button" class="btn-simpan">SIMPAN PERUBAHAN</button>
-                    
+
                 </div> <!-- End Right -->
             </div> <!-- End Body -->
         </div>
@@ -254,20 +279,20 @@
 
         if(btnAddNew) {
             btnAddNew.addEventListener('click', function(e) {
-                e.preventDefault(); 
-                modalAdd.style.display = 'flex'; 
+                e.preventDefault();
+                modalAdd.style.display = 'flex';
             });
         }
         if(btnBackAdd) {
             btnBackAdd.addEventListener('click', function() {
-                modalAdd.style.display = 'none'; 
+                modalAdd.style.display = 'none';
             });
         }
 
         // --- 2. LOGIKA UNTUK MODAL UPDATE ---
         const modalUpdate = document.getElementById('modalUpdateProduct');
         // Gunakan querySelectorAll karena tombol Update ada banyak
-        const btnUpdates = document.querySelectorAll('.btn-update'); 
+        const btnUpdates = document.querySelectorAll('.btn-update');
         const btnBackUpdate = document.getElementById('btnBackUpdate');
 
         // Looping ke semua tombol UPDATE NOW
@@ -293,6 +318,22 @@
                 modalUpdate.style.display = 'none';
             }
         });
+
+        // --- 4. PREVIEW GAMBAR SEBELUM UPLOAD ---
+        const fotoInput = document.getElementById('fotoInput');
+        const previewFoto = document.getElementById('previewFoto');
+
+        if (fotoInput) {
+            fotoInput.addEventListener('change', function(e) {
+                if (e.target.files && e.target.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        previewFoto.src = event.target.result;
+                    };
+                    reader.readAsDataURL(e.target.files[0]);
+                }
+            });
+        }
     </script>
 </body>
 </html>
