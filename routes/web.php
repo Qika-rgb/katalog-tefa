@@ -90,7 +90,7 @@ Route::middleware(['auth', 'role:admin_pusat'])->prefix('admin-pusat')->group(fu
 // =========================
 // ROUTE ADMIN JURUSAN (Terproteksi Role)
 // =========================
-Route::middleware(['auth', 'role:admin_jurusan'])->prefix('admin-jurusan')->group(function () {
+    Route::middleware(['auth', 'role:admin_jurusan'])->prefix('admin-jurusan')->group(function () {
     Route::get('/dashboard', function () {
         return view('admin-jurusan');
     })->name('admin-jurusan.dashboard');
