@@ -14,13 +14,14 @@ return new class extends Migration
     Schema::create('pesanans', function (Blueprint $table) {
         $table->id();
 
-        $table->unsignedBigInteger('produk_id')->nullable();
-        $table->unsignedBigInteger('customer_id')->nullable();
+        // Menggunakan foreignId agar terhubung resmi ke tabel users dan produks
+        $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+        $table->foreignId('produk_id')->constrained('produks')->onDelete('cascade');
 
-        $table->string('no_telepon')->nullable();
+        $table->string('no_telepon');
         $table->integer('jumlah')->default(1);
+        $table->bigInteger('total_harga')->default(0); // Ditambahkan untuk menyimpan total bayar
 
-        // Opsi 'Pending' dan 'Ditolak' sudah ditambahkan di sini:
         $table->enum('status', [
             'Pending',
             'Tahap Pembuatan',
@@ -31,7 +32,6 @@ return new class extends Migration
         ])->default('Pending');
 
         $table->date('estimasi_selesai')->nullable();
-
         $table->timestamps();
     });
 }

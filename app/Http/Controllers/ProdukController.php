@@ -11,10 +11,9 @@ class ProdukController extends Controller
 {
     // Form tambah produk untuk Admin Jurusan
     public function create()
-    {
-        $kategoris = Kategori::all();
-        return view('admin-jurusan.produk.create', compact('kategoris'));
-    }
+{
+    return view('admin-products');
+}
 
     // Proses simpan produk baru
     public function store(Request $request)

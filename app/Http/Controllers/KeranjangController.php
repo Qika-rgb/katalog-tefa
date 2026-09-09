@@ -2,44 +2,33 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\produk;
+use App\Models\Keranjang;
+use App\Models\Produk;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class KeranjangController extends Controller
 {
-    public function tambah(Request $request, $id)
-    {
-        $produk = produk::findOrFail($id);
-
-        $jumlah = (int) $request->input('jumlah', 1);
-
-        if ($jumlah < 1) {
-            $jumlah = 1;
-        }
-
-        $keranjang = session()->get('keranjang', []);
-
-        if (isset($keranjang[$id])) {
-            $keranjang[$id]['jumlah'] += $jumlah;
-        } else {
-            $keranjang[$id] = [
-                'id' => $produk->id,
-                'nama_produk' => $produk->nama_produk,
-                'harga' => $produk->harga,
-                'foto' => $produk->foto,
-                'jumlah' => $jumlah,
-            ];
-        }
-
-        session()->put('keranjang', $keranjang);
-
-        return redirect('/keranjang');
-    }
-
     public function index()
     {
-        $keranjang = session()->get('keranjang', []);
+        // Mengambil keranjang berdasarkan user yang sedang login
+        $keranjangs = Keranjang::with('produk')->where('user_id', Auth::id())->get();
+        return view('keranjang', compact('keranjangs'));
+    }
 
-        return view('keranjang', compact('keranjang'));
+    public function tambah(Request $request, $id)
+    {
+        $request->validate([
+            'jumlah' => 'required|numeric|min:1',
+        ]);
+
+        // Simpan langsung ke database tabel keranjangs
+        Keranjang::create([
+            'user_id'   => Auth::id(),
+            'produk_id' => $id,
+            'jumlah'    => $request->jumlah,
+        ]);
+
+        return redirect()->route('keranjang.index')->with('success', 'Produk berhasil ditambah ke keranjang!');
     }
 }

@@ -28,31 +28,42 @@ Route::get('/pemesanan/{id}', [KatalogController::class, 'detail']);
 // =========================
 // KERANJANG & CHECKOUT
 // =========================
-Route::get('/keranjang', [KeranjangController::class, 'index']);
-Route::post('/keranjang/tambah/{id}', [KeranjangController::class, 'tambah']);
+Route::middleware(['auth'])->group(function () {
+    Route::get('/keranjang', [KeranjangController::class, 'index'])->name('keranjang.index');
+    Route::post('/keranjang/tambah/{id}', [KeranjangController::class, 'tambah'])->name('keranjang.tambah');
 
-Route::get('/checkout', [CheckoutController::class, 'index']);
-Route::post('/checkout', [CheckoutController::class, 'store']);
-
-// =========================
-// STATUS PESANAN (CUSTOMER)
-// =========================
-Route::get('/status', function () {
-    $pesanans = Pesanan::with('produk')->latest()->get();
-    return view('status', compact('pesanans'));
+    // =========================
+    // STATUS PESANAN (CUSTOMER)
+    // =========================
+    Route::get('/status', [App\Http\Controllers\PesananController::class, 'status'])->name('pesanan.status');
+    Route::post('/pesanan/store', [App\Http\Controllers\PesananController::class, 'store'])->name('pesanan.store');
 });
-
 Route::get('/status/detail', function (Illuminate\Http\Request $request) {
     $pesanan = Pesanan::with('produk')->findOrFail($request->pesanan_id);
     return view('status-detail', compact('pesanan'));
 });
 
 // =========================
+// ROUTE DASHBOARD GENERAL
+// =========================
+Route::get('/dashboard', function () {
+    $role = auth()->user()->role;
+
+    if ($role === 'admin_pusat') {
+        return redirect()->route('admin-pusat.dashboard');
+    } elseif ($role === 'admin_jurusan') {
+        return redirect()->route('admin-jurusan.dashboard');
+    }
+
+    return redirect('/katalog');
+})->middleware(['auth'])->name('dashboard');
+
+// =========================
 // ROUTE ADMIN PUSAT (Terproteksi Role)
 // =========================
 Route::middleware(['auth', 'role:admin_pusat'])->prefix('admin-pusat')->group(function () {
     Route::get('/dashboard', function () {
-        return view('admin-pusat.dashboard');
+        return view('admin-pusat-status');
     })->name('admin-pusat.dashboard');
 
     // STEP 1: Product Report
@@ -81,10 +92,10 @@ Route::middleware(['auth', 'role:admin_pusat'])->prefix('admin-pusat')->group(fu
 // =========================
 Route::middleware(['auth', 'role:admin_jurusan'])->prefix('admin-jurusan')->group(function () {
     Route::get('/dashboard', function () {
-        return view('admin-jurusan.dashboard');
+        return view('admin-jurusan');
     })->name('admin-jurusan.dashboard');
 
-    // Fitur Tambah Produk (Tugas No. 3)
+    // Fitur Tambah Produk
     Route::get('/produk/create', [ProdukController::class, 'create'])->name('admin-jurusan.produk.create');
     Route::post('/produk/store', [ProdukController::class, 'store'])->name('admin-jurusan.produk.store');
 });
