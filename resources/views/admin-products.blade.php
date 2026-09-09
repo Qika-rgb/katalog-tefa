@@ -16,7 +16,7 @@
             <img src="{{ asset('images/logo_tefa.png') }}" alt="Logo" class="admin-logo">
         </a>
         <ul class="admin-nav">
-            <li><a href="/admin-jurusan">ANALYTICS REPORTS</a></li>
+            <li><a href="{{ route('admin-jurusan.dashboard') }}" class="..."    >ANALYTICS REPORTS</a></li>
             <li><a href="/admin-jurusan/products" class="active">PRODUCTS</a></li>
         </ul>
     </div>

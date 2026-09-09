@@ -18,7 +18,7 @@
         </a>
         <ul class="admin-nav">
             <li><a href="#" class="active">ANALYTICS REPORTS</a></li>
-            <li><a href="admin-jurusan/products">PRODUCTS</a></li>
+            <li><a href="{{ route('admin-jurusan.produk.create') }}" class="...">PRODUCTS</a></li>
         </ul>
     </div>
 
