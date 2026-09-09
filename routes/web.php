@@ -20,13 +20,10 @@ Route::get('/katalog', [KatalogController::class, 'index']);
 Route::get('/pemesanan/{id}', [KatalogController::class, 'detail']);
 
 // =========================
-// KERANJANG & CHECKOUT
+// KERANJANG
 // =========================
 Route::get('/keranjang', [KeranjangController::class, 'index']);
 Route::post('/keranjang/tambah/{id}', [KeranjangController::class, 'tambah']);
-
-Route::get('/checkout', [CheckoutController::class, 'index']);
-Route::post('/checkout', [CheckoutController::class, 'store']);
 
 // =========================
 // STATUS PESANAN (CUSTOMER)
@@ -56,7 +53,7 @@ Route::prefix('admin-pusat')->group(function () {
 });
 
 // =========================
-// ROUTE LAINNYA (JURUSAN & CS)
+// ROUTE LAINNYA (JURUSAN)
 // =========================
 Route::get('/admin-jurusan', function () {
     return view('admin-jurusan');
@@ -66,8 +63,21 @@ Route::get('/admin-jurusan/products', function () {
     return view('admin-products');
 });
 
-Route::get('/customer-service', [ChatController::class, 'customerService']);
-Route::post('/chat/send', [ChatController::class, 'sendMessage']);
+// =========================
+// ROUTE YANG WAJIB LOGIN (No. 10)
+// Guest yang belum login otomatis diarahkan ke /login
+// =========================
+Route::middleware('auth')->group(function () {
+
+    // CHECKOUT
+    Route::get('/checkout', [CheckoutController::class, 'index']);
+    Route::post('/checkout', [CheckoutController::class, 'store']);
+
+    // CUSTOMER SERVICE / CHAT
+    Route::get('/customer-service', [ChatController::class, 'customerService']);
+    Route::post('/chat/send', [ChatController::class, 'sendMessage']);
+
+});
 
 // =========================
 // ROUTE DASHBOARD BREEZE (REDIRECT KE HOME)
