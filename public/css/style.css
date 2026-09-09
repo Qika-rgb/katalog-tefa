@@ -969,6 +969,30 @@ body.bg-light {
     max-width: 120px;
 }
 
+/* ===== TRACKING TIMELINE - STATUS AKTIF (No. 7) ===== */
+
+.tracking-icon {
+    color: #cbd5e1;
+}
+
+.tracking-step.tracking-active .tracking-icon {
+    color: #2563eb;
+}
+
+.tracking-step.tracking-active .tracking-line {
+    background-color: #2563eb;
+}
+
+.tracking-step.tracking-active .tracking-text {
+    color: #2563eb;
+    font-weight: 800;
+}
+
+.tracking-step.tracking-active:last-child .tracking-icon {
+    color: #000;
+}
+
+
 /* =========================================
    HALAMAN DASHBOARD ADMIN JURUSAN
    ========================================= */

@@ -31,4 +31,10 @@ class Pesanan extends Model
     {
         return $this->belongsTo(User::class, 'customer_id');
     }
+
+    // Relasi ke detail pesanan (daftar produk dalam 1 pesanan)
+    public function detailPesanans()
+    {
+        return $this->hasMany(DetailPesanan::class, 'pesanan_id');
+    }
 }

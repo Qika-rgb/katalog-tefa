@@ -80,36 +80,52 @@
         <!-- STATUS PESANAN -->
         <div class="detail-alert">
 
-            @if ($pesanan->status == 'Menunggu')
+            @if ($pesanan->status == 'Pending')
 
-                <h2>PESANAN SEDANG DIPROSES</h2>
+                <h2><i class="fa-regular fa-clock"></i> PESANAN SEDANG MENUNGGU</h2>
 
                 <p>
-                    Pesanan kamu sedang menunggu untuk diproses.
+                    Pesanan kamu sedang menunggu untuk diverifikasi admin.
                 </p>
 
-            @elseif ($pesanan->status == 'Diproses')
+            @elseif ($pesanan->status == 'Tahap Pembuatan')
 
-                <h2>PESANAN SEDANG DIPROSES</h2>
+                <h2><i class="fa-solid fa-industry"></i> PESANAN SEDANG DIBUAT</h2>
 
                 <p>
                     Pesanan kamu sedang dikerjakan.
                 </p>
 
+            @elseif ($pesanan->status == 'Pengemasan')
+
+                <h2><i class="fa-solid fa-dolly"></i> PESANAN SEDANG DIKEMAS</h2>
+
+                <p>
+                    Pesanan kamu sedang dalam tahap pengemasan.
+                </p>
+
             @elseif ($pesanan->status == 'Siap Diambil')
 
-                <h2>BARANG ANDA SIAP DIAMBIL</h2>
+                <h2><i class="fa-solid fa-box-open"></i> BARANG ANDA SIAP DIAMBIL</h2>
 
                 <p>
                     Dipersilahkan untuk mengambil barangmu di tempat kami.
                 </p>
 
-            @elseif ($pesanan->status == 'Selesai')
+            @elseif ($pesanan->status == 'Sudah Diambil')
 
-                <h2>PESANAN SELESAI</h2>
+                <h2><i class="fa-regular fa-handshake"></i> PESANAN SELESAI</h2>
 
                 <p>
                     Pesanan telah selesai dan sudah diambil.
+                </p>
+
+            @elseif ($pesanan->status == 'Ditolak')
+
+                <h2><i class="fa-solid fa-circle-xmark"></i> PESANAN DITOLAK</h2>
+
+                <p>
+                    Mohon maaf, pesanan kamu tidak dapat diproses.
                 </p>
 
             @else
@@ -171,7 +187,7 @@
                                 ANDA BELUM MENGAMBIL
                             </button>
 
-                        @elseif ($pesanan->status == 'Selesai')
+                        @elseif ($pesanan->status == 'Sudah Diambil')
 
                             <button class="btn-belum-ambil">
                                 SUDAH DIAMBIL
@@ -217,15 +233,18 @@
 
 
         <!-- TIMELINE -->
+        @php
+            $urutanStatus = ['Pending', 'Tahap Pembuatan', 'Pengemasan', 'Siap Diambil', 'Sudah Diambil'];
+            $posisiSekarang = array_search($pesanan->status, $urutanStatus);
+        @endphp
+
         <div class="tracking-timeline">
 
             <!-- PEMBUATAN -->
-            <div class="tracking-step">
+            <div class="tracking-step {{ $posisiSekarang >= 1 ? 'tracking-active' : '' }}">
 
                 <div class="tracking-icon">
-
                     <i class="fa-solid fa-industry"></i>
-
                 </div>
 
                 <div class="tracking-line"></div>
@@ -239,12 +258,10 @@
 
 
             <!-- PENGEMASAN -->
-            <div class="tracking-step">
+            <div class="tracking-step {{ $posisiSekarang >= 2 ? 'tracking-active' : '' }}">
 
                 <div class="tracking-icon">
-
                     <i class="fa-solid fa-dolly"></i>
-
                 </div>
 
                 <div class="tracking-line"></div>
@@ -257,12 +274,10 @@
 
 
             <!-- SIAP DIAMBIL -->
-            <div class="tracking-step">
+            <div class="tracking-step {{ $posisiSekarang >= 3 ? 'tracking-active' : '' }}">
 
                 <div class="tracking-icon">
-
                     <i class="fa-solid fa-box-open"></i>
-
                 </div>
 
                 <div class="tracking-line"></div>
@@ -275,25 +290,8 @@
 
 
             <!-- SELESAI -->
-            <div class="tracking-step">
+            <div class="tracking-step {{ $posisiSekarang >= 4 ? 'tracking-active' : '' }}">
 
                 <div class="tracking-icon">
-
                     <i class="fa-regular fa-handshake"></i>
-
                 </div>
-
-                <div class="tracking-text">
-                    Barang Sudah diambil
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-
-</body>
-</html>

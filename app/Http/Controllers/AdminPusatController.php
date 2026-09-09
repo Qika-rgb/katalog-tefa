@@ -15,16 +15,23 @@ class AdminPusatController extends Controller
         return view('admin-pusat-status', compact('produks'));
     }
 
-    // STEP 2 — Verifikasi Pesanan (Menampilkan Pesanan yang Perlu Diverifikasi)
-    public function verifikasi()
-    {
-        // Mengambil data pesanan beserta relasi user dan produk
-        $pesanans = Pesanan::with(['user', 'produk'])
-            ->latest('updated_at')
-            ->get();
+    // STEP 2 — Verifikasi Pesanan (Menampilkan Pesanan yang Perlu Diverifikasi + Riwayat Selesai)
+public function verifikasi()
+{
+    // Pesanan baru yang masih perlu di-ACCEPT/DECLINE
+    $pesanans = Pesanan::with(['user', 'produk'])
+        ->where('status', 'Pending')
+        ->latest('updated_at')
+        ->get();
 
-        return view('admin-pusat-verifikasi', compact('pesanans'));
-    }
+    // Riwayat pesanan yang sudah selesai (No. 5)
+    $riwayatSelesai = Pesanan::with(['user', 'produk'])
+        ->where('status', 'Sudah Diambil')
+        ->latest('updated_at')
+        ->get();
+
+    return view('admin-pusat-verifikasi', compact('pesanans', 'riwayatSelesai'));
+}
 
     // STEP 3 — ACCEPT
     public function accept($id)
