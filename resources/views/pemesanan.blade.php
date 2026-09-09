@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pemesanan</title>
+    <title>Pemesanan - {{ $produk->nama_produk }}</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -27,7 +27,7 @@
                 <a href="/register" style="color: inherit; text-decoration: none;">
                     <i class="fa-regular fa-user"></i>
                 </a>
-                <a href="#" style="color: inherit; text-decoration: none;">
+                <a href="/customer-service" style="color: inherit; text-decoration: none;">
                     <i class="fa-solid fa-headset"></i>
                 </a>
             </div>
@@ -37,7 +37,7 @@
         <div class="pemesanan-card">
             
             <div class="pemesanan-grid">
-                <!-- BAGIAN KIRI: GAMBAR -->
+                
                 <!-- BAGIAN KIRI: GAMBAR -->
                 <div class="product-images">
                     <!-- Menampilkan foto sesuai database -->
@@ -64,33 +64,43 @@
                     <!-- Menampilkan harga produk dari database -->
                     <div class="detail-price">RP {{ number_format($produk->harga, 0, ',', '.') }}</div>
 
-                    <!-- Kuantitas -->
-                    <span class="qty-label">KUANTITAS</span>
-                    <div class="qty-control">
-                        <button class="qty-btn" id="btnMinus">-</button>
-                        <input type="text" class="qty-input" id="qtyInput" value="1">
-                        <button class="qty-btn" id="btnPlus">+</button>
-                    </div>
+                    <!-- MULAI FORM PEMESANAN (Menyambung ke Keranjang) -->
+                    <form action="/keranjang/tambah/{{ $produk->id }}" method="POST">
+                        @csrf
 
-                    <!-- Input Nomor Telepon -->
-                    <input type="text" class="input-telepon" placeholder="ISI NOMOR TELEPON MU!">
+                        <!-- Kuantitas -->
+                        <span class="qty-label">KUANTITAS</span>
+                        <div class="qty-control">
+                            <!-- type="button" agar form tidak tersubmit saat klik minus -->
+                            <button type="button" class="qty-btn" id="btnMinus">-</button>
+                            <!-- Input ini otomatis mengirim name="jumlah" -->
+                            <input type="text" name="jumlah" class="qty-input" id="qtyInput" value="1" readonly>
+                            <!-- type="button" agar form tidak tersubmit saat klik plus -->
+                            <button type="button" class="qty-btn" id="btnPlus">+</button>
+                        </div>
 
-                    <!-- Tombol Aksi -->
-                  <div class="action-buttons">
-    <form action="/keranjang/tambah/{{ $produk->id }}" method="POST">
-        @csrf
+                        <!-- Input Nomor Telepon -->
+                        <input type="text" name="no_telepon" class="input-telepon" placeholder="ISI NOMOR TELEPON MU!" required>
 
-        <input type="hidden" name="jumlah" id="jumlahForm" value="1">
+                        <!-- Tombol Aksi -->
+                        <div class="action-buttons">
+                            
+                            <!-- Tombol Keranjang (Mensubmit form ke database) -->
+                            <button type="submit" class="btn-outline-blue">
+                                <i class="fa-solid fa-cart-arrow-down"></i> MASUKAN KERANJANG
+                            </button>
 
-        <button type="submit" class="btn-outline-blue">
-            <i class="fa-solid fa-cart-arrow-down"></i> MASUKAN KERANJANG
-        </button>
-    </form>
+                            <!-- Tombol BUY (Arahkan langsung ke WhatsApp Admin TEFA) -->
+                            <!-- Ganti 6281234567890 dengan nomor WA sekolahmu -->
+                            <a href="https://wa.me/6281234567890?text=Halo%20Admin%20TEFA,%20saya%20tertarik%20untuk%20memesan%20{{ $produk->nama_produk }}." target="_blank" class="btn-solid-blue" style="text-decoration: none; display: flex; justify-content: center; align-items: center; width: 100%;">
+                                BUY
+                            </a>
 
-    <button type="button" class="btn-solid-blue">BUY</button>
-</div>
+                        </div>
+                    </form>
                     
                 </div>
+            </div> <!-- End Grid Atas -->
 
             <!-- BAGIAN BAWAH: INFO TOKO -->
             <div class="store-info-box">
@@ -116,24 +126,21 @@
 
     <!-- JavaScript Interaktif untuk Tombol Plus/Minus -->
     <script>
-    const btnMinus = document.getElementById('btnMinus');
-    const btnPlus = document.getElementById('btnPlus');
-    const qtyInput = document.getElementById('qtyInput');
-    const jumlahForm = document.getElementById('jumlahForm');
+        const btnMinus = document.getElementById('btnMinus');
+        const btnPlus = document.getElementById('btnPlus');
+        const qtyInput = document.getElementById('qtyInput');
 
-    btnPlus.addEventListener('click', function() {
-        qtyInput.value = parseInt(qtyInput.value) + 1;
-        jumlahForm.value = qtyInput.value;
-    });
+        // Tambah Kuantitas
+        btnPlus.addEventListener('click', function() {
+            qtyInput.value = parseInt(qtyInput.value) + 1;
+        });
 
-    btnMinus.addEventListener('click', function() {
-        if (parseInt(qtyInput.value) > 1) {
-            qtyInput.value = parseInt(qtyInput.value) - 1;
-            jumlahForm.value = qtyInput.value;
-        }
-    });
-</script>
-</body>
-</html>
+        // Kurangi Kuantitas (Minimal 1)
+        btnMinus.addEventListener('click', function() {
+            if (parseInt(qtyInput.value) > 1) {
+                qtyInput.value = parseInt(qtyInput.value) - 1;
+            }
+        });
+    </script>
 </body>
 </html>
