@@ -10,17 +10,23 @@
 </head>
 <body class="admin-body">
 
-    <!-- SIDEBAR -->
+<!-- SIDEBAR -->
     <div class="admin-sidebar">
         <a href="/">
             <img src="{{ asset('images/logo_tefa.png') }}" alt="Logo" class="admin-logo">
         </a>
         <ul class="admin-nav">
             <li><a href="/admin-pusat/product-report">PRODUCT REPORT</a></li>
+            
+            <!-- Tempat menaruh kode logika notifikasi chat -->
             <li>
-                <div class="red-dot"></div>
+                @if(isset($unread_chat) && $unread_chat > 0)
+                    <div class="red-dot"></div>
+                @endif
                 <a href="/admin-pusat/chat" class="active-cs active-black-line">CUSTOMER SERVICE</a>
             </li>
+            <!-- ========================================== -->
+
             <li><a href="/admin-pusat/verifikasi">VERIFIKASI PESAN</a></li>
             <li><a href="/admin-pusat/status-pesanan">STATUS</a></li>
             <li><a href="/admin-pusat/done">DONE</a></li>
@@ -48,12 +54,11 @@
             </div>
         </div>
 
-<!-- WADAH UTAMA CHAT -->
+        <!-- WADAH UTAMA CHAT -->
         <div class="chat-wrapper">
 
             <!-- KIRI: Daftar Pelanggan -->
             <div class="chat-sidebar">
-                <!-- Sisa 1 kontak saja, titik merah dan totebag sudah hilang -->
                 <div class="contact-item">
                     <img src="{{ asset('images/foto_profil.png') }}" alt="Avatar" class="contact-avatar">
                     <span class="contact-name">CUSTOMER WEB</span>
@@ -94,26 +99,8 @@
             </div> <!-- Penutup chat-main -->
 
         </div> <!-- Penutup chat-wrapper -->
-        
-                    <input
-                        type="hidden"
-                        name="sender"
-                        value="admin"
-                    >
 
-                    <button type="submit" class="btn-send">
-                        <i class="fa-regular fa-paper-plane"></i>
-                    </button>
-                </form>
-
-            </div>
-            <!-- chat-main ditutup di sini, SETELAH form -->
-
-        </div>
-        <!-- chat-wrapper ditutup di sini -->
-
-    </div>
-    <!-- admin-main ditutup di sini -->
+    </div> <!-- Penutup admin-main -->
 
 </body>
 </html>

@@ -10,19 +10,25 @@
 </head>
 <body class="admin-body">
 
-    <!-- SIDEBAR -->
+<!-- SIDEBAR -->
     <div class="admin-sidebar">
         <a href="/">
             <img src="{{ asset('images/logo_tefa.png') }}" alt="Logo" class="admin-logo">
         </a>
         <ul class="admin-nav">
             <li><a href="/admin-pusat/product-report">PRODUCT REPORT</a></li>
+            
+            <!-- Tempat menaruh kode logika notifikasi chat -->
             <li>
-                <div class="red-dot"></div>
-                <a href="/admin-pusat/chat" class="active-cs">CUSTOMER SERVICE</a>
+                @if(isset($unread_chat) && $unread_chat > 0)
+                    <div class="red-dot"></div>
+                @endif
+                <a href="/admin-pusat/chat" class="active-cs active-black-line">CUSTOMER SERVICE</a>
             </li>
+            <!-- ========================================== -->
+
             <li><a href="/admin-pusat/verifikasi">VERIFIKASI PESAN</a></li>
-            <li><a href="/admin-pusat/status-pesanan" class="active-black-line">STATUS</a></li>
+            <li><a href="/admin-pusat/status-pesanan">STATUS</a></li>
             <li><a href="/admin-pusat/done">DONE</a></li>
         </ul>
     </div>

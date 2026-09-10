@@ -60,9 +60,13 @@ Route::get('/dashboard', function () {
 // ROUTE ADMIN PUSAT (Terproteksi Role)
 // =========================
 Route::middleware(['auth', 'role:admin_pusat'])->prefix('admin-pusat')->group(function () {
+    
+    // --- PERBAIKAN: Mengambil data produk untuk ditampilkan di dashboard ---
     Route::get('/dashboard', function () {
-        return view('admin-pusat-status');
+        $produks = \App\Models\Produk::all(); 
+        return view('admin-pusat-status', compact('produks'));
     })->name('admin-pusat.dashboard');
+    // ------------------------------------------------------------------------
 
     Route::get('/product-report', [AdminPusatController::class, 'productReport'])->name('admin.product-report');
     Route::get('/verifikasi', [AdminPusatController::class, 'verifikasi'])->name('admin.verifikasi');
@@ -78,7 +82,7 @@ Route::middleware(['auth', 'role:admin_pusat'])->prefix('admin-pusat')->group(fu
 // =========================
 // ROUTE ADMIN JURUSAN (Terproteksi Role)
 // =========================
-    Route::middleware(['auth', 'role:admin_jurusan'])->prefix('admin-jurusan')->group(function () {
+Route::middleware(['auth', 'role:admin_jurusan'])->prefix('admin-jurusan')->group(function () {
     Route::get('/dashboard', function () {
         return view('admin-jurusan');
     })->name('admin-jurusan.dashboard');
