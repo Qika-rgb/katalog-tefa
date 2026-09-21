@@ -13,7 +13,7 @@ class Pesanan extends Model
 
     protected $fillable = [
         'produk_id',
-        'customer_id',
+        'user_id', // <-- PERBAIKAN: Diubah dari customer_id menjadi user_id
         'no_telepon',
         'jumlah',
         'status',
@@ -26,10 +26,10 @@ class Pesanan extends Model
         return $this->belongsTo(Produk::class, 'produk_id');
     }
 
-    // Relasi ke model User (menggunakan customer_id)
+    // Relasi ke model User (menggunakan user_id)
     public function user()
     {
-        return $this->belongsTo(User::class, 'customer_id');
+        return $this->belongsTo(User::class, 'user_id'); // <-- PERBAIKAN: Sesuaikan foreign key-nya
     }
 
     // Relasi ke detail pesanan (daftar produk dalam 1 pesanan)

@@ -31,6 +31,9 @@ Route::get('/pemesanan/{id}', [KatalogController::class, 'detail']);
 Route::middleware(['auth'])->group(function () {
     Route::get('/keranjang', [KeranjangController::class, 'index'])->name('keranjang.index');
     Route::post('/keranjang/tambah/{id}', [KeranjangController::class, 'tambah'])->name('keranjang.tambah');
+    
+    // Rute baru untuk menghapus produk dari keranjang
+    Route::delete('/keranjang/hapus/{id}', [KeranjangController::class, 'hapus'])->name('keranjang.hapus');
 
     Route::get('/status', [App\Http\Controllers\PesananController::class, 'status'])->name('pesanan.status');
     Route::post('/pesanan/store', [App\Http\Controllers\PesananController::class, 'store'])->name('pesanan.store');

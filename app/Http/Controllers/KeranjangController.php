@@ -31,4 +31,19 @@ class KeranjangController extends Controller
 
         return redirect()->route('keranjang.index')->with('success', 'Produk berhasil ditambah ke keranjang!');
     }
+
+    // FUNGSI BARU UNTUK MENGHAPUS PRODUK DARI KERANJANG
+    public function hapus($id)
+    {
+        // Cari data keranjang berdasarkan ID
+        $keranjang = Keranjang::findOrFail($id);
+        
+        // Keamanan ekstra: Pastikan hanya pemilik keranjang yang bisa menghapusnya
+        if ($keranjang->user_id == Auth::id()) {
+            $keranjang->delete();
+            return redirect()->back()->with('success', 'Produk berhasil dihapus dari keranjang.');
+        }
+
+        return redirect()->back()->with('error', 'Gagal menghapus produk. Akses ditolak.');
+    }
 }
