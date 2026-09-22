@@ -16,32 +16,12 @@
             <img src="{{ asset('images/logo_tefa.png') }}" alt="Logo" class="admin-logo">
         </a>
         <ul class="admin-nav">
-            <!-- Menu Product Report -->
+            <!-- Navigasi Dinamis Laravel -->
             <li>
-                <a href="/admin-pusat/product-report" class="{{ request()->is('admin-pusat/product-report') ? 'active-cs active-black-line' : '' }}">PRODUCT REPORT</a>
+                <a href="{{ route('admin-jurusan.dashboard') }}" class="{{ request()->routeIs('admin-jurusan.dashboard') ? 'active' : '' }}">ANALYTICS REPORTS</a>
             </li>
-            
-            <!-- Menu Customer Service -->
             <li>
-                @if(isset($unread_chat) && $unread_chat > 0)
-                    <div class="red-dot"></div>
-                @endif
-                <a href="/admin-pusat/chat" class="{{ request()->is('admin-pusat/chat') ? 'active-cs active-black-line' : '' }}">CUSTOMER SERVICE</a>
-            </li>
-
-            <!-- Menu Verifikasi Pesan -->
-            <li>
-                <a href="/admin-pusat/verifikasi" class="{{ request()->is('admin-pusat/verifikasi') ? 'active-cs active-black-line' : '' }}">VERIFIKASI PESAN</a>
-            </li>
-            
-            <!-- Menu Status -->
-            <li>
-                <a href="/admin-pusat/status-pesanan" class="{{ request()->is('admin-pusat/status-pesanan') ? 'active-cs active-black-line' : '' }}">STATUS</a>
-            </li>
-            
-            <!-- Menu Done -->
-            <li>
-                <a href="/admin-pusat/done" class="{{ request()->is('admin-pusat/done') ? 'active-cs active-black-line' : '' }}">DONE</a>
+                <a href="{{ route('admin-jurusan.produk.create') }}" class="{{ request()->routeIs('admin-jurusan.produk.create') ? 'active' : '' }}">PRODUCTS</a>
             </li>
         </ul>
     </div>
