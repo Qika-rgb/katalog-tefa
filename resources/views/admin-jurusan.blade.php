@@ -12,19 +12,16 @@
 
     <!-- SIDEBAR -->
     <div class="admin-sidebar">
-        <!-- Pakai logo yang sudah kamu punya -->
         <a href="/">
             <img src="{{ asset('images/logo_tefa.png') }}" alt="Logo" class="admin-logo">
         </a>
         <ul class="admin-nav">
-            <!-- Navigasi Dinamis Laravel -->
             <li>
                 <a href="{{ route('admin-jurusan.dashboard') }}" class="{{ request()->routeIs('admin-jurusan.dashboard') ? 'active' : '' }}">ANALYTICS REPORTS</a>
             </li>
             <li>
                 <a href="{{ route('admin-jurusan.produk.create') }}" class="{{ request()->routeIs('admin-jurusan.produk.create') ? 'active' : '' }}">PRODUCTS</a>
             </li>
-            <!-- MENU BARU PORTOFOLIO -->
             <li>
                 <a href="{{ route('admin-jurusan.portofolio.index') }}" class="{{ request()->routeIs('admin-jurusan.portofolio*') ? 'active' : '' }}">PORTOFOLIO</a>
             </li>
@@ -34,11 +31,23 @@
     <!-- MAIN CONTENT -->
     <div class="admin-main">
         
-        <!-- Top Profile -->
+        <!-- Top Profile Dinamis -->
         <div class="admin-top-profile">
+            @php
+                $userJurusan = strtoupper(auth()->user()->jurusan ?? 'RPL');
+                $logoMap = [
+                    'RPL'     => 'logo_rpl.jpeg',
+                    'DKV'     => 'logo_dkv.jpeg',
+                    'TKJ'     => 'logo_tkj.jpeg',
+                    'ANIMASI' => 'logo_animasi.jpeg',
+                    'PSPT'    => 'logo_pspt.jpeg',
+                    'GIM'     => 'logo_gim.jpeg',
+                ];
+                $logoFile = $logoMap[$userJurusan] ?? 'icon_rpl.png';
+            @endphp
             <div class="profile-pill">
-                <img src="{{ asset('images/icon_dkv1.png') }}" alt="Avatar">
-                TEFA DKV
+                <img src="{{ asset('images/' . $logoFile) }}" alt="Avatar">
+                TEFA {{ auth()->user()->jurusan ?? 'JURUSAN' }}
             </div>
         </div>
 
@@ -56,7 +65,7 @@
         <!-- GRID DASHBOARD -->
         <div class="dashboard-grid">
             
-            <!-- KIRI: Satisfaction Rate (Vertical Bar) -->
+            <!-- KIRI: Satisfaction Rate -->
             <div class="dash-card">
                 <h3 class="card-title">Satisfaction rate</h3>
                 
@@ -67,7 +76,6 @@
                     <div class="v-bar bg-brown" style="height: 40%;">20</div>
                 </div>
                 
-                <!-- Label Bawah -->
                 <div class="labels-under">
                     <div class="label-box bg-beige">baner</div>
                     <div class="label-box bg-beige">ds</div>
@@ -81,7 +89,7 @@
             <!-- KANAN: Kombinasi Konten -->
             <div class="right-column">
                 
-                <!-- Kanan Atas: Sales Results -->
+                <!-- Sales Results -->
                 <div class="dash-card" style="margin-bottom: 20px;">
                     <div class="sales-top-row">
                         <div>
@@ -111,7 +119,7 @@
                     </div>
                 </div>
 
-                <!-- Kanan Bawah: Orders & Approved -->
+                <!-- Orders & Approved -->
                 <div class="stats-grid">
                     <div class="stat-card">
                         <h4>ORDERS</h4>
@@ -126,11 +134,11 @@
                     </div>
                 </div>
 
-            </div> <!-- End Right Column -->
+            </div>
 
-        </div> <!-- End Dashboard Grid -->
+        </div>
 
-    </div> <!-- End Main Content -->
+    </div>
 
 </body>
 </html>

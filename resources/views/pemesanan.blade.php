@@ -18,17 +18,21 @@
             <!-- SISI KIRI: MEDIA (VIDEO / FOTO) -->
             <div style="background-color: #f9fafb; border-radius: 12px; padding: 16px; display: flex; align-items: center; justify-content: center; min-height: 320px; overflow: hidden; border: 1px solid #e5e7eb;">
                 @php
-                    $mediaFile = $produk->vidio ?? $produk->foto ?? '';
-                    $extension = pathinfo($mediaFile, PATHINFO_EXTENSION);
+                    $mediaFile = $produk->vidio ?? $produk->foto ?? 'default.png';
+                    $extension = strtolower(pathinfo($mediaFile, PATHINFO_EXTENSION));
+
+                    // Cek apakah file berasal dari upload storage atau folder images statis
+                    $isStorage = preg_match('/^(produk|portofolio)\//', (string)$mediaFile);
+                    $mediaUrl = $isStorage ? asset('storage/' . $mediaFile) : asset('images/' . $mediaFile);
                 @endphp
 
-                @if(in_array(strtolower($extension), ['mp4', 'webm', 'ogg']))
+                @if(in_array($extension, ['mp4', 'webm', 'ogg']))
                     <video width="100%" controls autoplay muted playsinline style="max-height: 340px; border-radius: 8px; object-fit: contain;">
-                        <source src="{{ asset('storage/' . $mediaFile) }}" type="video/mp4">
+                        <source src="{{ $mediaUrl }}" type="video/mp4">
                         Browser Anda tidak mendukung pemutaran video.
                     </video>
                 @else
-                    <img src="{{ asset('images/' . ($mediaFile ?: 'default.png')) }}" alt="{{ $produk->nama_produk ?? 'Produk' }}" style="max-height: 340px; width: 100%; object-fit: contain;">
+                    <img src="{{ $mediaUrl }}" alt="{{ $produk->nama_produk ?? 'Produk' }}" style="max-height: 340px; width: 100%; object-fit: contain;">
                 @endif
             </div>
 

@@ -10,20 +10,18 @@
 </head>
 <body class="admin-body">
 
-<!-- SIDEBAR -->
+    <!-- SIDEBAR -->
     <div class="admin-sidebar">
         <a href="/">
             <img src="{{ asset('images/logo_tefa.png') }}" alt="Logo" class="admin-logo">
         </a>
         <ul class="admin-nav">
-            <!-- Navigasi Dinamis Laravel -->
             <li>
                 <a href="{{ route('admin-jurusan.dashboard') }}" class="{{ request()->routeIs('admin-jurusan.dashboard') ? 'active' : '' }}">ANALYTICS REPORTS</a>
             </li>
             <li>
                 <a href="{{ route('admin-jurusan.produk.create') }}" class="{{ request()->routeIs('admin-jurusan.produk.create') ? 'active' : '' }}">PRODUCTS</a>
             </li>
-            <!-- MENU BARU PORTOFOLIO -->
             <li>
                 <a href="{{ route('admin-jurusan.portofolio.index') }}" class="{{ request()->routeIs('admin-jurusan.portofolio*') ? 'active' : '' }}">PORTOFOLIO</a>
             </li>
@@ -33,11 +31,23 @@
     <!-- MAIN CONTENT -->
     <div class="admin-main">
 
-        <!-- Top Profile -->
+        <!-- Top Profile Dinamis -->
         <div class="admin-top-profile">
+            @php
+                $userJurusan = strtoupper(auth()->user()->jurusan ?? 'RPL');
+                $logoMap = [
+                    'RPL'     => 'logo_rpl.jpeg',
+                    'DKV'     => 'logo_dkv.jpeg',
+                    'TKJ'     => 'logo_tkj.jpeg',
+                    'ANIMASI' => 'logo_animasi.jpeg',
+                    'PSPT'    => 'logo_pspt.jpeg',
+                    'GIM'     => 'logo_gim.jpeg',
+                ];
+                $logoFile = $logoMap[$userJurusan] ?? 'logo_rpl.jpeg';
+            @endphp
             <div class="profile-pill">
-                <img src="{{ asset('images/icon_dkv1.png') }}" alt="Avatar">
-                TEFA DKV
+                <img src="{{ asset('images/' . $logoFile) }}" alt="Avatar">
+                TEFA {{ auth()->user()->jurusan ?? 'JURUSAN' }}
             </div>
         </div>
 
@@ -73,71 +83,55 @@
 
             <div class="product-grid">
 
-                <!-- KARTU 1 -->
-                <div class="product-card">
-                    <div class="product-img-wrapper">
-                        <img src="{{ asset('images/produk_dkv2.png') }}" alt="Graphic Design">
-                        <a href="#" class="btn-update">UPDATE NOW</a>
-                    </div>
-                    <div class="product-info">
-                        <h3>Design creation services...</h3>
-                        <p class="price">RP 2.000.000</p>
-                        <div class="rating">
-                            <i class="fa-solid fa-star"></i>
-                            <span>5.0 + 5Rb terjual</span>
+                <!-- LOOPING PRODUK DINAMIS SESUAI DATABASE -->
+                @forelse ($produks as $item)
+                    <div class="product-card">
+                        <div class="product-img-wrapper">
+                            @php
+                                $foto = $item->foto ?? 'default.png';
+                                $isStorage = str_starts_with($foto, 'produk/');
+                                $imgSrc = $isStorage ? asset('storage/' . $foto) : asset('images/' . $foto);
+                            @endphp
+                            <img src="{{ $imgSrc }}" alt="{{ $item->nama_produk }}">
+                            <a href="#" class="btn-update" 
+                               data-id="{{ $item->id }}" 
+                               data-nama="{{ $item->nama_produk }}" 
+                               data-deskripsi="{{ $item->deskripsi }}" 
+                               data-harga="{{ $item->harga }}" 
+                               data-foto="{{ $imgSrc }}">UPDATE NOW</a>
+                        </div>
+                        <div class="product-info">
+                            <h3>{{ Str::limit($item->nama_produk, 26) }}</h3>
+                            <p class="price">
+                                RP {{ is_numeric($item->harga) ? number_format((float)$item->harga, 0, ',', '.') : $item->harga }}
+                            </p>
+                            
+                            <!-- RATING & TOMBOL HAPUS -->
+                            <div class="rating" style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
+                                <div>
+                                    <i class="fa-solid fa-star"></i>
+                                    <span>5.0 + 0 terjual</span>
+                                </div>
+
+                                <!-- Form Hapus Produk -->
+                                <form action="{{ route('admin-jurusan.produk.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus produk ini?');" style="margin: 0;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" style="background: transparent; border: none; color: #dc2626; cursor: pointer; font-size: 13px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; padding: 2px 6px; border-radius: 4px; transition: 0.2s;" onmouseover="this.style.backgroundColor='#fee2e2'" onmouseout="this.style.backgroundColor='transparent'">
+                                        <i class="fa-regular fa-trash-can"></i> Hapus
+                                    </button>
+                                </form>
+                            </div>
+
                         </div>
                     </div>
-                </div>
+                @empty
+                    <div style="grid-column: 1 / -1; padding: 25px; text-align: center; color: #6b7280; font-size: 14px;">
+                        Belum ada produk yang terdaftar untuk jurusan {{ auth()->user()->jurusan }}.
+                    </div>
+                @endforelse
 
-                <!-- KARTU 2 -->
-                <div class="product-card">
-                    <div class="product-img-wrapper">
-                        <img src="{{ asset('images/produk_dkv3.png') }}" alt="Web Services">
-                        <a href="#" class="btn-update">UPDATE NOW</a>
-                    </div>
-                    <div class="product-info">
-                        <h3>web services</h3>
-                        <p class="price">RP 1.500.000</p>
-                        <div class="rating">
-                            <i class="fa-solid fa-star"></i>
-                            <span>5.0 + 5Rb terjual</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- KARTU 3 -->
-                <div class="product-card">
-                    <div class="product-img-wrapper">
-                        <img src="{{ asset('images/produk_dkv2.png') }}" alt="Podcast">
-                        <a href="#" class="btn-update">UPDATE NOW</a>
-                    </div>
-                    <div class="product-info">
-                        <h3>Podcast Production ser...</h3>
-                        <p class="price">RP 1.500.000</p>
-                        <div class="rating">
-                            <i class="fa-solid fa-star"></i>
-                            <span>5.0 + 5Rb terjual</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- KARTU 4 (Tote Bag) -->
-                <div class="product-card">
-                    <div class="product-img-wrapper">
-                        <img src="{{ asset('images/produk_dkv3.png') }}" alt="Tote Bag">
-                        <a href="#" class="btn-update">UPDATE NOW</a>
-                    </div>
-                    <div class="product-info">
-                        <h3>Tote bag making</h3>
-                        <p class="price">RP 500.000</p>
-                        <div class="rating">
-                            <i class="fa-solid fa-star"></i>
-                            <span>5.0 + 5Rb terjual</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- KARTU ADD NEW (DI SINI ID DITAMBAHKAN) -->
+                <!-- KARTU ADD NEW -->
                 <a href="#" class="add-new-box" id="btnAddNew">
                     <div class="add-new-icon-wrapper">
                         <i class="fa-solid fa-plus"></i>
@@ -147,23 +141,20 @@
 
             </div>
 
-        </div> <!-- End Admin White Box -->
+        </div>
 
-    </div> <!-- End Main Content -->
+    </div>
 
-    <!-- OVERLAY MODAL TAMBAH PRODUK (DI SINI ID DITAMBAHKAN) -->
+    <!-- OVERLAY MODAL TAMBAH PRODUK -->
     <div class="modal-overlay" id="modalAddProduct">
         <div class="modal-card">
 
-            <!-- Tombol Back (DI SINI ID DITAMBAHKAN) -->
             <button type="button" class="btn-back" id="btnBackModal"><i class="fa-solid fa-chevron-left"></i> BACK</button>
 
-            <!-- FORM TAMBAH PRODUK (Terhubung ke ProdukController@store) -->
             <form action="{{ route('admin-jurusan.produk.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
                 <div class="modal-body">
-                    <!-- Bagian Kiri: Gambar -->
                     <div class="modal-left">
                         <label for="fotoInput" class="image-upload-box" style="cursor: pointer;">
                             <img
@@ -176,15 +167,13 @@
                             type="file"
                             id="fotoInput"
                             name="foto"
-                            accept="image/jpeg,image/png,image/jpg"
+                            accept="image/jpeg,image/png,image/jpg,image/webp"
                             style="display: none;"
                         >
                         <span class="upload-label">TAMBAHKAN GAMBAR</span>
                     </div>
 
-                    <!-- Bagian Kanan: Form Utama -->
                     <div class="modal-right">
-
                         <div class="form-group">
                             <label>NAMA</label>
                             <input type="text" name="nama_produk" class="form-input" required>
@@ -211,9 +200,8 @@
                         </div>
 
                         <button type="submit" class="btn-simpan">SIMPAN</button>
-
-                    </div> <!-- End Right -->
-                </div> <!-- End Body -->
+                    </div>
+                </div>
             </form>
 
         </div>
@@ -223,65 +211,40 @@
     <div class="modal-overlay" id="modalUpdateProduct">
         <div class="modal-card">
 
-            <!-- Tombol Back Khusus Update -->
             <button class="btn-back" id="btnBackUpdate"><i class="fa-solid fa-chevron-left"></i> BACK</button>
 
             <div class="modal-body">
-                <!-- Bagian Kiri: Gambar -->
                 <div class="modal-left">
                     <div class="image-upload-box">
-                        <img src="{{ asset('images/produk_dkv2.png') }}" alt="Edit Gambar">
+                        <img id="updatePreviewFoto" src="{{ asset('images/icon_gallery.png') }}" alt="Edit Gambar">
                     </div>
-                    <span class="upload-label">UBAH GAMBAR</span>
+                    <span class="upload-label">GAMBAR PRODUK</span>
                 </div>
 
-                <!-- Bagian Kanan: Form Utama -->
                 <div class="modal-right">
-
                     <div class="form-group">
                         <label>NAMA</label>
-                        <input type="text" class="form-input" value="Design creation services">
+                        <input type="text" id="updateNamaProduk" class="form-input" readonly>
                     </div>
 
                     <div class="form-group">
-                        <label>TIPE PENJUALAN</label>
-                        <select class="form-input">
-                            <option>BARANG</option>
-                            <option selected>JASA</option>
-                        </select>
-                    </div>
-
-                    <!-- Baris STOK & KODE PENJUALAN -->
-                    <div class="row-stok-kode">
-                        <div class="form-group col-stok">
-                            <label>STOK</label>
-                            <input type="number" class="form-input" value="10">
-                        </div>
-
-                        <div class="form-group col-kode">
-                            <label>KODE PENJUALAN</label>
-                            <div class="kode-input-wrapper">
-                                <input type="text" class="form-input" value="DKV-001">
-                                <button type="button" class="btn-refresh"><i class="fa-solid fa-rotate"></i></button>
-                            </div>
-                        </div>
+                        <label>DESKRIPSI</label>
+                        <input type="text" id="updateDeskripsi" class="form-input" readonly>
                     </div>
 
                     <div class="form-group col-harga">
                         <label>HARGA JUAL</label>
-                        <input type="text" class="form-input" value="2000000">
+                        <input type="text" id="updateHarga" class="form-input" readonly>
                     </div>
 
-                    <button type="button" class="btn-simpan">SIMPAN PERUBAHAN</button>
-
-                </div> <!-- End Right -->
-            </div> <!-- End Body -->
+                    <button type="button" class="btn-simpan" id="btnCloseUpdate">TUTUP</button>
+                </div>
+            </div>
         </div>
     </div>
 
-<!-- SCRIPT JAVASCRIPT UNTUK POP-UP (VERSI INSTAN) -->
-<script>
-        // --- 1. LOGIKA UNTUK MODAL ADD NEW ---
+    <!-- SCRIPT JAVASCRIPT UNTUK POP-UP -->
+    <script>
         const modalAdd = document.getElementById('modalAddProduct');
         const btnAddNew = document.getElementById('btnAddNew');
         const btnBackAdd = document.getElementById('btnBackModal');
@@ -298,16 +261,23 @@
             });
         }
 
-        // --- 2. LOGIKA UNTUK MODAL UPDATE ---
         const modalUpdate = document.getElementById('modalUpdateProduct');
-        // Gunakan querySelectorAll karena tombol Update ada banyak
         const btnUpdates = document.querySelectorAll('.btn-update');
         const btnBackUpdate = document.getElementById('btnBackUpdate');
+        const btnCloseUpdate = document.getElementById('btnCloseUpdate');
 
-        // Looping ke semua tombol UPDATE NOW
+        const updateNama = document.getElementById('updateNamaProduk');
+        const updateDeskripsi = document.getElementById('updateDeskripsi');
+        const updateHarga = document.getElementById('updateHarga');
+        const updateFoto = document.getElementById('updatePreviewFoto');
+
         btnUpdates.forEach(function(btn) {
             btn.addEventListener('click', function(e) {
                 e.preventDefault();
+                if(updateNama) updateNama.value = this.dataset.nama || '';
+                if(updateDeskripsi) updateDeskripsi.value = this.dataset.deskripsi || '';
+                if(updateHarga) updateHarga.value = this.dataset.harga || '';
+                if(updateFoto && this.dataset.foto) updateFoto.src = this.dataset.foto;
                 modalUpdate.style.display = 'flex';
             });
         });
@@ -317,18 +287,17 @@
                 modalUpdate.style.display = 'none';
             });
         }
-
-        // --- 3. TUTUP MODAL JIKA AREA LUAR DIKLIK ---
-        window.addEventListener('click', function(event) {
-            if (event.target === modalAdd) {
-                modalAdd.style.display = 'none';
-            }
-            if (event.target === modalUpdate) {
+        if(btnCloseUpdate) {
+            btnCloseUpdate.addEventListener('click', function() {
                 modalUpdate.style.display = 'none';
-            }
+            });
+        }
+
+        window.addEventListener('click', function(event) {
+            if (event.target === modalAdd) modalAdd.style.display = 'none';
+            if (event.target === modalUpdate) modalUpdate.style.display = 'none';
         });
 
-        // --- 4. PREVIEW GAMBAR SEBELUM UPLOAD ---
         const fotoInput = document.getElementById('fotoInput');
         const previewFoto = document.getElementById('previewFoto');
 

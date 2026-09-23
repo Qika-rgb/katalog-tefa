@@ -14,7 +14,7 @@
             </div>
             
             <!-- Gambar Banner Orang -->
-            <img src="{{ asset('images/icon_rpl.png') }}" alt="Banner Icon" class="banner-img" id="bannerImg">
+            <img src="<?= asset('images/icon_rpl.png') ?>" alt="Banner Icon" class="banner-img" id="bannerImg">
         </div>
 
         <!-- Panah Kanan -->
@@ -26,25 +26,30 @@
 
     <!-- GRID PRODUK DARI DATABASE -->
     <div class="product-grid">
-        
-        <?php if (isset($produks) && count($produks) > 0): ?>
+        <?php if (!empty($produks) && count($produks) > 0): ?>
             <?php foreach ($produks as$item): ?>
+                <?php 
+                    $mediaFile = $item->vidio ?? $item->foto ?? 'default.png';
+                    $extension = strtolower(pathinfo($mediaFile, PATHINFO_EXTENSION));
+
+                    // Jika mengandung 'produk/' atau 'portofolio/', ambil dari storage
+                    if (str_contains($mediaFile, 'produk/') || str_contains($mediaFile, 'portofolio/')) {
+                        $mediaUrl = asset('storage/' . $mediaFile);
+                    } else {
+                        $mediaUrl = asset('images/' . $mediaFile);
+                    }
+                ?>
                 <div class="product-card" data-kategori="<?= $item->kategori_id ?? '' ?>">
                     
                    <!-- Kotak Media -->
                    <div class="product-img-wrapper" style="position: relative; background-color: #ffffff; height: 200px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 5px;">
-                        <?php 
-                            $mediaFile = $item->vidio ?? $item->foto ?? '';
-                            $extension = pathinfo($mediaFile, PATHINFO_EXTENSION);
-                        ?>
-
-                        <?php if (in_array(strtolower($extension), ['mp4', 'webm', 'ogg'])): ?>
+                        <?php if (in_array($extension, ['mp4', 'webm', 'ogg'])): ?>
                             <video width="100%" height="100%" autoplay loop muted playsinline style="object-fit: cover; width: 100%; height: 100%;">
-                                <source src="<?= asset('storage/' . $mediaFile) ?>" type="video/mp4">
+                                <source src="<?= $mediaUrl ?>" type="video/mp4">
                                 Browser Anda tidak mendukung pemutaran video.
                             </video>
                         <?php else: ?>
-                            <img src="<?= asset('images/' . $mediaFile) ?>" alt="<?= e($item->nama_produk) ?>" style="width: 100%; height: 200px; object-fit: contain;">
+                            <img src="<?= $mediaUrl ?>" alt="<?= htmlspecialchars($item->nama_produk ?? '') ?>" style="width: 100%; height: 200px; object-fit: contain;">
                         <?php endif; ?>
 
                         <a href="/pemesanan/<?= $item->id ?>" class="btn-order">ORDER NOW</a>
@@ -52,18 +57,19 @@
 
                     <!-- Info Teks -->
                     <div class="product-info">
-                        <h3><?= e($item->nama_produk) ?></h3>
+                        <h3><?= htmlspecialchars($item->nama_produk ?? '') ?></h3>
                         <p class="price">
                             RP 
-                            <?php if (str_contains((string)$item->harga, '-')): ?>
-                                <?= e($item->harga) ?>
-                            <?php else: ?>
-                                <?php if (is_numeric($item->harga)): ?>
-                                    <?= number_format((float)$item->harga, 0, ',', '.') ?>
-                                <?php else: ?>
-                                    <?= e($item->harga) ?>
-                                <?php endif; ?>
-                            <?php endif; ?>
+                            <?php 
+                                $harga = (string)($item->harga ?? 0);
+                                if (strpos($harga, '-') !== false) {
+                                    echo htmlspecialchars($harga);
+                                } elseif (is_numeric($item->harga)) {
+                                    echo number_format((float)$item->harga, 0, ',', '.');
+                                } else {
+                                    echo htmlspecialchars($harga);
+                                }
+                            ?>
                         </p>
 
                         <div class="rating">
@@ -74,8 +80,9 @@
                     
                 </div>
             <?php endforeach; ?>
+        <?php else: ?>
+            <p style="grid-column: 1 / -1; text-align: center; color: #6b7280; padding: 30px;">Belum ada produk yang tersedia.</p>
         <?php endif; ?>
-        
     </div>
 
 </div>
@@ -84,16 +91,16 @@
 <script>
     const bannerSemua = {
         title: "WELCOME TO SMKN 4 TANJUNGPINANG",
-        img: "{{ asset('images/icon_sekolah.png') }}"
+        img: "<?= asset('images/icon_sekolah.png') ?>"
     };
 
     const banners = [
-        { title: "WELCOME TO TEFA REKAYASA PERANGKAT LUNAK", bg: "linear-gradient(to right, #ab6f4f, #e24215)", img: "{{ asset('images/icon_rpl.png') }}" },
-        { title: "WELCOME TO TEFA ANIMASI", bg: "linear-gradient(to right, #38bdf8, #08405c)", img: "{{ asset('images/icon_animasi.png') }}" },
-        { title: "WELCOME TO TEFA TKJ", bg: "linear-gradient(to right, #34d399, #065139)", img: "{{ asset('images/icon_tkj.png') }}" },
-        { title: "WELCOME TO TEFA PSPT", bg: "linear-gradient(to right, #facc15, #573e07)", img: "{{ asset('images/icon_pspt.png') }}" },
-        { title: "WELCOME TO TEFA DKV", bg: "linear-gradient(to right, #dc2626, #991b1b)", img: "{{ asset('images/icon_dkv2.png') }}" },
-        { title: "WELCOME TO TEFA PENGEMBANGAN GIM", bg: "linear-gradient(to right, #4f46e5, #090542)", img: "{{ asset('images/icon_gim.png') }}" }
+        { title: "WELCOME TO TEFA REKAYASA PERANGKAT LUNAK", bg: "linear-gradient(to right, #ab6f4f, #e24215)", img: "<?= asset('images/icon_rpl.png') ?>" },
+        { title: "WELCOME TO TEFA ANIMASI", bg: "linear-gradient(to right, #38bdf8, #08405c)", img: "<?= asset('images/icon_animasi.png') ?>" },
+        { title: "WELCOME TO TEFA TKJ", bg: "linear-gradient(to right, #34d399, #065139)", img: "<?= asset('images/icon_tkj.png') ?>" },
+        { title: "WELCOME TO TEFA PSPT", bg: "linear-gradient(to right, #facc15, #573e07)", img: "<?= asset('images/icon_pspt.png') ?>" },
+        { title: "WELCOME TO TEFA DKV", bg: "linear-gradient(to right, #dc2626, #991b1b)", img: "<?= asset('images/icon_dkv2.png') ?>" },
+        { title: "WELCOME TO TEFA PENGEMBANGAN GIM", bg: "linear-gradient(to right, #4f46e5, #090542)", img: "<?= asset('images/icon_gim.png') ?>" }
     ];
 
     let currentIndex = 0;
