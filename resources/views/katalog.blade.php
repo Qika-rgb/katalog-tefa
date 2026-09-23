@@ -44,13 +44,25 @@
                 
                 <!-- Info Teks -->
                 <div class="product-info">
-                    <h3>{{ $item->nama_produk }}</h3>
-                    <p class="price">RP {{ number_format($item->harga, 0, ',', '.') }}</p>
-                    <div class="rating">
-                        <i class="fa-solid fa-star"></i>
-                        <span>5.0 + 5Rb terjual</span>
-                    </div>
-                </div>
+    <h3>{{ $item->nama_produk }}</h3>
+    <p class="price">
+    RP 
+    @if(str_contains($item->harga, '-'))
+        {{ $item->harga }}
+    @else
+        @if(is_numeric($item->harga))
+            {{ number_format($item->harga, 0, ',', '.') }}
+        @else
+            {{ $item->harga }}
+        @endif
+    @endif
+</p>
+
+    <div class="rating">
+        <i class="fa-solid fa-star"></i>
+        <span>5.0 + 5Rb terjual</span>
+    </div>
+</div>
                 
             </div>
         @endforeach

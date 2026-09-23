@@ -62,7 +62,14 @@
                     </div>
 
                     <!-- Menampilkan harga produk dari database -->
-                    <div class="detail-price">RP {{ number_format($produk->harga, 0, ',', '.') }}</div>
+                    <div class="detail-price">
+            RP 
+            @if(is_numeric(str_replace(['.', ','], '', $produk->harga)))
+            {{ number_format($produk->harga, 0, ',', '.') }}
+            @else
+            {{ $produk->harga }}
+            @endif
+                </div>
 
                     <!-- MULAI FORM PEMESANAN (Menyambung ke Keranjang / Beli Langsung) -->
                     <form action="/keranjang/tambah/{{ $produk->id }}" method="POST">
