@@ -61,7 +61,8 @@ Route::get('/dashboard', function () {
 // =========================
 Route::middleware(['auth', 'role:admin_pusat'])->prefix('admin-pusat')->group(function () {
     Route::get('/dashboard', function () {
-        return view('admin-pusat-status');
+        $produks = \App\Models\Produk::all();
+        return view('admin-pusat-status', compact('produks'));
     })->name('admin-pusat.dashboard');
 
     Route::get('/product-report', [AdminPusatController::class, 'productReport'])->name('admin.product-report');
@@ -78,9 +79,33 @@ Route::middleware(['auth', 'role:admin_pusat'])->prefix('admin-pusat')->group(fu
 // =========================
 // ROUTE ADMIN JURUSAN (Terproteksi Role)
 // =========================
-    Route::middleware(['auth', 'role:admin_jurusan'])->prefix('admin-jurusan')->group(function () {
+Route::middleware(['auth', 'role:admin_jurusan'])->prefix('admin-jurusan')->group(function () {
     Route::get('/dashboard', function () {
-        return view('admin-jurusan');
+        $jurusan = auth()->user()->jurusan;
+
+        // Ambil semua produk yang kategorinya sesuai jurusan admin ini
+        $produkIds = \App\Models\Produk::whereHas('kategori', function ($q) use ($jurusan) {
+            $q->where('nama_kategori', $jurusan);
+        })->pluck('id');
+
+        // ORDERS: total pesanan masuk untuk produk-produk jurusan ini
+        $totalOrders = Pesanan::whereIn('produk_id', $produkIds)->count();
+
+        // APPROVED: pesanan yang sudah di-ACCEPT (bukan Pending, bukan Ditolak)
+        $totalApproved = Pesanan::whereIn('produk_id', $produkIds)
+            ->whereNotIn('status', ['Pending', 'Ditolak'])
+            ->count();
+
+        // SALES RESULTS: produk yang paling banyak dipesan (top 4)
+        $topProduk = \App\Models\Produk::whereIn('id', $produkIds)
+            ->withCount('pesanans')
+            ->orderByDesc('pesanans_count')
+            ->take(4)
+            ->get();
+
+        $maxPesanan = $topProduk->max('pesanans_count') ?: 1; // hindari bagi nol
+
+        return view('admin-jurusan', compact('totalOrders', 'totalApproved', 'topProduk', 'maxPesanan'));
     })->name('admin-jurusan.dashboard');
 
     Route::get('/produk/create', [ProdukController::class, 'create'])->name('admin-jurusan.produk.create');

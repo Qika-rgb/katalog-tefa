@@ -78,10 +78,15 @@
                         <div>
                             <h3 class="card-title">Sales results</h3>
                             <div class="chart-container-horizontal">
-                                <div class="h-bar bg-bright-red" style="width: 100%;">design grafis</div>
-                                <div class="h-bar bg-dark-red" style="width: 60%;">baner</div>
-                                <div class="h-bar bg-beige" style="width: 40%;">stokbag</div>
-                                <div class="h-bar bg-brown" style="width: 50%;">nametag</div>
+                                @forelse ($topProduk as $index => $produk)
+                                    @php
+                                        $warna = ['bg-bright-red', 'bg-dark-red', 'bg-beige', 'bg-brown'][$index % 4];
+                                        $lebar = ($produk->pesanans_count / $maxPesanan) * 100;
+                                    @endphp
+                                    <div class="h-bar {{ $warna }}" style="width: {{ $lebar }}%;">{{ $produk->nama_produk }}</div>
+                                @empty
+                                    <p style="font-size: 12px; color: #999;">Belum ada data pesanan.</p>
+                                @endforelse
                             </div>
                             <div class="scale-x">
                                 <span>0</span><span>100</span><span>200</span><span>300</span><span>400</span><span>500</span>
@@ -91,8 +96,8 @@
                         <!-- Box Highest Value -->
                         <div class="highest-value-box">
                             <p>Highest Value</p>
-                            <h3>Home</h3>
-                            <p class="desc">home has the highest value for Page Views by Page Type among the others</p>
+                            <h3>{{ $topProduk->first()->nama_produk ?? '-' }}</h3>
+                            <p class="desc">Produk ini paling banyak dipesan dibanding produk lain di jurusan ini.</p>
                         </div>
                     </div>
                 </div>
@@ -101,15 +106,13 @@
                 <div class="stats-grid">
                     <div class="stat-card">
                         <h4>ORDERS</h4>
-                        <div class="number">140</div>
-                        <span class="percent">8,2%</span> <span class="since">SINCE LAST MOUNT</span>
+                        <div class="number">{{ $totalOrders }}</div>
                         <i class="fa-solid fa-clipboard-check icon-bg"></i>
                     </div>
 
                     <div class="stat-card">
                         <h4>APPROVED</h4>
-                        <div class="number">36</div>
-                        <span class="percent">8,2%</span> <span class="since">SINCE LAST MOUNT</span>
+                        <div class="number">{{ $totalApproved }}</div>
                         <i class="fa-regular fa-square-check icon-bg"></i>
                     </div>
                 </div>
