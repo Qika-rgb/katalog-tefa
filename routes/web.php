@@ -31,8 +31,6 @@ Route::get('/pemesanan/{id}', [KatalogController::class, 'detail']);
 Route::middleware(['auth'])->group(function () {
     Route::get('/keranjang', [KeranjangController::class, 'index'])->name('keranjang.index');
     Route::post('/keranjang/tambah/{id}', [KeranjangController::class, 'tambah'])->name('keranjang.tambah');
-    
-    // Rute baru untuk menghapus produk dari keranjang
     Route::delete('/keranjang/hapus/{id}', [KeranjangController::class, 'hapus'])->name('keranjang.hapus');
 
     Route::get('/status', [App\Http\Controllers\PesananController::class, 'status'])->name('pesanan.status');
@@ -63,13 +61,10 @@ Route::get('/dashboard', function () {
 // ROUTE ADMIN PUSAT (Terproteksi Role)
 // =========================
 Route::middleware(['auth', 'role:admin_pusat'])->prefix('admin-pusat')->group(function () {
-    
-    // --- PERBAIKAN: Mengambil data produk untuk ditampilkan di dashboard ---
     Route::get('/dashboard', function () {
         $produks = \App\Models\Produk::all(); 
         return view('admin-pusat-status', compact('produks'));
     })->name('admin-pusat.dashboard');
-    // ------------------------------------------------------------------------
 
     Route::get('/product-report', [AdminPusatController::class, 'productReport'])->name('admin.product-report');
     Route::get('/verifikasi', [AdminPusatController::class, 'verifikasi'])->name('admin.verifikasi');
@@ -87,7 +82,7 @@ Route::middleware(['auth', 'role:admin_pusat'])->prefix('admin-pusat')->group(fu
 // =========================
 Route::middleware(['auth', 'role:admin_jurusan'])->prefix('admin-jurusan')->group(function () {
     Route::get('/dashboard', function () {
-        return view('admin-jurusan');
+        return view('admin-jurusan.dashboard');
     })->name('admin-jurusan.dashboard');
 
     Route::get('/produk/create', [ProdukController::class, 'create'])->name('admin-jurusan.produk.create');
@@ -95,19 +90,14 @@ Route::middleware(['auth', 'role:admin_jurusan'])->prefix('admin-jurusan')->grou
 });
 
 // =========================
-// ROUTE YANG WAJIB LOGIN (No. 10)
-// Guest yang belum login otomatis diarahkan ke /login
+// ROUTE YANG WAJIB LOGIN (CHECKOUT & CHAT)
 // =========================
 Route::middleware(['auth'])->group(function () {
-
-    // CHECKOUT
     Route::get('/checkout', [CheckoutController::class, 'index']);
     Route::post('/checkout', [CheckoutController::class, 'store']);
 
-    // CUSTOMER SERVICE / CHAT
     Route::get('/customer-service', [ChatController::class, 'customerService']);
     Route::post('/chat/send', [ChatController::class, 'sendMessage']);
-
 });
 
 // =========================
