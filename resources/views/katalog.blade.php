@@ -35,13 +35,15 @@
             <!-- Asumsi: tim backend membuat kolom 'kategori_id' (0=RPL, 1=Animasi, 2=TKJ, 3=PSPT, 4=DKV, 5=Gim) -->
             <div class="product-card" data-kategori="{{ $item->kategori_id ?? '' }}">
                 
-                <!-- Kotak Gambar & Tombol -->
-                <div class="product-img-wrapper">
-                    <img src="{{ asset('images/' . $item->foto) }}" alt="{{ $item->nama_produk }}">
-                    <!-- Mengirimkan ID produk ke URL -->
-                    <a href="/pemesanan/{{ $item->id }}" class="btn-order">ORDER NOW</a>
-                </div>
-                
+             <!-- Kotak Gambar & Tombol -->
+
+<div class="product-img-wrapper">
+    <img src="{{ asset('images/' . $item->foto) }}" alt="{{ $item->nama_produk }}" style="width: 100%; height: 200px; object-fit: contain; background-color: #ffffff; padding: 5px;">
+    <!-- Mengirimkan ID produk ke URL -->
+    <a href="/pemesanan/{{ $item->id }}" class="btn-order">ORDER NOW</a>
+</div>
+
+
                 <!-- Info Teks -->
                 <div class="product-info">
     <h3>{{ $item->nama_produk }}</h3>

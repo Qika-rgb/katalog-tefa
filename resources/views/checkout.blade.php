@@ -43,20 +43,40 @@
             <hr>
 
             <!-- DAFTAR PRODUK -->
-            <!-- PERBAIKAN: Menggunakan $keranjangs (pakai 's') -->
             @forelse ($keranjangs as $item)
                 <div style="display: flex; align-items: center; gap: 20px; padding: 20px 0; border-bottom: 1px solid #ddd;">
-                    <!-- PERBAIKAN: Menggunakan format Object ->produk->foto -->
+                    
                     <img src="{{ asset('images/' . $item->produk->foto) }}" alt="{{ $item->produk->nama_produk }}" style="width: 100px; height: 100px; object-fit: cover; border-radius: 10px;">
                     
                     <div style="flex: 1;">
                         <h3>{{ $item->produk->nama_produk }}</h3>
-                        <p>Harga: <strong>RP {{ number_format($item->produk->harga, 0, ',', '.') }}</strong></p>
+                        <p>Harga: 
+                            <strong>
+                                RP 
+                                @if(str_contains($item->produk->harga, '-'))
+                                    {{ $item->produk->harga }}
+                                @else
+                                    @if(is_numeric(str_replace(['.', ','], '', $item->produk->harga)))
+                                        {{ number_format((float) str_replace(['.', ','], '', $item->produk->harga), 0, ',', '.') }}
+                                    @else
+                                        {{ $item->produk->harga }}
+                                    @endif
+                                @endif
+                            </strong>
+                        </p>
                         <p>Jumlah: <strong>{{ $item->jumlah }}</strong></p>
                     </div>
 
                     <div>
-                        <strong>RP {{ number_format($item->produk->harga * $item->jumlah, 0, ',', '.') }}</strong>
+                        <strong>
+                            RP 
+                            @php
+                                $hargaClean = is_numeric(str_replace(['.', ','], '', $item->produk->harga)) 
+                                    ? (float) str_replace(['.', ','], '', $item->produk->harga) 
+                                    : 0;
+                            @endphp
+                            {{ number_format($hargaClean * $item->jumlah, 0, ',', '.') }}
+                        </strong>
                     </div>
                 </div>
             @empty
@@ -96,8 +116,17 @@
                         <div style="display: flex; justify-content: space-between; font-size: 20px; font-weight: bold;">
                             <span>TOTAL PESANAN</span>
                             <span>
-                                <!-- PERBAIKAN: Perhitungan total menggunakan Object -->
-                                RP {{ number_format($keranjangs->sum(function ($item) { return $item->produk->harga * $item->jumlah; }), 0, ',', '.') }}
+                                RP {{ number_format(
+                                    $keranjangs->sum(function ($item) {
+                                        $hargaClean = is_numeric(str_replace(['.', ','], '', $item->produk->harga)) 
+                                            ? (float) str_replace(['.', ','], '', $item->produk->harga) 
+                                            : 0;
+                                        return $hargaClean * $item->jumlah;
+                                    }),
+                                    0,
+                                    ',',
+                                    '.'
+                                ) }}
                             </span>
                         </div>
 
