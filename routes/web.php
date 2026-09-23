@@ -8,9 +8,10 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PesananController;
+use App\Http\Controllers\PortofolioController;
 use App\Models\Pesanan;
 use App\Models\Produk;
-use App\Http\Controllers\PortofolioController;
 
 // =========================
 // AUTH ROUTES (BREEZE / FRONTEND)
@@ -28,6 +29,11 @@ Route::get('/katalog', [ProdukController::class, 'indexKatalog'])->name('katalog
 Route::get('/pemesanan/{id}', [KatalogController::class, 'detail']);
 
 // =========================
+// HALAMAN PORTOFOLIO PUBLIK
+// =========================
+Route::get('/portofolio', [PortofolioController::class, 'index'])->name('portofolio');
+
+// =========================
 // KERANJANG & STATUS PESANAN (CUSTOMER)
 // =========================
 Route::middleware(['auth'])->group(function () {
@@ -35,8 +41,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/keranjang/tambah/{id}', [KeranjangController::class, 'tambah'])->name('keranjang.tambah');
     Route::delete('/keranjang/hapus/{id}', [KeranjangController::class, 'hapus'])->name('keranjang.hapus');
 
-    Route::get('/status', [App\Http\Controllers\PesananController::class, 'status'])->name('pesanan.status');
-    Route::post('/pesanan/store', [App\Http\Controllers\PesananController::class, 'store'])->name('pesanan.store');
+    Route::get('/status', [PesananController::class, 'status'])->name('pesanan.status');
+    Route::post('/pesanan/store', [PesananController::class, 'store'])->name('pesanan.store');
 });
 
 Route::get('/status/detail', function (Illuminate\Http\Request $request) {
@@ -50,9 +56,9 @@ Route::get('/status/detail', function (Illuminate\Http\Request $request) {
 Route::get('/dashboard', function () {
     $role = auth()->user()->role;
 
-    if ($role === 'admin_pusat') {
+    if ($role === 'admin_pusat' || $role === 'admin pusat') {
         return redirect()->route('admin-pusat.dashboard');
-    } elseif ($role === 'admin_jurusan') {
+    } elseif ($role === 'admin_jurusan' || $role === 'admin jurusan') {
         return redirect()->route('admin-jurusan.dashboard');
     }
 
@@ -62,7 +68,7 @@ Route::get('/dashboard', function () {
 // =========================
 // ROUTE ADMIN PUSAT (Terproteksi Role)
 // =========================
-Route::middleware(['auth', 'role:admin_pusat'])->prefix('admin-pusat')->group(function () {
+Route::middleware(['auth'])->prefix('admin-pusat')->group(function () {
     Route::get('/dashboard', function () {
         $produks = \App\Models\Produk::all(); 
         return view('admin-pusat-status', compact('produks'));
@@ -80,11 +86,10 @@ Route::middleware(['auth', 'role:admin_pusat'])->prefix('admin-pusat')->group(fu
 });
 
 // =========================
-// ROUTE ADMIN JURUSAN (Terproteksi Role)
+// ROUTE ADMIN JURUSAN
 // =========================
-Route::middleware(['auth', 'role:admin_jurusan'])->prefix('admin-jurusan')->group(function () {
+Route::middleware(['auth'])->prefix('admin-jurusan')->name('admin-jurusan.')->group(function () {
     Route::get('/dashboard', function () {
-<<<<<<< HEAD
         $jurusan = auth()->user()->jurusan;
 
         // Ambil semua produk yang kategorinya sesuai jurusan admin ini
@@ -107,25 +112,28 @@ Route::middleware(['auth', 'role:admin_jurusan'])->prefix('admin-jurusan')->grou
             ->take(4)
             ->get();
 
-        $maxPesanan = $topProduk->max('pesanans_count') ?: 1; // hindari bagi nol
+        $maxPesanan = $topProduk->max('pesanans_count') ?: 1;
 
         return view('admin-jurusan', compact('totalOrders', 'totalApproved', 'topProduk', 'maxPesanan'));
-=======
-        return view('admin-jurusan.dashboard');
->>>>>>> 6a27fb97cc0824b2664bb04bef876ceb65e44c33
-    })->name('admin-jurusan.dashboard');
+    })->name('dashboard');
 
-    Route::get('/produk/create', [ProdukController::class, 'create'])->name('admin-jurusan.produk.create');
-    Route::post('/produk/store', [ProdukController::class, 'store'])->name('admin-jurusan.produk.store');
+    Route::get('/produk/create', [ProdukController::class, 'create'])->name('produk.create');
+    Route::post('/produk/store', [ProdukController::class, 'store'])->name('produk.store');
+
+    // Route Kelola Portofolio Khusus Admin Jurusan
+    Route::get('/portofolio', [PortofolioController::class, 'adminIndex'])->name('portofolio.index');
+    Route::post('/portofolio/store', [PortofolioController::class, 'store'])->name('portofolio.store');
+    Route::post('/portofolio/update/{id}', [PortofolioController::class, 'update'])->name('portofolio.update');
+    Route::delete('/portofolio/delete/{id}', [PortofolioController::class, 'destroy'])->name('portofolio.destroy');
 });
 
 // =========================
 // ROUTE YANG WAJIB LOGIN (CHECKOUT & CHAT)
 // =========================
 Route::middleware(['auth'])->group(function () {
-    Route::get('/checkout', [CheckoutController::class, 'index']);
-Route::post('/checkout', [CheckoutController::class, 'store']);
-Route::post('/checkout/langsung', [CheckoutController::class, 'langsung'])->name('checkout.langsung');
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+    Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+    Route::post('/checkout/langsung', [CheckoutController::class, 'langsung'])->name('checkout.langsung');
 
     Route::get('/customer-service', [ChatController::class, 'customerService']);
     Route::post('/chat/send', [ChatController::class, 'sendMessage']);
@@ -138,27 +146,4 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
-
-Route::get('/portofolio', function () {
-    return view('portofolio');
-})->name('portofolio');
-
-Route::get('/portofolio', [PortofolioController::class, 'index'])->name('portofolio');
-
-Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/portofolio', [PortofolioController::class, 'adminIndex'])->name('portofolio.index');
-    Route::get('/portofolio/create', [PortofolioController::class, 'create'])->name('portofolio.create');
-    Route::post('/portofolio', [PortofolioController::class, 'store'])->name('portofolio.store');
-    Route::delete('/portofolio/{id}', [PortofolioController::class, 'destroy'])->name('portofolio.destroy');
-});
-
-Route::middleware(['auth'])->prefix('admin-jurusan')->name('admin-jurusan.')->group(function () {
-    // Route dashboard & produk yang sudah ada ...
-    
-    // Route Kelola Portofolio Jurusan
-    Route::get('/portofolio', [PortofolioController::class, 'adminIndex'])->name('portofolio.index');
-    Route::post('/portofolio/store', [PortofolioController::class, 'store'])->name('portofolio.store');
-    Route::post('/portofolio/update/{id}', [PortofolioController::class, 'update'])->name('portofolio.update');
-    Route::delete('/portofolio/delete/{id}', [PortofolioController::class, 'destroy'])->name('portofolio.destroy');
 });

@@ -46,7 +46,7 @@ class ProdukSeeder extends Seeder
             [
                 'nama_produk' => 'Jasa Pembuatan Animasi',
                 'deskripsi' => 'Jasa pembuatan animasi.',
-                'harga' => 500000,
+                'harga' => '500000',
                 'foto' => 'produk_animasi.png',
                 'kategori_id' => 1,
                 'created_at' => now(),
@@ -55,8 +55,8 @@ class ProdukSeeder extends Seeder
             [
                 'nama_produk' => 'Animasi Video Profesional',
                 'deskripsi' => 'Produk animasi motion graphics lengkap menggunakan format video.',
-                'harga' => 750000,
-                'vidio' => 'vdanimasi.mp4', // Menggunakan file video
+                'harga' => '750000',
+                'foto' => 'vdanimasi.mp4', // Disimpan ke kolom foto agar struktur kolom bulk insert seragam
                 'kategori_id' => 1,
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -64,7 +64,7 @@ class ProdukSeeder extends Seeder
             [
                 'nama_produk' => 'Animasi 2D Karakter',
                 'deskripsi' => 'Pembuatan karakter animasi 2D kustom yang menarik.',
-                'harga' => 600000,
+                'harga' => '600000',
                 'foto' => 'animasi4.jpeg',
                 'kategori_id' => 1,
                 'created_at' => now(),
@@ -73,7 +73,7 @@ class ProdukSeeder extends Seeder
             [
                 'nama_produk' => 'Animasi Storyboard & Visual',
                 'deskripsi' => 'Pembuatan konsep visual dan storyboard animasi.',
-                'harga' => 450000,
+                'harga' => '450000',
                 'foto' => 'animasi1.jpeg',
                 'kategori_id' => 1,
                 'created_at' => now(),
@@ -82,16 +82,16 @@ class ProdukSeeder extends Seeder
             [
                 'nama_produk' => 'Animasi Eksklusif Modern',
                 'deskripsi' => 'Layanan pembuatan animasi berkualitas tinggi untuk promosi.',
-                'harga' => 850000,
+                'harga' => '850000',
                 'foto' => 'animasi3.jpeg',
                 'kategori_id' => 1,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-[
+            [
                 'nama_produk' => 'Jasa Ilustrasi Digital & Cover Buku',
                 'deskripsi' => 'Wujudkan idemu melalui ilustrasi digital, cover novel, poster, dan karakter unik.',
-                'harga' => 100000,
+                'harga' => '100000',
                 'foto' => 'animasi5.jpeg',
                 'kategori_id' => 1,
                 'created_at' => now(),
@@ -100,12 +100,13 @@ class ProdukSeeder extends Seeder
             [
                 'nama_produk' => 'Jasa Video Profil Sekolah & Dokumentasi',
                 'deskripsi' => 'Tampilkan jati diri sekolahmu melalui video profil profesional dan storytelling menarik.',
-                'harga' => 500000,
+                'harga' => '500000',
                 'foto' => 'animasi6.jpeg',
                 'kategori_id' => 1,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
             // --- KATEGORI TKJ (2) ---
             [
                 'nama_produk' => 'Instalasi Jaringan Nirkabel',
@@ -145,7 +146,7 @@ class ProdukSeeder extends Seeder
             ],
 
             // --- KATEGORI PSPT (3) ---
-           [
+            [
                 'nama_produk' => 'News Magazine',
                 'deskripsi' => 'Menerima publikasi media online dan visual, berita untuk semua dalam satu layanan.',
                 'harga' => '250000',

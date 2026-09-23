@@ -27,56 +27,54 @@
     <!-- GRID PRODUK DARI DATABASE -->
     <div class="product-grid">
         
-        @foreach ($produks as$item)
-            <div class="product-card" data-kategori="{{ $item->kategori_id ?? '' }}">
-                
-               <!-- Kotak Media (Mendukung Video 'vidio' atau Gambar 'foto') -->
-               <div class="product-img-wrapper" style="position: relative; background-color: #ffffff; height: 200px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 5px;">
-                    @php
-                        // Cek apakah produk punya kolom vidio atau foto
-                        $mediaFile = $item->vidio ?? $item->foto ?? '';
-                        $extension = pathinfo($mediaFile, PATHINFO_EXTENSION);
-                    @endphp
+        <?php if (isset($produks) && count($produks) > 0): ?>
+            <?php foreach ($produks as$item): ?>
+                <div class="product-card" data-kategori="<?= $item->kategori_id ?? '' ?>">
+                    
+                   <!-- Kotak Media -->
+                   <div class="product-img-wrapper" style="position: relative; background-color: #ffffff; height: 200px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 5px;">
+                        <?php 
+                            $mediaFile = $item->vidio ?? $item->foto ?? '';
+                            $extension = pathinfo($mediaFile, PATHINFO_EXTENSION);
+                        ?>
 
-                    @if(in_array(strtolower($extension), ['mp4', 'webm', 'ogg']))
-                        <!-- Jika file produk berupa VIDEO -->
-                        <video width="100%" height="100%" autoplay loop muted playsinline style="object-fit: cover; width: 100%; height: 100%;">
-                            <source src="{{ asset('storage/' . $mediaFile) }}" type="video/mp4">
-                            Browser Anda tidak mendukung pemutaran video.
-                        </video>
-                    @else
-                        <!-- Jika file produk berupa GAMBAR -->
-                        <img src="{{ asset('images/' . $mediaFile) }}" alt="{{ $item->nama_produk }}" style="width: 100%; height: 200px; object-fit: contain;">
-                    @endif
+                        <?php if (in_array(strtolower($extension), ['mp4', 'webm', 'ogg'])): ?>
+                            <video width="100%" height="100%" autoplay loop muted playsinline style="object-fit: cover; width: 100%; height: 100%;">
+                                <source src="<?= asset('storage/' . $mediaFile) ?>" type="video/mp4">
+                                Browser Anda tidak mendukung pemutaran video.
+                            </video>
+                        <?php else: ?>
+                            <img src="<?= asset('images/' . $mediaFile) ?>" alt="<?= e($item->nama_produk) ?>" style="width: 100%; height: 200px; object-fit: contain;">
+                        <?php endif; ?>
 
-                    <!-- Mengirimkan ID produk ke URL -->
-                    <a href="/pemesanan/{{ $item->id }}" class="btn-order">ORDER NOW</a>
-               </div>
+                        <a href="/pemesanan/<?= $item->id ?>" class="btn-order">ORDER NOW</a>
+                   </div>
 
-                <!-- Info Teks -->
-                <div class="product-info">
-                    <h3>{{ $item->nama_produk }}</h3>
-                    <p class="price">
-                        RP 
-                        @if(str_contains($item->harga, '-'))
-                            {{ $item->harga }}
-                        @else
-                            @if(is_numeric($item->harga))
-                                {{ number_format((float)$item->harga, 0, ',', '.') }}
-                            @else
-                                {{ $item->harga }}
-                            @endif
-                        @endif
-                    </p>
+                    <!-- Info Teks -->
+                    <div class="product-info">
+                        <h3><?= e($item->nama_produk) ?></h3>
+                        <p class="price">
+                            RP 
+                            <?php if (str_contains((string)$item->harga, '-')): ?>
+                                <?= e($item->harga) ?>
+                            <?php else: ?>
+                                <?php if (is_numeric($item->harga)): ?>
+                                    <?= number_format((float)$item->harga, 0, ',', '.') ?>
+                                <?php else: ?>
+                                    <?= e($item->harga) ?>
+                                <?php endif; ?>
+                            <?php endif; ?>
+                        </p>
 
-                    <div class="rating">
-                        <i class="fa-solid fa-star"></i>
-                        <span>5.0 + 5Rb terjual</span>
+                        <div class="rating">
+                            <i class="fa-solid fa-star"></i>
+                            <span>5.0 + 5Rb terjual</span>
+                        </div>
                     </div>
+                    
                 </div>
-                
-            </div>
-        @endforeach
+            <?php endforeach; ?>
+        <?php endif; ?>
         
     </div>
 

@@ -42,7 +42,6 @@
 
     </div>
 
-
     <!-- =========================
          KARTU UTAMA
     ========================== -->
@@ -76,8 +75,8 @@
                         <div style="display: flex; gap: 20px; align-items: center;">
                             <!-- FOTO PRODUK -->
                             <img
-                                src="{{ asset('images/' . $item->produk->foto) }}"
-                                alt="{{ $item->produk->nama_produk }}"
+                                src="{{ asset('images/' . ($item->produk->foto ?? 'default.png')) }}"
+                                alt="{{ $item->produk->nama_produk ?? 'Produk' }}"
                                 class="cart-item-img"
                             >
 
@@ -85,28 +84,27 @@
                             <div class="cart-item-details">
 
                                 <h4>
-                                    {{ $item->produk->nama_produk }}
+                                    {{ $item->produk->nama_produk ?? 'Nama Produk' }}
                                 </h4>
 
                                 <h5>
-                                    TEFA DKV
+                                    TEFA SMKN 4
                                 </h5>
 
                                 <p class="cart-item-price">
-<<<<<<< HEAD
-                                    RP {{ $item->produk->harga }}
-=======
                                     RP 
-                                    @if(str_contains($item->produk->harga, '-'))
-                                        {{ $item->produk->harga }}
-                                    @else
-                                        @if(is_numeric(str_replace(['.', ','], '', $item->produk->harga)))
-                                            {{ number_format((float) str_replace(['.', ','], '', $item->produk->harga), 0, ',', '.') }}
-                                        @else
+                                    @if(isset($item->produk->harga))
+                                        @if(str_contains($item->produk->harga, '-'))
                                             {{ $item->produk->harga }}
+                                        @else
+                                            @php
+                                                $cleanPrice = preg_replace('/[^0-9]/', '', (string)$item->produk->harga);
+                                            @endphp
+                                            {{ is_numeric($cleanPrice) ? number_format((float)$cleanPrice, 0, ',', '.') : $item->produk->harga }}
                                         @endif
+                                    @else
+                                        0
                                     @endif
->>>>>>> 6a27fb97cc0824b2664bb04bef876ceb65e44c33
                                 </p>
 
                             </div>
@@ -168,7 +166,6 @@
 
         </div>
 
-
         <!-- =========================
              CHECKOUT
         ========================== -->
@@ -186,17 +183,9 @@
                         RP
                         {{ number_format(
                             $keranjangs->sum(function ($item) {
-<<<<<<< HEAD
-                                $hargaBersih = (float) preg_replace('/[^0-9]/', '', $item->produk->harga ?? 0);
+                                $hargaBersih = (float) preg_replace('/[^0-9]/', '', (string)($item->produk->harga ?? 0));
                                 $jumlah = (int) ($item->jumlah ?? 1);
                                 return $hargaBersih * $jumlah;
-=======
-                                // Ambil harga bersih jika berupa angka, atau 0 jika berupa rentang teks
-                                $hargaClean = is_numeric(str_replace(['.', ','], '', $item->produk->harga)) 
-                                    ? (float) str_replace(['.', ','], '', $item->produk->harga) 
-                                    : 0;
-                                return $hargaClean * $item->jumlah;
->>>>>>> 6a27fb97cc0824b2664bb04bef876ceb65e44c33
                             }),
                             0, ',', '.'
                         ) }}

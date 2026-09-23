@@ -29,7 +29,7 @@
             <a href="/register" style="color: inherit; text-decoration: none;">
                 <i class="fa-regular fa-user"></i>
             </a>
-            <a href="#" style="color: inherit; text-decoration: none;">
+            <a href="/customer-service" style="color: inherit; text-decoration: none;">
                 <i class="fa-solid fa-headset"></i>
             </a>
         </div>
@@ -44,25 +44,25 @@
             <!-- DAFTAR PRODUK -->
             @forelse ($keranjangs as $item)
                 <div style="display: flex; align-items: center; gap: 20px; padding: 20px 0; border-bottom: 1px solid #ddd;">
-<<<<<<< HEAD
-=======
                     
->>>>>>> 6a27fb97cc0824b2664bb04bef876ceb65e44c33
-                    <img src="{{ asset('images/' . $item->produk->foto) }}" alt="{{ $item->produk->nama_produk }}" style="width: 100px; height: 100px; object-fit: cover; border-radius: 10px;">
+                    <img src="{{ asset('images/' . ($item->produk->foto ?? 'default.png')) }}" alt="{{ $item->produk->nama_produk ?? 'Produk' }}" style="width: 100px; height: 100px; object-fit: cover; border-radius: 10px;">
 
                     <div style="flex: 1;">
-                        <h3>{{ $item->produk->nama_produk }}</h3>
+                        <h3>{{ $item->produk->nama_produk ?? 'Nama Produk' }}</h3>
                         <p>Harga: 
                             <strong>
                                 RP 
-                                @if(str_contains($item->produk->harga, '-'))
-                                    {{ $item->produk->harga }}
-                                @else
-                                    @if(is_numeric(str_replace(['.', ','], '', $item->produk->harga)))
-                                        {{ number_format((float) str_replace(['.', ','], '', $item->produk->harga), 0, ',', '.') }}
-                                    @else
+                                @if(isset($item->produk->harga))
+                                    @if(str_contains((string)$item->produk->harga, '-'))
                                         {{ $item->produk->harga }}
+                                    @else
+                                        @php
+                                            $cleanPrice = preg_replace('/[^0-9]/', '', (string)$item->produk->harga);
+                                        @endphp
+                                        {{ is_numeric($cleanPrice) ? number_format((float)$cleanPrice, 0, ',', '.') : $item->produk->harga }}
                                     @endif
+                                @else
+                                    0
                                 @endif
                             </strong>
                         </p>
@@ -73,11 +73,9 @@
                         <strong>
                             RP 
                             @php
-                                $hargaClean = is_numeric(str_replace(['.', ','], '', $item->produk->harga)) 
-                                    ? (float) str_replace(['.', ','], '', $item->produk->harga) 
-                                    : 0;
+                                $hargaClean = (float) preg_replace('/[^0-9]/', '', (string)($item->produk->harga ?? 0));
                             @endphp
-                            {{ number_format($hargaClean * $item->jumlah, 0, ',', '.') }}
+                            {{ number_format($hargaClean * (int)$item->jumlah, 0, ',', '.') }}
                         </strong>
                     </div>
                 </div>
@@ -85,31 +83,42 @@
                 <div style="text-align: center; padding: 40px;">
                     <i class="fa-solid fa-cart-shopping" style="font-size: 50px;"></i>
                     <h3>Keranjang masih kosong</h3>
-                    <a href="/katalog">Kembali ke Katalog</a>
+                    <a href="/katalog" class="btn-solid-blue" style="display: inline-block; margin-top: 15px; text-decoration: none;">Kembali ke Katalog</a>
                 </div>
             @endforelse
 
             @if(count($keranjangs) > 0)
                 <!-- FORM CHECKOUT -->
-                <form action="/checkout" method="POST">
+                <form action="{{ route('checkout.store') }}" method="POST">
                     @csrf
 
                     <!-- DATA PEMBELI -->
                     <div style="margin-top: 30px;">
                         <h2>DATA PEMBELI</h2>
+
+                        @if ($errors->any())
+                            <div style="padding: 10px 15px; background-color: #f8d7da; color: #721c24; border-radius: 8px; margin-top: 15px; font-weight: 600;">
+                                <ul style="margin: 0; padding-left: 20px;">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
                         <div style="margin-top: 20px;">
                             <label>Nama</label>
-                            <input type="text" name="nama" placeholder="MASUKKAN NAMA" required style="width: 100%; padding: 12px; margin-top: 8px; margin-bottom: 15px;">
+                            <input type="text" name="nama" value="{{ old('nama', Auth::user()->name ?? '') }}" placeholder="MASUKKAN NAMA" required style="width: 100%; padding: 12px; margin-top: 8px; margin-bottom: 15px;">
                         </div>
 
                         <div>
                             <label>Nomor Telepon</label>
-                            <input type="text" name="telepon" placeholder="MASUKKAN NOMOR TELEPON" required style="width: 100%; padding: 12px; margin-top: 8px; margin-bottom: 15px;">
+                            <input type="text" name="telepon" value="{{ old('telepon') }}" placeholder="MASUKKAN NOMOR TELEPON" required style="width: 100%; padding: 12px; margin-top: 8px; margin-bottom: 15px;">
                         </div>
 
                         <div>
                             <label>Alamat</label>
-                            <textarea name="alamat" placeholder="MASUKKAN ALAMAT" rows="4" required style="width: 100%; padding: 12px; margin-top: 8px;"></textarea>
+                            <textarea name="alamat" placeholder="MASUKKAN ALAMAT" rows="4" required style="width: 100%; padding: 12px; margin-top: 8px;">{{ old('alamat') }}</textarea>
                         </div>
                     </div>
 
@@ -118,26 +127,20 @@
                         <div style="display: flex; justify-content: space-between; font-size: 20px; font-weight: bold;">
                             <span>TOTAL PESANAN</span>
                             <span>
-<<<<<<< HEAD
-                                RP {{ number_format($keranjangs->sum(function ($item) { return $item->produk->harga * $item->jumlah; }), 0, ',', '.') }}
-=======
                                 RP {{ number_format(
                                     $keranjangs->sum(function ($item) {
-                                        $hargaClean = is_numeric(str_replace(['.', ','], '', $item->produk->harga)) 
-                                            ? (float) str_replace(['.', ','], '', $item->produk->harga) 
-                                            : 0;
-                                        return $hargaClean * $item->jumlah;
+                                        $hargaClean = (float) preg_replace('/[^0-9]/', '', (string)($item->produk->harga ?? 0));
+                                        return $hargaClean * (int)($item->jumlah ?? 1);
                                     }),
                                     0,
                                     ',',
                                     '.'
                                 ) }}
->>>>>>> 6a27fb97cc0824b2664bb04bef876ceb65e44c33
                             </span>
                         </div>
 
                         <!-- TOMBOL KONFIRMASI -->
-                        <button type="submit" class="btn-checkout" style="margin-top: 25px;">
+                        <button type="submit" class="btn-checkout" style="margin-top: 25px; border: none; cursor: pointer; width: 100%;">
                             KONFIRMASI PESANAN
                         </button>
                     </div>

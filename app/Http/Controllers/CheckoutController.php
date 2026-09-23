@@ -86,19 +86,11 @@ class CheckoutController extends Controller
             $totalJumlah = $keranjangs->sum('jumlah');
 
             $pesanan = Pesanan::create([
-<<<<<<< HEAD
                 'produk_id'  => $produkPertama->produk_id,
                 'user_id'    => $user_id,
                 'no_telepon' => $request->telepon,
                 'jumlah'     => $totalJumlah,
                 'status'     => 'Pending',
-=======
-                'produk_id'   => $produkPertama->produk_id,
-                'user_id'     => $user_id, 
-                'no_telepon'  => $request->telepon,
-                'jumlah'      => $totalJumlah,
-                'status'      => 'Pending', 
->>>>>>> 6a27fb97cc0824b2664bb04bef876ceb65e44c33
             ]);
 
             foreach ($keranjangs as $item) {
@@ -119,11 +111,7 @@ class CheckoutController extends Controller
                     'pesanan_id' => $pesanan->id,
                     'produk_id'  => $item->produk_id,
                     'jumlah'     => $item->jumlah,
-<<<<<<< HEAD
-                    'harga'      => $item->produk->harga,
-=======
-                    'harga'      => $hargaBersih, // Menggunakan harga yang sudah bersih dari string/rentang
->>>>>>> 6a27fb97cc0824b2664bb04bef876ceb65e44c33
+                    'harga'      => $hargaBersih, // Menggunakan harga numerik bersih
                 ]);
             }
 
