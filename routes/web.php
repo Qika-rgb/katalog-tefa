@@ -10,7 +10,7 @@ use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\ProfileController;
 use App\Models\Pesanan;
 use App\Models\Produk;
-
+use App\Http\Controllers\PortofolioController;
 
 // =========================
 // AUTH ROUTES (BREEZE / FRONTEND)
@@ -149,3 +149,22 @@ Route::middleware('auth')->group(function () {
 Route::get('/portofolio', function () {
     return view('portofolio');
 })->name('portofolio');
+
+Route::get('/portofolio', [PortofolioController::class, 'index'])->name('portofolio');
+
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/portofolio', [PortofolioController::class, 'adminIndex'])->name('portofolio.index');
+    Route::get('/portofolio/create', [PortofolioController::class, 'create'])->name('portofolio.create');
+    Route::post('/portofolio', [PortofolioController::class, 'store'])->name('portofolio.store');
+    Route::delete('/portofolio/{id}', [PortofolioController::class, 'destroy'])->name('portofolio.destroy');
+});
+
+Route::middleware(['auth'])->prefix('admin-jurusan')->name('admin-jurusan.')->group(function () {
+    // Route dashboard & produk yang sudah ada ...
+    
+    // Route Kelola Portofolio Jurusan
+    Route::get('/portofolio', [PortofolioController::class, 'adminIndex'])->name('portofolio.index');
+    Route::post('/portofolio/store', [PortofolioController::class, 'store'])->name('portofolio.store');
+    Route::post('/portofolio/update/{id}', [PortofolioController::class, 'update'])->name('portofolio.update');
+    Route::delete('/portofolio/delete/{id}', [PortofolioController::class, 'destroy'])->name('portofolio.destroy');
+});

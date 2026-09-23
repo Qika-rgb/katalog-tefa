@@ -23,6 +23,10 @@
             <li>
                 <a href="{{ route('admin-jurusan.produk.create') }}" class="{{ request()->routeIs('admin-jurusan.produk.create') ? 'active' : '' }}">PRODUCTS</a>
             </li>
+            <!-- MENU BARU PORTOFOLIO -->
+            <li>
+                <a href="{{ route('admin-jurusan.portofolio.index') }}" class="{{ request()->routeIs('admin-jurusan.portofolio*') ? 'active' : '' }}">PORTOFOLIO</a>
+            </li>
         </ul>
     </div>
 
