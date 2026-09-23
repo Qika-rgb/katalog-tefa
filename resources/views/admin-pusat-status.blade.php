@@ -16,51 +16,39 @@
 
 <body class="admin-body">
 
-    <!-- SIDEBAR -->
+<!-- SIDEBAR -->
     <div class="admin-sidebar">
-
         <a href="/">
-            <img src="{{ asset('images/logo_tefa.png') }}"
-                 alt="Logo"
-                 class="admin-logo">
+            <img src="{{ asset('images/logo_tefa.png') }}" alt="Logo" class="admin-logo">
         </a>
-
         <ul class="admin-nav">
-
+            <!-- Menu Product Report -->
             <li>
-                <a href="/admin-pusat/status"
-                   class="active-black-line">
-                    PRODUCT REPORT
-                </a>
+                <a href="/admin-pusat/product-report" class="{{ request()->is('admin-pusat/product-report') ? 'active-cs active-black-line' : '' }}">PRODUCT REPORT</a>
+            </li>
+            
+            <!-- Menu Customer Service -->
+            <li>
+                @if(isset($unread_chat) && $unread_chat > 0)
+                    <div class="red-dot"></div>
+                @endif
+                <a href="/admin-pusat/chat" class="{{ request()->is('admin-pusat/chat') ? 'active-cs active-black-line' : '' }}">CUSTOMER SERVICE</a>
             </li>
 
+            <!-- Menu Verifikasi Pesan -->
             <li>
-                <div class="red-dot"></div>
-
-                <a href="/admin-pusat/chat"
-                   class="active-cs">
-                    CUSTOMER SERVICE
-                </a>
+                <a href="/admin-pusat/verifikasi" class="{{ request()->is('admin-pusat/verifikasi') ? 'active-cs active-black-line' : '' }}">VERIFIKASI PESAN</a>
             </li>
-
+            
+            <!-- Menu Status -->
             <li>
-                <a href="/admin-pusat/verifikasi">
-                    VERIFIKASI PESAN
-                </a>
+                <a href="/admin-pusat/status-pesanan" class="{{ request()->is('admin-pusat/status-pesanan') ? 'active-cs active-black-line' : '' }}">STATUS</a>
             </li>
-
+            
+            <!-- Menu Done -->
             <li>
-                <a href="/admin-pusat/status-pesanan">
-                    STATUS
-                </a>
+                <a href="/admin-pusat/done" class="{{ request()->is('admin-pusat/done') ? 'active-cs active-black-line' : '' }}">DONE</a>
             </li>
-
-            <li>
-                <a href="/admin-pusat/done">
-                    DONE
-                </a>
-            </li>
-
         </ul>
     </div>
 

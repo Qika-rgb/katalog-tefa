@@ -10,14 +10,19 @@
 </head>
 <body class="admin-body">
 
-    <!-- SIDEBAR -->
+<!-- SIDEBAR -->
     <div class="admin-sidebar">
         <a href="/">
             <img src="{{ asset('images/logo_tefa.png') }}" alt="Logo" class="admin-logo">
         </a>
         <ul class="admin-nav">
-            <li><a href="{{ route('admin-jurusan.dashboard') }}" class="..."    >ANALYTICS REPORTS</a></li>
-            <li><a href="/admin-jurusan/products" class="active">PRODUCTS</a></li>
+            <!-- Navigasi Dinamis Laravel -->
+            <li>
+                <a href="{{ route('admin-jurusan.dashboard') }}" class="{{ request()->routeIs('admin-jurusan.dashboard') ? 'active' : '' }}">ANALYTICS REPORTS</a>
+            </li>
+            <li>
+                <a href="{{ route('admin-jurusan.produk.create') }}" class="{{ request()->routeIs('admin-jurusan.produk.create') ? 'active' : '' }}">PRODUCTS</a>
+            </li>
         </ul>
     </div>
 

@@ -4,74 +4,112 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Pesanan;
 use App\Models\DetailPesanan;
+use App\Models\Keranjang;
+use App\Models\Produk;
 
 class CheckoutController extends Controller
 {
+    // Menyimpan data "beli langsung" ke session, lalu arahkan ke halaman checkout
+    public function langsung(Request $request)
+    {
+        $request->validate([
+            'produk_id' => 'required|exists:produks,id',
+            'jumlah'    => 'required|numeric|min:1',
+        ]);
+
+        session(['buy_now' => [
+            'produk_id' => $request->produk_id,
+            'jumlah'    => $request->jumlah,
+        ]]);
+
+        return redirect('/checkout');
+    }
+
     // Menampilkan halaman checkout
     public function index()
     {
-        $keranjang = session()->get('keranjang', []);
+        if (session()->has('buy_now')) {
+            // Mode "Beli Langsung": bikin data pesanan sementara, tanpa sentuh tabel keranjang
+            $buyNow = session('buy_now');
+            $produk = Produk::findOrFail($buyNow['produk_id']);
 
-        return view('checkout', compact('keranjang'));
+            $keranjangs = collect([
+                (object) [
+                    'produk_id' => $produk->id,
+                    'produk'    => $produk,
+                    'jumlah'    => $buyNow['jumlah'],
+                ]
+            ]);
+        } else {
+            // Mode normal: ambil dari keranjang seperti biasa
+            $keranjangs = Keranjang::with('produk')->where('user_id', Auth::id())->get();
+        }
+
+        return view('checkout', compact('keranjangs'));
     }
 
     // Menyimpan pesanan
     public function store(Request $request)
     {
-        // Validasi data pembeli
         $request->validate([
-            'nama' => 'required|string|max:255',
+            'nama'    => 'required|string|max:255',
             'telepon' => 'required|string|max:20',
-            'alamat' => 'required|string',
+            'alamat'  => 'required|string',
         ]);
 
-        // Ambil keranjang
-        $keranjang = session()->get('keranjang', []);
+        $user_id = Auth::id();
 
-        // Jika keranjang kosong
-        if (empty($keranjang)) {
-            return redirect('/keranjang')
-                ->with('error', 'Keranjang masih kosong.');
+        if (session()->has('buy_now')) {
+            $buyNow = session('buy_now');
+            $produk = Produk::findOrFail($buyNow['produk_id']);
+
+            $keranjangs = collect([
+                (object) [
+                    'produk_id' => $produk->id,
+                    'produk'    => $produk,
+                    'jumlah'    => $buyNow['jumlah'],
+                ]
+            ]);
+        } else {
+            $keranjangs = Keranjang::with('produk')->where('user_id', $user_id)->get();
+
+            if ($keranjangs->isEmpty()) {
+                return redirect('/keranjang')->with('error', 'Keranjang masih kosong.');
+            }
         }
 
-        DB::transaction(function () use ($request, $keranjang) {
+        DB::transaction(function () use ($request, $keranjangs, $user_id) {
+            $produkPertama = $keranjangs->first();
+            $totalJumlah = $keranjangs->sum('jumlah');
 
-            // Ambil item pertama dari keranjang terlepas dari key-nya
-            $firstKey = array_key_first($keranjang);
-            $produkPertama = $keranjang[$firstKey];
-
-            // Hitung total jumlah barang
-            $totalJumlah = collect($keranjang)->sum(function ($item) {
-                return $item['jumlah'] ?? 1;
-            });
-
-            // Simpan pesanan utama dengan status 'Pending' untuk verifikasi Admin
             $pesanan = Pesanan::create([
-                'produk_id'  => $produkPertama['id'] ?? $produkPertama['produk_id'] ?? $firstKey,
-                'customer_id' => null,
-                'no_telepon'  => $request->telepon,
-                'jumlah'      => $totalJumlah,
-               'status' => 'Tahap Pembuatan',
+                'produk_id'  => $produkPertama->produk_id,
+                'user_id'    => $user_id,
+                'no_telepon' => $request->telepon,
+                'jumlah'     => $totalJumlah,
+                'status'     => 'Pending',
             ]);
 
-            // Simpan setiap produk ke detail pesanan
-            foreach ($keranjang as $produkId => $item) {
+            foreach ($keranjangs as $item) {
                 DetailPesanan::create([
                     'pesanan_id' => $pesanan->id,
-                    'produk_id'  => $item['id'] ?? $item['produk_id'] ?? $produkId,
-                    'jumlah'     => $item['jumlah'] ?? 1,
-                    'harga'      => $item['harga'] ?? 0,
+                    'produk_id'  => $item->produk_id,
+                    'jumlah'     => $item->jumlah,
+                    'harga'      => $item->produk->harga,
                 ]);
+            }
+
+            // Kosongkan keranjang HANYA kalau ini bukan mode "Beli Langsung"
+            if (!session()->has('buy_now')) {
+                Keranjang::where('user_id', $user_id)->delete();
             }
         });
 
-        // Kosongkan keranjang
-        session()->forget('keranjang');
+        session()->forget('buy_now');
 
-        // Kembali ke halaman status
-        return redirect('/status')
-            ->with('success', 'Pesanan berhasil dibuat!');
+        return redirect('/status')->with('success', 'Pesanan berhasil dibuat dan menunggu verifikasi Admin!');
     }
 }

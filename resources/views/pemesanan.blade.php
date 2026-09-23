@@ -6,14 +6,14 @@
     <title>Pemesanan - {{ $produk->nama_produk }}</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <!-- Panggil CSS Utama kita -->
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 </head>
 <body class="bg-light">
 
     <div class="pemesanan-wrapper">
-        
+
         <!-- HEADER -->
         <div class="pemesanan-header">
             <div class="pemesanan-title">
@@ -35,9 +35,9 @@
 
         <!-- CARD UTAMA -->
         <div class="pemesanan-card">
-            
+
             <div class="pemesanan-grid">
-                
+
                 <!-- BAGIAN KIRI: GAMBAR -->
                 <div class="product-images">
                     <!-- Menampilkan foto sesuai database -->
@@ -46,10 +46,10 @@
 
                 <!-- BAGIAN KANAN: INFO PRODUK -->
                 <div class="product-detail-info">
-                    
+
                     <!-- Menampilkan nama produk dari database -->
                     <h1>{{ $produk->nama_produk }}</h1>
-                    
+
                     <!-- Rating Bintang -->
                     <div class="detail-rating">
                         <span>4.5</span>
@@ -64,9 +64,12 @@
                     <!-- Menampilkan harga produk dari database -->
                     <div class="detail-price">RP {{ number_format($produk->harga, 0, ',', '.') }}</div>
 
-                    <!-- MULAI FORM PEMESANAN (Menyambung ke Keranjang) -->
+                    <!-- MULAI FORM PEMESANAN (Menyambung ke Keranjang / Beli Langsung) -->
                     <form action="/keranjang/tambah/{{ $produk->id }}" method="POST">
                         @csrf
+
+                        <!-- Dikirim khusus untuk tombol BUY -->
+                        <input type="hidden" name="produk_id" value="{{ $produk->id }}">
 
                         <!-- Kuantitas -->
                         <span class="qty-label">KUANTITAS</span>
@@ -84,21 +87,25 @@
 
                         <!-- Tombol Aksi -->
                         <div class="action-buttons">
-                            
-                            <!-- Tombol Keranjang (Mensubmit form ke database) -->
+
+                            <!-- Tombol Keranjang (submit normal ke KeranjangController) -->
                             <button type="submit" class="btn-outline-blue">
                                 <i class="fa-solid fa-cart-arrow-down"></i> MASUKAN KERANJANG
                             </button>
 
-                            <!-- Tombol BUY (Arahkan langsung ke WhatsApp Admin TEFA) -->
-                            <!-- Ganti 6281234567890 dengan nomor WA sekolahmu -->
-                            <a href="https://wa.me/6281234567890?text=Halo%20Admin%20TEFA,%20saya%20tertarik%20untuk%20memesan%20{{ $produk->nama_produk }}." target="_blank" class="btn-solid-blue" style="text-decoration: none; display: flex; justify-content: center; align-items: center; width: 100%;">
+                            <!-- Tombol BUY (langsung ke Checkout, skip keranjang) -->
+                            <button
+                                type="submit"
+                                formaction="{{ route('checkout.langsung') }}"
+                                class="btn-solid-blue"
+                                style="width: 100%;"
+                            >
                                 BUY
-                            </a>
+                            </button>
 
                         </div>
                     </form>
-                    
+
                 </div>
             </div> <!-- End Grid Atas -->
 
@@ -115,32 +122,3 @@
 
                 <div class="store-stats">
                     <div>Penilaian <span>10 RB</span></div>
-                    <div>presentase rating <span>89,55</span></div>
-                    <div>produk <span>50</span></div>
-                    <div>lokasi <span>SMKN 4 TANJUNGPINANG TIMUR</span></div>
-                </div>
-            </div>
-
-        </div> <!-- End Card -->
-    </div> <!-- End Wrapper -->
-
-    <!-- JavaScript Interaktif untuk Tombol Plus/Minus -->
-    <script>
-        const btnMinus = document.getElementById('btnMinus');
-        const btnPlus = document.getElementById('btnPlus');
-        const qtyInput = document.getElementById('qtyInput');
-
-        // Tambah Kuantitas
-        btnPlus.addEventListener('click', function() {
-            qtyInput.value = parseInt(qtyInput.value) + 1;
-        });
-
-        // Kurangi Kuantitas (Minimal 1)
-        btnMinus.addEventListener('click', function() {
-            if (parseInt(qtyInput.value) > 1) {
-                qtyInput.value = parseInt(qtyInput.value) - 1;
-            }
-        });
-    </script>
-</body>
-</html>

@@ -4,34 +4,46 @@ namespace App\Http\Controllers;
 
 use App\Models\Pesanan;
 use App\Models\Produk;
+use App\Models\Message; // <-- JANGAN LUPA: Panggil model Message di sini
 use Illuminate\Http\Request;
 
 class AdminPusatController extends Controller
 {
+    // ==========================================
+    // FUNGSI BANTUAN UNTUK NOTIFIKASI CHAT
+    // ==========================================
+    private function getUnreadChat()
+    {
+        // Menghitung jumlah pesan dari customer (Bisa kamu tambah ->where('is_read', false) nanti jika ada kolomnya)
+        return Message::where('sender', 'customer')->count();
+    }
+    // ==========================================
+
     // STEP 1 — Product Report
     public function productReport()
     {
         $produks = Produk::all();
-        return view('admin-pusat-status', compact('produks'));
+        $unread_chat = $this->getUnreadChat(); // Panggil notif
+
+        return view('admin-pusat-status', compact('produks', 'unread_chat'));
     }
 
-    // STEP 2 — Verifikasi Pesanan (Menampilkan Pesanan yang Perlu Diverifikasi + Riwayat Selesai)
-public function verifikasi()
-{
-    // Pesanan baru yang masih perlu di-ACCEPT/DECLINE
-    $pesanans = Pesanan::with(['user', 'produk'])
-        ->where('status', 'Pending')
-        ->latest('updated_at')
-        ->get();
+    // STEP 2 — Verifikasi Pesanan
+    public function verifikasi()
+    {
+        $pesanans = Pesanan::with(['user', 'produk'])
+            ->where('status', 'Pending')
+            ->latest('updated_at')
+            ->get();
 
-    // Riwayat pesanan yang sudah selesai (No. 5)
-    $riwayatSelesai = Pesanan::with(['user', 'produk'])
-        ->where('status', 'Sudah Diambil')
-        ->latest('updated_at')
-        ->get();
+        $riwayatSelesai = Pesanan::with(['user', 'produk'])
+            ->where('status', 'Sudah Diambil')
+            ->latest('updated_at')
+            ->get();
 
-    return view('admin-pusat-verifikasi', compact('pesanans', 'riwayatSelesai'));
-}
+        $unread_chat = $this->getUnreadChat(); // Panggil notif
+        return view('admin-pusat-verifikasi', compact('pesanans', 'riwayatSelesai', 'unread_chat'));
+    }
 
     // STEP 3 — ACCEPT
     public function accept($id)
@@ -59,7 +71,8 @@ public function verifikasi()
             ->latest()
             ->get();
 
-        return view('admin-pusat-status-pesanan', compact('pesanans'));
+        $unread_chat = $this->getUnreadChat(); // Panggil notif
+        return view('admin-pusat-status-pesanan', compact('pesanans', 'unread_chat'));
     }
 
     // STEP 6 — Ubah Status Berjenjang
@@ -94,6 +107,7 @@ public function verifikasi()
             ->latest()
             ->get();
 
-        return view('admin-pusat-done', compact('pesanans'));
+        $unread_chat = $this->getUnreadChat(); // Panggil notif
+        return view('admin-pusat-done', compact('pesanans', 'unread_chat'));
     }
 }

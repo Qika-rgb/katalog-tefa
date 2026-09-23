@@ -9,6 +9,8 @@ use App\Http\Controllers\ChatController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\ProfileController;
 use App\Models\Pesanan;
+use App\Models\Produk;
+
 
 // =========================
 // AUTH ROUTES (BREEZE / FRONTEND)
@@ -31,6 +33,9 @@ Route::get('/pemesanan/{id}', [KatalogController::class, 'detail']);
 Route::middleware(['auth'])->group(function () {
     Route::get('/keranjang', [KeranjangController::class, 'index'])->name('keranjang.index');
     Route::post('/keranjang/tambah/{id}', [KeranjangController::class, 'tambah'])->name('keranjang.tambah');
+    
+    // Rute baru untuk menghapus produk dari keranjang
+    Route::delete('/keranjang/hapus/{id}', [KeranjangController::class, 'hapus'])->name('keranjang.hapus');
 
     Route::get('/status', [App\Http\Controllers\PesananController::class, 'status'])->name('pesanan.status');
     Route::post('/pesanan/store', [App\Http\Controllers\PesananController::class, 'store'])->name('pesanan.store');
@@ -60,10 +65,13 @@ Route::get('/dashboard', function () {
 // ROUTE ADMIN PUSAT (Terproteksi Role)
 // =========================
 Route::middleware(['auth', 'role:admin_pusat'])->prefix('admin-pusat')->group(function () {
+    
+    // --- PERBAIKAN: Mengambil data produk untuk ditampilkan di dashboard ---
     Route::get('/dashboard', function () {
-        $produks = \App\Models\Produk::all();
+        $produks = \App\Models\Produk::all(); 
         return view('admin-pusat-status', compact('produks'));
     })->name('admin-pusat.dashboard');
+    // ------------------------------------------------------------------------
 
     Route::get('/product-report', [AdminPusatController::class, 'productReport'])->name('admin.product-report');
     Route::get('/verifikasi', [AdminPusatController::class, 'verifikasi'])->name('admin.verifikasi');
@@ -120,7 +128,8 @@ Route::middleware(['auth'])->group(function () {
 
     // CHECKOUT
     Route::get('/checkout', [CheckoutController::class, 'index']);
-    Route::post('/checkout', [CheckoutController::class, 'store']);
+Route::post('/checkout', [CheckoutController::class, 'store']);
+Route::post('/checkout/langsung', [CheckoutController::class, 'langsung'])->name('checkout.langsung');
 
     // CUSTOMER SERVICE / CHAT
     Route::get('/customer-service', [ChatController::class, 'customerService']);
