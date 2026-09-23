@@ -93,7 +93,7 @@
                                 </h5>
 
                                 <p class="cart-item-price">
-                                    RP {{ number_format($item->produk->harga, 0, ',', '.') }}
+                                    RP {{ $item->produk->harga }}
                                 </p>
 
                             </div>
@@ -174,11 +174,11 @@
                         RP
                         {{ number_format(
                             $keranjangs->sum(function ($item) {
-                                return $item->produk->harga * $item->jumlah;
+                                $hargaBersih = (float) preg_replace('/[^0-9]/', '', $item->produk->harga ?? 0);
+                                $jumlah = (int) ($item->jumlah ?? 1);
+                                return $hargaBersih * $jumlah;
                             }),
-                            0,
-                            ',',
-                            '.'
+                            0, ',', '.'
                         ) }}
                     </span>
 

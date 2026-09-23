@@ -27,8 +27,9 @@
         <!-- 2. MENU UTAMA -->
         <ul class="nav-menu">
             <li><a href="/" class="{{ request()->is('/') ? 'active' : '' }}">HOME</a></li>
-            <li><a href="/katalog" class="{{ request()->is('katalog') ? 'active' : '' }}">KATALOG</a></li>
-            <li><a href="/status" class="{{ request()->is('status') ? 'active' : '' }}">STATUS</a></li>
+            <li><a href="/katalog" class="{{ request()->is('katalog*') ? 'active' : '' }}">KATALOG</a></li>
+            <li><a href="/status" class="{{ request()->is('status*') ? 'active' : '' }}">STATUS</a></li>
+            <li><a href="/portofolio" class="{{ request()->is('portofolio*') ? 'active' : '' }}">PORTOFOLIO</a></li>
         </ul>
 
     <!-- 3. SEARCH BAR MENGGUNAKAN FORM GET -->

@@ -9,9 +9,9 @@
             <h2>TEFA<br>DESAIN KOMUNIKASI VISUAL</h2>
             <p>Membangun fondasi digital yang tangguh, aman, dan terintegrasi. Dari perakitan perangkat keras, manajemen jaringan komputer, hingga konfigurasi server, kami siap menghadirkan solusi infrastruktur IT yang handal dan berstandar industri.</p>
 
-            <!-- DKV -->
-            <a href="/katalog?banner=4" class="btn-dark">
-                FOR DETAIL GO TO KATALOG
+            <!-- DKV (Kategori ID: 4) -->
+            <a href="{{ url('/portofolio?kategori=4') }}" class="btn-dark">
+                LIHAT PORTOFOLIO
             </a>
         </div>
 
@@ -27,9 +27,9 @@
             <h2>TEFA<br>PENGEMBANGAN GIM</h2>
             <p>Membangun fondasi digital yang tangguh, aman, dan terintegrasi. Dari perakitan perangkat keras, manajemen jaringan komputer, hingga konfigurasi server, kami siap menghadirkan solusi infrastruktur IT yang handal dan berstandar industri.</p>
 
-            <!-- GIM -->
-            <a href="/katalog?banner=5" class="btn-dark">
-                FOR DETAIL GO TO KATALOG
+            <!-- GIM (Kategori ID: 5) -->
+            <a href="{{ url('/portofolio?kategori=5') }}" class="btn-dark">
+                LIHAT PORTOFOLIO
             </a>
         </div>
 
@@ -45,9 +45,9 @@
             <h2>TEFA<br>TEKNIK KOMPUTER JARINGAN</h2>
             <p>Membangun fondasi digital yang tangguh, aman, dan terintegrasi. Dari perakitan perangkat keras, manajemen jaringan komputer, hingga konfigurasi server, kami siap menghadirkan solusi infrastruktur IT yang handal dan berstandar industri.</p>
 
-            <!-- TKJ -->
-            <a href="/katalog?banner=2" class="btn-dark">
-                FOR DETAIL GO TO KATALOG
+            <!-- TKJ (Kategori ID: 2) -->
+            <a href="{{ url('/portofolio?kategori=2') }}" class="btn-dark">
+                LIHAT PORTOFOLIO
             </a>
         </div>
 
@@ -63,9 +63,9 @@
             <h2>TEFA<br>REKAYASA PERANGKAT LUNAK</h2>
             <p>Menerjemahkan ide dan logika menjadi solusi digital yang fungsional, efisien, dan andal. Dari perancangan sistem, pengembangan aplikasi web dan seluler, hingga manajemen basis data, kami siap menghadirkan produk perangkat lunak berstandar industri.</p>
 
-            <!-- RPL -->
-            <a href="/katalog?banner=0" class="btn-dark">
-                FOR DETAIL GO TO KATALOG
+            <!-- RPL (Kategori ID: 0) -->
+            <a href="{{ url('/portofolio?kategori=0') }}" class="btn-dark">
+                LIHAT PORTOFOLIO
             </a>
         </div>
 
@@ -81,9 +81,9 @@
             <h2>TEFA<br>PRODUK SIARAN PROGRAM TELEVISI</h2>
             <p>Menghidupkan cerita di layar kaca melalui produksi audio-visual yang kreatif, dinamis, dan berkualitas tinggi. Dari tahap pra-produksi, produksi di studio maupun lapangan, hingga pasca-produksi, kami siap menghadirkan tayangan visual yang bernyawa dan berstandar industri.</p>
 
-            <!-- PSPT -->
-            <a href="/katalog?banner=3" class="btn-dark">
-                FOR DETAIL GO TO KATALOG
+            <!-- PSPT (Kategori ID: 3) -->
+            <a href="{{ url('/portofolio?kategori=3') }}" class="btn-dark">
+                LIHAT PORTOFOLIO
             </a>
         </div>
 
@@ -99,9 +99,9 @@
             <h2>TEFA<br>ANIMASI</h2>
             <p>Menghidupkan karakter dan imajinasi melalui gerakan visual yang dinamis dan ekspresif. Dari pembuatan konsep, pemodelan objek, hingga teknik animasi 2D dan 3D, kami siap menghadirkan cerita interaktif yang memukau dan berstandar industri.</p>
 
-            <!-- ANIMASI -->
-            <a href="/katalog?banner=1" class="btn-dark">
-                FOR DETAIL GO TO KATALOG
+            <!-- ANIMASI (Kategori ID: 1) -->
+            <a href="{{ url('/portofolio?kategori=1') }}" class="btn-dark">
+                LIHAT PORTOFOLIO
             </a>
         </div>
 
