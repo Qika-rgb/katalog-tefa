@@ -44,7 +44,7 @@
 
 
     <!-- =========================
-        KARTU UTAMA
+         KARTU UTAMA
     ========================== -->
     <div class="pemesanan-card">
 
@@ -93,7 +93,20 @@
                                 </h5>
 
                                 <p class="cart-item-price">
+<<<<<<< HEAD
                                     RP {{ $item->produk->harga }}
+=======
+                                    RP 
+                                    @if(str_contains($item->produk->harga, '-'))
+                                        {{ $item->produk->harga }}
+                                    @else
+                                        @if(is_numeric(str_replace(['.', ','], '', $item->produk->harga)))
+                                            {{ number_format((float) str_replace(['.', ','], '', $item->produk->harga), 0, ',', '.') }}
+                                        @else
+                                            {{ $item->produk->harga }}
+                                        @endif
+                                    @endif
+>>>>>>> 6a27fb97cc0824b2664bb04bef876ceb65e44c33
                                 </p>
 
                             </div>
@@ -143,13 +156,12 @@
                         Silakan pilih produk terlebih dahulu.
                     </p>
 
-
-                  <a href="/katalog"
-    class="btn-solid-blue"
-    style="display: inline-block; margin-top: 15px; text-decoration: none;"
->
-    KEMBALI KE KATALOG
-</a>
+                    <a href="/katalog"
+                        class="btn-solid-blue"
+                        style="display: inline-block; margin-top: 15px; text-decoration: none;"
+                    >
+                        KEMBALI KE KATALOG
+                    </a>
                 </div>
 
             @endforelse
@@ -174,9 +186,17 @@
                         RP
                         {{ number_format(
                             $keranjangs->sum(function ($item) {
+<<<<<<< HEAD
                                 $hargaBersih = (float) preg_replace('/[^0-9]/', '', $item->produk->harga ?? 0);
                                 $jumlah = (int) ($item->jumlah ?? 1);
                                 return $hargaBersih * $jumlah;
+=======
+                                // Ambil harga bersih jika berupa angka, atau 0 jika berupa rentang teks
+                                $hargaClean = is_numeric(str_replace(['.', ','], '', $item->produk->harga)) 
+                                    ? (float) str_replace(['.', ','], '', $item->produk->harga) 
+                                    : 0;
+                                return $hargaClean * $item->jumlah;
+>>>>>>> 6a27fb97cc0824b2664bb04bef876ceb65e44c33
                             }),
                             0, ',', '.'
                         ) }}
@@ -185,7 +205,7 @@
                 </div>
 
                 <a href="/checkout" class="btn-checkout" style="text-decoration: none; display: inline-block;">
-                Get Started
+                    Get Started
                 </a>
 
             </div>

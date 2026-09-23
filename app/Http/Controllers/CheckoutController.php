@@ -86,19 +86,44 @@ class CheckoutController extends Controller
             $totalJumlah = $keranjangs->sum('jumlah');
 
             $pesanan = Pesanan::create([
+<<<<<<< HEAD
                 'produk_id'  => $produkPertama->produk_id,
                 'user_id'    => $user_id,
                 'no_telepon' => $request->telepon,
                 'jumlah'     => $totalJumlah,
                 'status'     => 'Pending',
+=======
+                'produk_id'   => $produkPertama->produk_id,
+                'user_id'     => $user_id, 
+                'no_telepon'  => $request->telepon,
+                'jumlah'      => $totalJumlah,
+                'status'      => 'Pending', 
+>>>>>>> 6a27fb97cc0824b2664bb04bef876ceb65e44c33
             ]);
 
             foreach ($keranjangs as $item) {
+                // Bersihkan harga dari string/rentang teks agar aman disimpan ke kolom database bertipe angka
+                $hargaMentah = $item->produk->harga;
+                
+                if (str_contains($hargaMentah, '-')) {
+                    // Jika berupa rentang (contoh: 150.000 - 300.000), ambil angka awalnya atau jadikan 0
+                    $parts = explode('-', $hargaMentah);
+                    $hargaBersih = (float) str_replace(['.', ','], '', trim($parts[0]));
+                } else {
+                    $hargaBersih = is_numeric(str_replace(['.', ','], '', $hargaMentah)) 
+                        ? (float) str_replace(['.', ','], '', $hargaMentah) 
+                        : 0;
+                }
+
                 DetailPesanan::create([
                     'pesanan_id' => $pesanan->id,
                     'produk_id'  => $item->produk_id,
                     'jumlah'     => $item->jumlah,
+<<<<<<< HEAD
                     'harga'      => $item->produk->harga,
+=======
+                    'harga'      => $hargaBersih, // Menggunakan harga yang sudah bersih dari string/rentang
+>>>>>>> 6a27fb97cc0824b2664bb04bef876ceb65e44c33
                 ]);
             }
 
