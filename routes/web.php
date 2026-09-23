@@ -84,7 +84,6 @@ Route::middleware(['auth', 'role:admin_pusat'])->prefix('admin-pusat')->group(fu
 // =========================
 Route::middleware(['auth', 'role:admin_jurusan'])->prefix('admin-jurusan')->group(function () {
     Route::get('/dashboard', function () {
-<<<<<<< HEAD
         $jurusan = auth()->user()->jurusan;
 
         // Ambil semua produk yang kategorinya sesuai jurusan admin ini
@@ -110,9 +109,6 @@ Route::middleware(['auth', 'role:admin_jurusan'])->prefix('admin-jurusan')->grou
         $maxPesanan = $topProduk->max('pesanans_count') ?: 1; // hindari bagi nol
 
         return view('admin-jurusan', compact('totalOrders', 'totalApproved', 'topProduk', 'maxPesanan'));
-=======
-        return view('admin-jurusan.dashboard');
->>>>>>> 6a27fb97cc0824b2664bb04bef876ceb65e44c33
     })->name('admin-jurusan.dashboard');
 
     Route::get('/produk/create', [ProdukController::class, 'create'])->name('admin-jurusan.produk.create');
@@ -124,8 +120,8 @@ Route::middleware(['auth', 'role:admin_jurusan'])->prefix('admin-jurusan')->grou
 // =========================
 Route::middleware(['auth'])->group(function () {
     Route::get('/checkout', [CheckoutController::class, 'index']);
-Route::post('/checkout', [CheckoutController::class, 'store']);
-Route::post('/checkout/langsung', [CheckoutController::class, 'langsung'])->name('checkout.langsung');
+    Route::post('/checkout', [CheckoutController::class, 'store']);
+    Route::post('/checkout/langsung', [CheckoutController::class, 'langsung'])->name('checkout.langsung');
 
     Route::get('/customer-service', [ChatController::class, 'customerService']);
     Route::post('/chat/send', [ChatController::class, 'sendMessage']);
@@ -140,10 +136,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/portofolio', function () {
-    return view('portofolio');
-})->name('portofolio');
-
 Route::get('/portofolio', [PortofolioController::class, 'index'])->name('portofolio');
 
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
@@ -154,8 +146,6 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 });
 
 Route::middleware(['auth'])->prefix('admin-jurusan')->name('admin-jurusan.')->group(function () {
-    // Route dashboard & produk yang sudah ada ...
-    
     // Route Kelola Portofolio Jurusan
     Route::get('/portofolio', [PortofolioController::class, 'adminIndex'])->name('portofolio.index');
     Route::post('/portofolio/store', [PortofolioController::class, 'store'])->name('portofolio.store');
