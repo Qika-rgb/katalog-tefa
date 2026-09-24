@@ -19,15 +19,24 @@ class AdminPusatController extends Controller
     }
     // ==========================================
 
-    // STEP 1 — Product Report
-    public function productReport()
+    // STEP 1 — Product Report (Dengan dukungan filter kategori/jurusan)
+    public function productReport(Request $request)
     {
-        $produks = Produk::all();
+        $kategori = $request->get('kategori');
+
+        $query = Produk::with('kategori');
+
+        if ($kategori && $kategori !== 'all') {
+            $query->where('kategori_id', $kategori);
+        }
+
+        $produks = $query->latest()->get();
+        $kategoris = \App\Models\Kategori::all(); // Untuk pilihan filter di dropdown view
         $unread_chat = $this->getUnreadChat(); // Panggil notif
 
-        return view('admin-pusat-status', compact('produks', 'unread_chat'));
+        return view('admin-pusat-status', compact('produks', 'kategoris', 'unread_chat'));
     }
-
+    
     // STEP 2 — Verifikasi Pesanan
     public function verifikasi()
     {

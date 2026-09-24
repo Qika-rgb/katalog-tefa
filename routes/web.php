@@ -65,7 +65,8 @@ Route::get('/dashboard', function () {
 Route::middleware(['auth', 'role:admin_pusat'])->prefix('admin-pusat')->group(function () {
     Route::get('/dashboard', function () {
         $produks = \App\Models\Produk::all(); 
-        return view('admin-pusat-status', compact('produks'));
+        $kategoris = \App\Models\Kategori::all(); // <-- Diperbaiki agar data kategori terbawa
+        return view('admin-pusat-status', compact('produks', 'kategoris')); // <-- Diperbaiki
     })->name('admin-pusat.dashboard');
 
     Route::get('/product-report', [AdminPusatController::class, 'productReport'])->name('admin.product-report');

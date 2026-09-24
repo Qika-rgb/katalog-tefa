@@ -94,6 +94,21 @@
         <!-- KOTAK PUTIH UNTUK DAFTAR PRODUK -->
         <div class="admin-white-box">
 
+            <!-- FORM FILTER KATEGORI / JURUSAN -->
+            <form method="GET" action="{{ route('admin.product-report') }}" style="margin-bottom: 20px; display: flex; gap: 10px; align-items: center;">
+                <select name="kategori" class="form-control" style="padding: 8px 12px; border-radius: 6px; border: 1px solid #ccc;" onchange="this.form.submit()">
+                    <option value="all">Semua Jurusan / Kategori</option>
+                    @foreach($kategoris as $kat)
+                        <option value="{{ $kat->id }}" {{ request('kategori') == $kat->id ? 'selected' : '' }}>
+                            {{ $kat->nama_kategori ?? $kat->nama ?? 'Kategori ' . $kat->id }}
+                        </option>
+                    @endforeach
+                </select>
+                @if(request('kategori') && request('kategori') !== 'all')
+                    <a href="{{ route('admin.product-report') }}" class="btn-reset" style="padding: 8px 12px; background: #e2e8f0; color: #333; text-decoration: none; border-radius: 6px; font-size: 14px;">Reset Filter</a>
+                @endif
+            </form>
+
             <div class="product-grid">
 
                 @forelse ($produks as $produk)
@@ -147,7 +162,7 @@
                                 <i class="fa-solid fa-star"></i>
 
                                 <span>
-                                    Product Report
+                                    {{ $produk->kategori->nama_kategori ?? 'Product Report' }}
                                 </span>
 
                             </div>
@@ -166,7 +181,7 @@
                         </h3>
 
                         <p>
-                            Data produk belum tersedia di database.
+                            Data produk belum tersedia di database atau untuk kategori ini.
                         </p>
 
                     </div>
@@ -176,7 +191,6 @@
             </div>
 
         </div>
-
     </div>
 
 </body>
