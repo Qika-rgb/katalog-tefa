@@ -5,7 +5,6 @@
 
     <!-- BAGIAN BANNER -->
     <div class="banner-container">
-        <!-- Panah Kiri -->
         <i class="fa-solid fa-chevron-left banner-arrow" id="prevBanner"></i>
         
         <div class="banner-content" id="bannerBg">
@@ -13,11 +12,9 @@
                 <h1 id="bannerTitle">WELCOME TO TEFA REKAYASA PERANGKAT LUNAK</h1>
             </div>
             
-            <!-- Gambar Banner Orang -->
             <img src="{{ asset('images/icon_rpl.png') }}" alt="Banner Icon" class="banner-img" id="bannerImg">
         </div>
 
-        <!-- Panah Kanan -->
         <i class="fa-solid fa-chevron-right banner-arrow" id="nextBanner"></i>
     </div>
 
@@ -26,58 +23,64 @@
 
     <!-- GRID PRODUK DARI DATABASE -->
     <div class="product-grid">
-        
-        @foreach ($produks as$item)
-            <div class="product-card" data-kategori="{{ $item->kategori_id ?? '' }}">
-                
-               <!-- Kotak Media (Mendukung Video 'vidio' atau Gambar 'foto') -->
-               <div class="product-img-wrapper" style="position: relative; background-color: #ffffff; height: 200px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 5px;">
-                    @php
-                        // Cek apakah produk punya kolom vidio atau foto
-                        $mediaFile = $item->vidio ?? $item->foto ?? '';
-                        $extension = pathinfo($mediaFile, PATHINFO_EXTENSION);
-                    @endphp
+        @if(isset($produks) && count($produks) > 0)
+            @foreach ($produks as$item)
+              @php
+    $mediaFile = $item->vidio ?? $item->foto ?? 'default.png';
+    $extension = strtolower(pathinfo($mediaFile, PATHINFO_EXTENSION));
 
-                    @if(in_array(strtolower($extension), ['mp4', 'webm', 'ogg']))
-                        <!-- Jika file produk berupa VIDEO -->
-                        <video width="100%" height="100%" autoplay loop muted playsinline style="object-fit: cover; width: 100%; height: 100%;">
-                            <source src="{{ asset('storage/' . $mediaFile) }}" type="video/mp4">
-                            Browser Anda tidak mendukung pemutaran video.
-                        </video>
-                    @else
-                        <!-- Jika file produk berupa GAMBAR -->
-                        <img src="{{ asset('images/' . $mediaFile) }}" alt="{{ $item->nama_produk }}" style="width: 100%; height: 200px; object-fit: contain;">
-                    @endif
+    if (str_contains($mediaFile, 'produk/') || str_contains($mediaFile, 'portofolio/')) {
+        $mediaUrl = asset('storage/' . $mediaFile);
+    } else {
+        $mediaUrl = asset('images/' . $mediaFile);
+    }
+@endphp
 
-                    <!-- Mengirimkan ID produk ke URL -->
-                    <a href="/pemesanan/{{ $item->id }}" class="btn-order">ORDER NOW</a>
-               </div>
-
-                <!-- Info Teks -->
-                <div class="product-info">
-                    <h3>{{ $item->nama_produk }}</h3>
-                    <p class="price">
-                        RP 
-                        @if(str_contains($item->harga, '-'))
-                            {{ $item->harga }}
+                <div class="product-card" data-kategori="{{ $item->kategori_id ?? '' }}">
+                   <div class="product-img-wrapper" style="position: relative; background-color: #ffffff; height: 200px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 5px;">
+                        @if(in_array($extension, ['mp4', 'webm', 'ogg']))
+                            <video width="100%" height="100%" autoplay loop muted playsinline style="object-fit: cover; width: 100%; height: 100%;">
+                                <source src="{{ $mediaUrl }}" type="video/mp4">
+                                Browser Anda tidak mendukung pemutaran video.
+                            </video>
                         @else
-                            @if(is_numeric($item->harga))
+                            <img src="{{ $mediaUrl }}" alt="{{ $item->nama_produk ?? '' }}" style="width: 100%; height: 200px; object-fit: contain;">
+                        @endif
+
+                        <a href="/pemesanan/{{ $item->id }}" class="btn-order">ORDER NOW</a>
+                   </div>
+
+                    <div class="product-info">
+                        <h3>{{ $item->nama_produk ?? '' }}</h3>
+                        <p class="price">
+                            RP 
+                            @php
+                                $harga = (string)($item->harga ?? 0);
+                            @endphp
+                            @if(strpos($harga, '-') !== false)
+                                {{ $harga }}
+                            @elseif(is_numeric($item->harga))
                                 {{ number_format((float)$item->harga, 0, ',', '.') }}
                             @else
-                                {{ $item->harga }}
+                                {{ $harga }}
                             @endif
-                        @endif
-                    </p>
+                        </p>
 
-                    <div class="rating">
-                        <i class="fa-solid fa-star"></i>
-                        <span>5.0 + 5Rb terjual</span>
+                        <div class="rating">
+                            <i class="fa-solid fa-star"></i>
+                            <span>5.0 + 5Rb terjual</span>
+                        </div>
                     </div>
                 </div>
-                
-            </div>
-        @endforeach
-        
+            @endforeach
+        @else
+            <p style="grid-column: 1 / -1; text-align: center; color: #6b7280; padding: 30px;">Belum ada produk yang tersedia.</p>
+        @endif
+    </div>
+
+    <!-- TOMBOL PAGINATION -->
+    <div class="d-flex justify-content-center mt-4 mb-5">
+        {{ $produks->links() }}
     </div>
 
 </div>
