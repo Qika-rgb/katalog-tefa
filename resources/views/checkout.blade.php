@@ -1,154 +1,104 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checkout</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-</head>
+@extends('layouts.frontend')
 
-<body class="bg-light">
+@section('content')
+<div class="container py-5">
+    <h2 class="mb-4 font-weight-bold">Checkout Pesanan</h2>
 
-<div class="pemesanan-wrapper">
-    <!-- HEADER -->
-    <div class="pemesanan-header">
-        <div class="pemesanan-title">
-            <a href="javascript:void(0)" onclick="history.back()">
-                <i class="fa-solid fa-chevron-left"></i>
-            </a>
-            <span class="text-blue">
-                CHECKOUT
-            </span>
+    @if(session('error'))
+        <div class="alert alert-danger mb-4">{{ session('error') }}</div>
+    @endif
+
+    @if ($errors->any())
+        <div class="alert alert-danger mb-4">
+            <ul class="mb-0 pl-3">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
         </div>
-        <div class="nav-icons">
-            <a href="/keranjang" style="color: inherit; text-decoration: none;">
-                <i class="fa-solid fa-cart-shopping"></i>
-            </a>
-            <a href="/register" style="color: inherit; text-decoration: none;">
-                <i class="fa-regular fa-user"></i>
-            </a>
-            <a href="/customer-service" style="color: inherit; text-decoration: none;">
-                <i class="fa-solid fa-headset"></i>
-            </a>
-        </div>
-    </div>
+    @endif
 
-    <!-- CARD CHECKOUT -->
-    <div class="pemesanan-card">
-        <div style="padding: 30px;">
-            <h2>KONFIRMASI PESANAN</h2>
-            <hr>
+    <form action="{{ route('checkout.store') }}" method="POST">
+        @csrf
+        @if(isset($produk))
+            <input type="hidden" name="produk_id" value="{{ $produk->id }}">
+            <input type="hidden" name="qty" value="{{ $qty ?? 1 }}">
+        @endif
 
-            <!-- DAFTAR PRODUK -->
-            @forelse ($keranjangs as $item)
-                <div style="display: flex; align-items: center; gap: 20px; padding: 20px 0; border-bottom: 1px solid #ddd;">
+        <div class="row">
+            <!-- SISI KIRI: INFORMASI PENGIRIMAN & PEMESAN -->
+            <div class="col-md-7">
+                <div class="card shadow-sm border-0 p-4 mb-4">
+                    <h4 class="mb-3">Informasi Pengiriman & Pemesan</h4>
                     
-                    <img src="{{ asset('images/' . ($item->produk->foto ?? 'default.png')) }}" alt="{{ $item->produk->nama_produk ?? 'Produk' }}" style="width: 100px; height: 100px; object-fit: cover; border-radius: 10px;">
-
-                    <div style="flex: 1;">
-                        <h3>{{ $item->produk->nama_produk ?? 'Nama Produk' }}</h3>
-                        <p>Harga: 
-                            <strong>
-                                RP 
-                                @if(isset($item->produk->harga))
-                                    @if(str_contains((string)$item->produk->harga, '-'))
-                                        {{ $item->produk->harga }}
-                                    @else
-                                        @php
-                                            $cleanPrice = preg_replace('/[^0-9]/', '', (string)$item->produk->harga);
-                                        @endphp
-                                        {{ is_numeric($cleanPrice) ? number_format((float)$cleanPrice, 0, ',', '.') : $item->produk->harga }}
-                                    @endif
-                                @else
-                                    0
-                                @endif
-                            </strong>
-                        </p>
-                        <p>Jumlah: <strong>{{ $item->jumlah }}</strong></p>
+                    <div class="form-group mb-3">
+                        <label for="nama_pemesan" class="font-weight-bold">Nama Lengkap</label>
+                        <input type="text" name="nama_pemesan" id="nama_pemesan" class="form-control" value="{{ old('nama_pemesan', Auth::user()->name ?? '') }}" placeholder="Masukkan nama lengkap" required>
                     </div>
 
-                    <div>
-                        <strong>
-                            RP 
-                            @php
-                                $hargaClean = (float) preg_replace('/[^0-9]/', '', (string)($item->produk->harga ?? 0));
-                            @endphp
-                            {{ number_format($hargaClean * (int)$item->jumlah, 0, ',', '.') }}
+                    <div class="form-group mb-3">
+                        <label for="no_hp" class="font-weight-bold">Nomor Handphone / WhatsApp</label>
+                        <input type="text" name="no_hp" id="no_hp" class="form-control" value="{{ old('no_hp') }}" placeholder="Contoh: 081234567890" required>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="alamat" class="font-weight-bold">Alamat Lengkap Pengiriman / Catatan</label>
+                        <textarea name="alamat" id="alamat" rows="3" class="form-control" placeholder="Masukkan alamat lengkap tujuan..." required>{{ old('alamat') }}</textarea>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="metode_pembayaran" class="font-weight-bold">Metode Pembayaran</label>
+                        <select name="metode_pembayaran" id="metode_pembayaran" class="form-control" required>
+                            <option value="">-- Pilih Metode Pembayaran --</option>
+                            <option value="Transfer Bank" {{ old('metode_pembayaran') == 'Transfer Bank' ? 'selected' : '' }}>Transfer Bank (BCA/BRI/Mandiri)</option>
+                            <option value="QRIS" {{ old('metode_pembayaran') == 'QRIS' ? 'selected' : '' }}>QRIS / E-Wallet (GoPay/OVO/Dana)</option>
+                            <option value="COD" {{ old('metode_pembayaran') == 'COD' ? 'selected' : '' }}>Bayar di Tempat (COD)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SISI KANAN: RINGKASAN PESANAN -->
+            <div class="col-md-5">
+                <div class="card shadow-sm border-0 p-4">
+                    <h4 class="mb-3">Ringkasan Pesanan</h4>
+                    <hr>
+                    
+                    @if(isset($items) && count($items) > 0)
+                        <ul class="list-group list-group-flush mb-3">
+                            @foreach($items as $item)
+                                @php
+                                    $hargaRaw = $item->produk->harga ?? 0;
+                                    $hargaClean = (float) preg_replace('/[^0-9]/', '', (string)$hargaRaw);
+                                    $jumlahItem = $item->jumlah ?? $qty ?? 1;
+                                    $subtotal = $hargaClean * $jumlahItem;
+                                @endphp
+                                <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                    <div>
+                                        <h6 class="my-0">{{ $item->produk->nama_produk ?? $item->produk->nama ?? 'Produk' }}</h6>
+                                        <small class="text-muted">Jumlah: {{ $jumlahItem }}</small>
+                                    </div>
+                                    <span class="text-muted">Rp {{ number_format($subtotal, 0, ',', '.') }}</span>
+                                </li>
+                            @endforeach
+                        </ul>
+                    @else
+                        <p class="text-muted text-center py-3">Tidak ada item yang dipilih.</p>
+                    @endif
+
+                    <div class="d-flex justify-content-between mb-4">
+                        <strong class="h5">Total Pembayaran:</strong>
+                        <strong class="h5 text-primary">
+                            Rp {{ number_format($totalHarga ?? 0, 0, ',', '.') }}
                         </strong>
                     </div>
+
+                    <button type="submit" class="btn btn-success btn-lg btn-block shadow-sm">
+                        Buat Pesanan Sekarang
+                    </button>
                 </div>
-            @empty
-                <div style="text-align: center; padding: 40px;">
-                    <i class="fa-solid fa-cart-shopping" style="font-size: 50px;"></i>
-                    <h3>Keranjang masih kosong</h3>
-                    <a href="/katalog" class="btn-solid-blue" style="display: inline-block; margin-top: 15px; text-decoration: none;">Kembali ke Katalog</a>
-                </div>
-            @endforelse
-
-            @if(count($keranjangs) > 0)
-                <!-- FORM CHECKOUT -->
-                <form action="{{ route('checkout.store') }}" method="POST">
-                    @csrf
-
-                    <!-- DATA PEMBELI -->
-                    <div style="margin-top: 30px;">
-                        <h2>DATA PEMBELI</h2>
-
-                        @if ($errors->any())
-                            <div style="padding: 10px 15px; background-color: #f8d7da; color: #721c24; border-radius: 8px; margin-top: 15px; font-weight: 600;">
-                                <ul style="margin: 0; padding-left: 20px;">
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        @endif
-
-                        <div style="margin-top: 20px;">
-                            <label>Nama</label>
-                            <input type="text" name="nama" value="{{ old('nama', Auth::user()->name ?? '') }}" placeholder="MASUKKAN NAMA" required style="width: 100%; padding: 12px; margin-top: 8px; margin-bottom: 15px;">
-                        </div>
-
-                        <div>
-                            <label>Nomor Telepon</label>
-                            <input type="text" name="telepon" value="{{ old('telepon') }}" placeholder="MASUKKAN NOMOR TELEPON" required style="width: 100%; padding: 12px; margin-top: 8px; margin-bottom: 15px;">
-                        </div>
-
-                        <div>
-                            <label>Alamat</label>
-                            <textarea name="alamat" placeholder="MASUKKAN ALAMAT" rows="4" required style="width: 100%; padding: 12px; margin-top: 8px;">{{ old('alamat') }}</textarea>
-                        </div>
-                    </div>
-
-                    <!-- TOTAL -->
-                    <div style="margin-top: 30px; padding-top: 20px; border-top: 2px solid #ddd;">
-                        <div style="display: flex; justify-content: space-between; font-size: 20px; font-weight: bold;">
-                            <span>TOTAL PESANAN</span>
-                            <span>
-                                RP {{ number_format(
-                                    $keranjangs->sum(function ($item) {
-                                        $hargaClean = (float) preg_replace('/[^0-9]/', '', (string)($item->produk->harga ?? 0));
-                                        return $hargaClean * (int)($item->jumlah ?? 1);
-                                    }),
-                                    0,
-                                    ',',
-                                    '.'
-                                ) }}
-                            </span>
-                        </div>
-
-                        <!-- TOMBOL KONFIRMASI -->
-                        <button type="submit" class="btn-checkout" style="margin-top: 25px; border: none; cursor: pointer; width: 100%;">
-                            KONFIRMASI PESANAN
-                        </button>
-                    </div>
-                </form>
-            @endif
+            </div>
         </div>
-    </div>
+    </form>
 </div>
-
-</body>
-</html>
+@endsection

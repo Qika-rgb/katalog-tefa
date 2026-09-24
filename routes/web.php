@@ -122,18 +122,19 @@ Route::middleware(['auth'])->prefix('admin-jurusan')->name('admin-jurusan.')->gr
 
         // SALES RESULTS: produk yang paling banyak dipesan (top 4)
         $topProduk = \App\Models\Produk::whereIn('id', $produkIds)
-    ->withSum('pesanans', 'jumlah')
-    ->orderByDesc('pesanans_sum_jumlah')
-    ->take(4)
-    ->get();
+            ->withSum('pesanans', 'jumlah')
+            ->orderByDesc('pesanans_sum_jumlah')
+            ->take(4)
+            ->get();
 
-    $maxPesanan = $topProduk->max('pesanans_sum_jumlah') ?: 1;
+        $maxPesanan = $topProduk->max('pesanans_sum_jumlah') ?: 1;
 
         return view('admin-jurusan', compact('totalOrders', 'totalApproved', 'topProduk', 'maxPesanan', 'statusData', 'maxStatus'));
     })->name('dashboard');
 
     Route::get('/produk/create', [ProdukController::class, 'create'])->name('produk.create');
     Route::post('/produk/store', [ProdukController::class, 'store'])->name('produk.store');
+    Route::delete('/produk/delete/{id}', [ProdukController::class, 'destroy'])->name('produk.destroy');
 
     // Route Kelola Portofolio Khusus Admin Jurusan
     Route::get('/portofolio', [PortofolioController::class, 'adminIndex'])->name('portofolio.index');
@@ -161,10 +162,4 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
-
-Route::middleware(['auth'])->prefix('admin-jurusan')->name('admin-jurusan.')->group(function () {
-    // ... route yang sudah ada ...
-
-    Route::delete('/produk/delete/{id}', [ProdukController::class, 'destroy'])->name('produk.destroy');
 });

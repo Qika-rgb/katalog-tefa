@@ -1,209 +1,109 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Keranjang Belanja</title>
+@extends('layouts.frontend')
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+@section('content')
+<div class="container py-5">
+    <h2 class="mb-4 font-weight-bold">Keranjang Belanja Kamu</h2>
 
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-</head>
+    @if(session('success'))
+        <div class="alert alert-success mb-4">{{ session('success') }}</div>
+    @endif
 
-<body class="bg-light">
+    @if(session('error'))
+        <div class="alert alert-danger mb-4">{{ session('error') }}</div>
+    @endif
 
-<div class="pemesanan-wrapper">
+    @php
+        // Normalisasi variabel (mendukung $items maupun $keranjangs)
+        $cartItems = $items ?? $keranjangs ?? collect();
+    @endphp
 
-    <!-- =========================
-         HEADER KERANJANG
-    ========================== -->
-    <div class="pemesanan-header">
-
-        <div class="pemesanan-title">
-            <a href="/katalog">
-                <i class="fa-solid fa-chevron-left"></i>
-            </a>
-
-            <span class="text-blue">KERANJANG</span>
-        </div>
-
-        <div class="nav-icons">
-            <a href="/keranjang" style="color: inherit; text-decoration: none;">
-                <i class="fa-solid fa-cart-shopping"></i>
-            </a>
-            <a href="/register" style="color: inherit; text-decoration: none;">
-                <i class="fa-regular fa-user"></i>
-            </a>
-            <a href="/customer-service" style="color: inherit; text-decoration: none;">
-                <i class="fa-solid fa-headset"></i>
-            </a>
-        </div>
-
-    </div>
-
-    <!-- =========================
-         KARTU UTAMA
-    ========================== -->
-    <div class="pemesanan-card">
-
-        <!-- ALERT NOTIFIKASI SUCCESS/ERROR -->
-        @if(session('success'))
-            <div style="padding: 10px 15px; background-color: #d4edda; color: #155724; border-radius: 8px; margin-bottom: 20px; font-weight: 600;">
-                {{ session('success') }}
-            </div>
-        @endif
-
-        @if(session('error'))
-            <div style="padding: 10px 15px; background-color: #f8d7da; color: #721c24; border-radius: 8px; margin-bottom: 20px; font-weight: 600;">
-                {{ session('error') }}
-            </div>
-        @endif
-
-        <div class="cart-container">
-
-            @forelse ($keranjangs as $item)
-
-                <!-- =========================
-                     ITEM PRODUK
-                ========================== -->
-                <div class="cart-item-wrapper">
-
-                    <div class="cart-item-box" style="display: flex; align-items: center; justify-content: space-between;">
-
-                        <!-- BAGIAN KIRI: FOTO & DETAIL -->
-                        <div style="display: flex; gap: 20px; align-items: center;">
-                            <!-- FOTO PRODUK -->
-                            <img
-                                src="{{ asset('images/' . ($item->produk->foto ?? 'default.png')) }}"
-                                alt="{{ $item->produk->nama_produk ?? 'Produk' }}"
-                                class="cart-item-img"
-                            >
-
-                            <!-- DETAIL PRODUK -->
-                            <div class="cart-item-details">
-
-                                <h4>
-                                    {{ $item->produk->nama_produk ?? 'Nama Produk' }}
-                                </h4>
-
-                                <h5>
-                                    TEFA SMKN 4
-                                </h5>
-
-                                <p class="cart-item-price">
-                                    RP 
-                                    @if(isset($item->produk->harga))
-                                        @if(str_contains($item->produk->harga, '-'))
-                                            {{ $item->produk->harga }}
-                                        @else
-                                            @php
-                                                $cleanPrice = preg_replace('/[^0-9]/', '', (string)$item->produk->harga);
-                                            @endphp
-                                            {{ is_numeric($cleanPrice) ? number_format((float)$cleanPrice, 0, ',', '.') : $item->produk->harga }}
-                                        @endif
-                                    @else
-                                        0
-                                    @endif
-                                </p>
-
-                            </div>
-                        </div>
-
-                        <!-- BAGIAN KANAN: JUMLAH & TOMBOL HAPUS -->
-                        <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 15px;">
-
-                            <!-- TOMBOL HAPUS -->
-                            <form action="/keranjang/hapus/{{ $item->id }}" method="POST" style="margin: 0;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" style="background: transparent; border: none; color: #dc2626; font-size: 1.2rem; cursor: pointer; transition: 0.3s;" title="Hapus Produk" onmouseover="this.style.color='#991b1b'" onmouseout="this.style.color='#dc2626'">
-                                    <i class="fa-solid fa-trash-can"></i>
-                                </button>
-                            </form>
-
-                            <!-- JUMLAH PRODUK -->
-                            <div class="cart-item-qty">
-                                Total
-                                <strong>
-                                    {{ $item->jumlah }}
-                                </strong>
-                            </div>
-
-                        </div>
-
+    @if(count($cartItems) > 0)
+        <div class="row">
+            <!-- DAFTAR ITEM KERANJANG -->
+            <div class="col-md-8 mb-4">
+                <div class="card shadow-sm border-0 p-3">
+                    <div class="table-responsive">
+                        <table class="table align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Produk</th>
+                                    <th>Harga</th>
+                                    <th>Jumlah</th>
+                                    <th>Subtotal</th>
+                                    <th class="text-center">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($cartItems as $item)
+                                    @php
+                                        $hargaRaw = $item->produk->harga ?? 0;
+                                        $hargaClean = (float) preg_replace('/[^0-9]/', '', (string)$hargaRaw);
+                                        $jumlah = (int) ($item->jumlah ?? 1);
+                                        $subtotal = $hargaClean * $jumlah;
+                                    @endphp
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                @if(isset($item->produk->foto))
+                                                    <img src="{{ asset('images/' . $item->produk->foto) }}" alt="Foto Produk" class="img-fluid rounded mr-3" style="width: 50px; height: 50px; object-fit: cover;">
+                                                @endif
+                                                <div>
+                                                    <span class="font-weight-bold d-block">{{ $item->produk->nama_produk ?? $item->produk->nama ?? 'Produk' }}</span>
+                                                    <small class="text-muted">TEFA SMKN 4</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>Rp {{ number_format($hargaClean, 0, ',', '.') }}</td>
+                                        <td>{{ $jumlah }}</td>
+                                        <td>Rp {{ number_format($subtotal, 0, ',', '.') }}</td>
+                                        <td class="text-center">
+                                            <form action="{{ route('keranjang.hapus', $item->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus produk ini?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger btn-sm" title="Hapus Produk">
+                                                    <i class="fa-solid fa-trash-can"></i> Hapus
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
-
                 </div>
+            </div>
 
-            @empty
-
-                <!-- KERANJANG KOSONG -->
-                <div style="text-align: center; padding: 40px;">
-
-                    <i
-                        class="fa-solid fa-cart-shopping"
-                        style="font-size: 50px; margin-bottom: 15px;"
-                    ></i>
-
-                    <h3>
-                        Keranjang masih kosong
-                    </h3>
-
-                    <p>
-                        Silakan pilih produk terlebih dahulu.
-                    </p>
-
-                    <a href="/katalog"
-                        class="btn-solid-blue"
-                        style="display: inline-block; margin-top: 15px; text-decoration: none;"
-                    >
-                        KEMBALI KE KATALOG
+            <!-- RINGKASAN TOTAL & CHECKOUT -->
+            <div class="col-md-4">
+                <div class="card shadow-sm border-0 p-4">
+                    <h4 class="mb-3">Total Belanja</h4>
+                    <hr>
+                    @php
+                        $grandTotal = $cartItems->sum(function ($item) {
+                            $hargaClean = (float) preg_replace('/[^0-9]/', '', (string)($item->produk->harga ?? 0));
+                            return $hargaClean * (int)($item->jumlah ?? 1);
+                        });
+                    @endphp
+                    <div class="d-flex justify-content-between mb-4">
+                        <strong class="h5 mb-0">Total:</strong>
+                        <strong class="h5 mb-0 text-primary">Rp {{ number_format($grandTotal, 0, ',', '.') }}</strong>
+                    </div>
+                    <a href="{{ url('/checkout') }}" class="btn btn-success btn-block btn-lg shadow-sm">
+                        Lanjut ke Checkout
                     </a>
                 </div>
-
-            @endforelse
-
-        </div>
-
-        <!-- =========================
-             CHECKOUT
-        ========================== -->
-        @if(count($keranjangs) > 0)
-
-            <div class="cart-checkout-section">
-
-                <div class="cart-total-info">
-
-                    <span class="total-label">
-                        Total
-                    </span>
-
-                    <span class="total-price">
-                        RP
-                        {{ number_format(
-                            $keranjangs->sum(function ($item) {
-                                $hargaBersih = (float) preg_replace('/[^0-9]/', '', (string)($item->produk->harga ?? 0));
-                                $jumlah = (int) ($item->jumlah ?? 1);
-                                return $hargaBersih * $jumlah;
-                            }),
-                            0, ',', '.'
-                        ) }}
-                    </span>
-
-                </div>
-
-                <a href="/checkout" class="btn-checkout" style="text-decoration: none; display: inline-block;">
-                    Get Started
-                </a>
-
             </div>
-
-        @endif
-
-    </div>
-
+        </div>
+    @else
+        <!-- TAMPILAN KERANJANG KOSONG -->
+        <div class="text-center py-5">
+            <i class="fa-solid fa-cart-shopping mb-3 text-muted" style="font-size: 60px;"></i>
+            <h3>Keranjang belanja kamu masih kosong</h3>
+            <p class="text-muted">Silakan pilih produk terlebih dahulu untuk mulai berbelanja.</p>
+            <a href="{{ route('katalog.index') }}" class="btn btn-primary mt-2">
+                Kembali ke Katalog
+            </a>
+        </div>
+    @endif
 </div>
-
-</body>
-</html>
+@endsection
