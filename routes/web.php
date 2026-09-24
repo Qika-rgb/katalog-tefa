@@ -70,7 +70,7 @@ Route::get('/dashboard', function () {
 // =========================
 Route::middleware(['auth'])->prefix('admin-pusat')->group(function () {
     Route::get('/dashboard', function () {
-        $produks = \App\Models\Produk::all(); 
+        $produks = \App\Models\Produk::all();
         return view('admin-pusat-status', compact('produks'));
     })->name('admin-pusat.dashboard');
 
@@ -105,16 +105,31 @@ Route::middleware(['auth'])->prefix('admin-jurusan')->name('admin-jurusan.')->gr
             ->whereNotIn('status', ['Pending', 'Ditolak'])
             ->count();
 
+        // STATUS BREAKDOWN: jumlah pesanan per status untuk produk jurusan ini
+        $statusList = ['Pending', 'Tahap Pembuatan', 'Pengemasan', 'Siap Diambil', 'Sudah Diambil'];
+
+        $statusCounts = Pesanan::whereIn('produk_id', $produkIds)
+            ->whereIn('status', $statusList)
+            ->selectRaw('status, count(*) as total')
+            ->groupBy('status')
+            ->pluck('total', 'status');
+
+        $statusData = collect($statusList)->mapWithKeys(function ($status) use ($statusCounts) {
+            return [$status => $statusCounts->get($status, 0)];
+        });
+
+        $maxStatus = $statusData->max() ?: 1;
+
         // SALES RESULTS: produk yang paling banyak dipesan (top 4)
         $topProduk = \App\Models\Produk::whereIn('id', $produkIds)
-            ->withCount('pesanans')
-            ->orderByDesc('pesanans_count')
-            ->take(4)
-            ->get();
+    ->withSum('pesanans', 'jumlah')
+    ->orderByDesc('pesanans_sum_jumlah')
+    ->take(4)
+    ->get();
 
-        $maxPesanan = $topProduk->max('pesanans_count') ?: 1;
+    $maxPesanan = $topProduk->max('pesanans_sum_jumlah') ?: 1;
 
-        return view('admin-jurusan', compact('totalOrders', 'totalApproved', 'topProduk', 'maxPesanan'));
+        return view('admin-jurusan', compact('totalOrders', 'totalApproved', 'topProduk', 'maxPesanan', 'statusData', 'maxStatus'));
     })->name('dashboard');
 
     Route::get('/produk/create', [ProdukController::class, 'create'])->name('produk.create');
@@ -150,6 +165,6 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware(['auth'])->prefix('admin-jurusan')->name('admin-jurusan.')->group(function () {
     // ... route yang sudah ada ...
-    
+
     Route::delete('/produk/delete/{id}', [ProdukController::class, 'destroy'])->name('produk.destroy');
 });
