@@ -126,6 +126,9 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/customer-service', [ChatController::class, 'customerService']);
     Route::post('/chat/send', [ChatController::class, 'sendMessage']);
+    
+    // Tambahan untuk Short Polling chat
+    Route::get('/chat/fetch/{room_id}', [ChatController::class, 'fetchPesans']);
 });
 
 // =========================

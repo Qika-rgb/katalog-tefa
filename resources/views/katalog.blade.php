@@ -24,7 +24,7 @@
     <!-- GRID PRODUK DARI DATABASE -->
     <div class="product-grid">
         @if(isset($produks) && count($produks) > 0)
-            @foreach ($produks as$item)
+            @foreach ($produks as $item)
               @php
     $mediaFile = $item->vidio ?? $item->foto ?? 'default.png';
     $extension = strtolower(pathinfo($mediaFile, PATHINFO_EXTENSION));

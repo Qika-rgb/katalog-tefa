@@ -27,7 +27,7 @@
             </div>
 
             <!-- AREA CHAT (BODY) -->
-            <div class="user-cs-body">
+            <div class="user-cs-body" id="chat-container-pesan">
                 
                 <!-- Pesan Otomatis Bot / Admin -->
                 <div class="cs-bot-msg">
@@ -40,16 +40,19 @@
                     <button type="button" class="cs-preset-btn" onclick="kirimPreset(this)">Mengapa saya tidak bisa login ke akun lama saya?</button>
                 </div>
 
-               @foreach($messages as $message)
-            <div class="{{ $message->sender === 'admin' ? 'cs-bot-msg' : 'cs-user-msg' }}">
-                {{ $message->message }}
-            </div>
+                @foreach ($messages as $message)
+                    <div class="{{ $message->sender === 'admin' ? 'cs-bot-msg' : 'cs-user-msg' }}">
+                        {{ $message->message }}
+                    </div>
                 @endforeach  
             </div>
 
             <!-- INPUT CHAT (FOOTER) -->
             <form action="/chat/send" method="POST" class="user-cs-footer">
                 @csrf
+
+                <input type="hidden" name="user_id" value="{{ $room_id ?? 1 }}">
+                <input type="hidden" name="sender" value="user">
 
                 <button type="button" class="add-btn"><i class="fa-solid fa-plus"></i></button>
 
@@ -69,12 +72,49 @@
     </div>
 
     <script>
-    function kirimPreset(btn) {
-        const teks = btn.innerText;
-        const input = document.querySelector('.user-cs-footer input[name="message"]');
-        input.value = teks;
-        document.querySelector('.user-cs-footer').submit();
-    }
+    document.addEventListener("DOMContentLoaded", function () {
+        const roomId = "{{ $room->id ?? ($room_id ?? 1) }}"; 
+
+        function loadPesanOtomatis() {
+            fetch('/chat/fetch/' + roomId)
+                .then(response => response.json())
+                .then(data => {
+                    let chatContainer = document.getElementById('chat-container-pesan'); 
+                    if (!chatContainer) return;
+
+                    let isScrolledToBottom = chatContainer.scrollHeight - chatContainer.clientHeight <= chatContainer.scrollTop + 10;
+
+                    let htmlContent = `
+                        <div class="cs-bot-msg">
+                            <p><span class="text-red">Hai Baniiuhuy,</span><br>
+                            Boleh minta Tolong jelaskan kendala yang kamu alami?</p>
+                            <button type="button" class="cs-preset-btn" onclick="kirimPreset(this)">Kenapa status pemesanan saya belum berubah?</button>
+                            <button type="button" class="cs-preset-btn" onclick="kirimPreset(this)">Bagaimana cara saya mau meng update no lama saya ke nomor yang baru</button>
+                            <button type="button" class="cs-preset-btn" onclick="kirimPreset(this)">Mengapa saya tidak bisa login ke akun lama saya?</button>
+                        </div>
+                    `;
+
+                    data.forEach(pesan => {
+                        let senderClass = (pesan.sender === 'admin') ? 'cs-bot-msg' : 'cs-user-msg';
+                        
+                        htmlContent += `
+                            <div class="${senderClass}">
+                                ${pesan.message}
+                            </div>
+                        `;
+                    });
+
+                    chatContainer.innerHTML = htmlContent;
+
+                    if (isScrolledToBottom) {
+                        chatContainer.scrollTop = chatContainer.scrollHeight;
+                    }
+                })
+                .catch(error => console.error('Gagal memuat pesan:', error));
+        }
+
+        setInterval(loadPesanOtomatis, 2000);
+    });
     </script>
 
 </body>

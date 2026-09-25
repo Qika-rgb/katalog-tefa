@@ -88,7 +88,7 @@
                 </div>
 
                 <!-- Chat Body (Looping dari Database) -->
-                <div class="chat-body">
+                <div class="chat-body" id="chat-body-container">
                     @foreach($messages as $message)
                         <div class="chat-bubble {{ $message->sender === 'admin' ? 'bubble-right' : 'bubble-left' }}">
                             <img src="{{ asset('images/foto_profil.png') }}" alt="Avatar" class="contact-avatar">
@@ -115,5 +115,50 @@
 
     </div> <!-- Penutup admin-main -->
 
+    <!-- Script opsional untuk auto-refresh ringan agar real-time chat aman di lokal -->
+    <script>
+document.addEventListener("DOMContentLoaded", function () {
+    // Tentukan room_id / user_id yang sedang aktif (sesuai dengan yang digunakan di sisi customer)
+    const roomId = 1; 
+
+    function loadAdminChat() {
+        fetch('/chat/fetch/' + roomId)
+            .then(response => response.json())
+            .then(data => {
+                let chatContainer = document.getElementById('chat-body-container'); 
+                if (!chatContainer) return;
+
+                let isScrolledToBottom = chatContainer.scrollHeight - chatContainer.clientHeight <= chatContainer.scrollTop + 10;
+
+                let htmlContent = '';
+
+                data.forEach(pesan => {
+                    // Jika sender === 'admin', bubble di kanan (bubble-right), jika bukan di kiri (bubble-left)
+                    let senderClass = (pesan.sender === 'admin') ? 'bubble-right' : 'bubble-left';
+                    
+                    htmlContent += `
+                        <div class="chat-bubble ${senderClass}">
+                            <img src="{{ asset('images/foto_profil.png') }}" alt="Avatar" class="contact-avatar">
+                            <div class="chat-text">
+                                ${pesan.message}
+                            </div>
+                        </div>
+                    `;
+                });
+
+                chatContainer.innerHTML = htmlContent;
+
+                // Auto scroll ke bawah jika sebelumnya posisi scroll berada di bawah
+                if (isScrolledToBottom) {
+                    chatContainer.scrollTop = chatContainer.scrollHeight;
+                }
+            })
+            .catch(error => console.error('Gagal memuat pesan admin:', error));
+    }
+
+    // Jalankan polling setiap 2 detik
+    setInterval(loadAdminChat, 2000);
+});
+</script>
 </body>
 </html>

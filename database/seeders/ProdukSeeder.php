@@ -56,10 +56,19 @@ class ProdukSeeder extends Seeder
                 'nama_produk' => 'Animasi Video Profesional',
                 'deskripsi' => 'Produk animasi motion graphics lengkap menggunakan format video.',
                 'harga' => 750000,
-                'vidio' => 'vdanimasi.mp4', // Menggunakan file video
+                'foto' => 'vdanimasi.mp4', // Menggunakan file video
                 'kategori_id' => 1,
                 'created_at' => now(),
                 'updated_at' => now(),
+            ],
+            [
+            'nama_produk' => 'Animasi Video 2D',
+            'deskripsi' => 'Produk animasi motion graphics lengkap menggunakan format video.',
+            'harga' => 750000,
+            'foto' => 'vdanimasi2.mp4',
+            'kategori_id' => 1,
+            'created_at' => now(),
+            'updated_at' => now(),
             ],
             [
                 'nama_produk' => 'Animasi 2D Karakter',
