@@ -6,6 +6,7 @@ use App\Models\Produk;
 use App\Models\Kategori;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class ProdukController extends Controller
 {
@@ -15,10 +16,7 @@ class ProdukController extends Controller
         $user = Auth::user();
         $jurusan = strtoupper(trim($user->jurusan ?? ''));
 
-<<<<<<< HEAD
         // Pemetaan jurusan ke kategori_id (0: RPL, 1: Animasi, 2: TKJ, 3: PSPT, 4: DKV, 5: Gim)
-=======
->>>>>>> 14bba1fdcd35b5b6dd3a10bda37e7d72fbb77bfc
         $jurusanMap = [
             'RPL'     => 0,
             'ANIMASI' => 1,
@@ -30,17 +28,11 @@ class ProdukController extends Controller
 
         $kategoriId = $jurusanMap[$jurusan] ?? null;
 
-<<<<<<< HEAD
         // Ambil produk khusus jurusan yang sedang login berdasarkan kategori_id
         if ($kategoriId !== null) {
             $produks = Produk::where('kategori_id', $kategoriId)->latest()->get();
         } else {
             // Cadangan jika kolom jurusan di tabel users bernilai teks langsung
-=======
-        if ($kategoriId !== null) {
-            $produks = Produk::where('kategori_id', $kategoriId)->latest()->get();
-        } else {
->>>>>>> 14bba1fdcd35b5b6dd3a10bda37e7d72fbb77bfc
             $produks = Produk::where('jurusan', $user->jurusan)->latest()->get();
         }
 
@@ -93,19 +85,8 @@ class ProdukController extends Controller
             $query->where('nama_produk', 'LIKE', '%' . $cari . '%');
         }
 
-<<<<<<< HEAD
-        $produks = $query->latest()->get();
+        $produks = $query->latest()->paginate(8)->appends(request()->query());
 
-        return view('katalog', compact('produks'));
-    }
-
-        public function destroy($id)
-    {
-        $produk = Produk::findOrFail($id);
-
-        // Hapus file gambar jika tersimpan di folder storage
-=======
-       $produks = $query->latest()->paginate(8)->appends(request()->query());
         return view('katalog', compact('produks'));
     }
 
@@ -113,9 +94,9 @@ class ProdukController extends Controller
     {
         $produk = Produk::findOrFail($id);
 
->>>>>>> 14bba1fdcd35b5b6dd3a10bda37e7d72fbb77bfc
-        if ($produk->foto && \Illuminate\Support\Facades\Storage::disk('public')->exists($produk->foto)) {
-            \Illuminate\Support\Facades\Storage::disk('public')->delete($produk->foto);
+        // Hapus file gambar jika tersimpan di folder storage
+        if ($produk->foto && Storage::disk('public')->exists($produk->foto)) {
+            Storage::disk('public')->delete($produk->foto);
         }
 
         $produk->delete();
