@@ -6,7 +6,9 @@
     <!-- HEADER KECIL & TOMBOL KEMBALI -->
     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 25px;">
         <div style="display: flex; align-items: center; gap: 12px;">
-            <a href="/katalog" style="color: #111827; font-size: 18px; text-decoration: none;"><i class="fa-solid fa-chevron-left"></i></a>
+            <a href="/katalog" style="color: #111827; font-size: 18px; text-decoration: none;">
+                <i class="fa-solid fa-chevron-left"></i>
+            </a>
             <span style="font-weight: 700; font-size: 18px; letter-spacing: 0.5px;">PEMESANAN PRODUK</span>
         </div>
     </div>
@@ -22,11 +24,11 @@
                     $extension = strtolower(pathinfo($mediaFile, PATHINFO_EXTENSION));
 
                     // Cek apakah file berasal dari upload storage atau folder images statis
-                    $isStorage = preg_match('/^(produk|portofolio)\//', (string)$mediaFile);
+                    $isStorage = str_contains($mediaFile, 'produk/') || str_contains($mediaFile, 'portofolio/');
                     $mediaUrl = $isStorage ? asset('storage/' . $mediaFile) : asset('images/' . $mediaFile);
                 @endphp
 
-                @if(in_array($extension, ['mp4', 'webm', 'ogg']))
+                @if(in_array($extension, ['mp4', 'webm', 'ogg', 'mov']))
                     <video width="100%" controls autoplay muted playsinline style="max-height: 340px; border-radius: 8px; object-fit: contain;">
                         <source src="{{ $mediaUrl }}" type="video/mp4">
                         Browser Anda tidak mendukung pemutaran video.

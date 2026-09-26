@@ -22,8 +22,8 @@ class KatalogController extends Controller
             $query->where('nama_produk', 'like', '%' . $request->cari . '%');
         }
 
-        // 4. Eksekusi pencarian
-        $produks = $query->get();
+        // 4. Eksekusi dengan pagination (8 item per halaman, withQueryString agar filter tidak hilang)
+       $produks = $query->latest()->paginate(8)->appends(request()->query());
 
         return view('katalog', compact('produks'));
     }

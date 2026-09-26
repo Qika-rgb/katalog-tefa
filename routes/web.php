@@ -12,6 +12,7 @@ use App\Http\Controllers\PesananController;
 use App\Http\Controllers\PortofolioController;
 use App\Models\Pesanan;
 use App\Models\Produk;
+use App\Models\Kategori;
 
 // =========================
 // AUTH ROUTES (BREEZE / FRONTEND)
@@ -26,7 +27,7 @@ Route::get('/', function () {
 });
 
 Route::get('/katalog', [ProdukController::class, 'indexKatalog'])->name('katalog.index');
-Route::get('/pemesanan/{id}', [KatalogController::class, 'detail']);
+Route::get('/pemesanan/{id}', [KatalogController::class, 'detail'])->name('katalog.detail');
 
 // =========================
 // HALAMAN PORTOFOLIO PUBLIK
@@ -70,8 +71,9 @@ Route::get('/dashboard', function () {
 // =========================
 Route::middleware(['auth'])->prefix('admin-pusat')->group(function () {
     Route::get('/dashboard', function () {
-        $produks = \App\Models\Produk::all();
-        return view('admin-pusat-status', compact('produks'));
+        $produks = Produk::all(); 
+        $kategoris = Kategori::all();
+        return view('admin-pusat-status', compact('produks', 'kategoris'));
     })->name('admin-pusat.dashboard');
 
     Route::get('/product-report', [AdminPusatController::class, 'productReport'])->name('admin.product-report');
@@ -93,7 +95,7 @@ Route::middleware(['auth'])->prefix('admin-jurusan')->name('admin-jurusan.')->gr
         $jurusan = auth()->user()->jurusan;
 
         // Ambil semua produk yang kategorinya sesuai jurusan admin ini
-        $produkIds = \App\Models\Produk::whereHas('kategori', function ($q) use ($jurusan) {
+        $produkIds = Produk::whereHas('kategori', function ($q) use ($jurusan) {
             $q->where('nama_kategori', $jurusan);
         })->pluck('id');
 
@@ -121,7 +123,7 @@ Route::middleware(['auth'])->prefix('admin-jurusan')->name('admin-jurusan.')->gr
         $maxStatus = $statusData->max() ?: 1;
 
         // SALES RESULTS: produk yang paling banyak dipesan (top 4)
-        $topProduk = \App\Models\Produk::whereIn('id', $produkIds)
+        $topProduk = Produk::whereIn('id', $produkIds)
             ->withSum('pesanans', 'jumlah')
             ->orderByDesc('pesanans_sum_jumlah')
             ->take(4)
@@ -151,8 +153,11 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
     Route::post('/checkout/langsung', [CheckoutController::class, 'langsung'])->name('checkout.langsung');
 
-    Route::get('/customer-service', [ChatController::class, 'customerService']);
-    Route::post('/chat/send', [ChatController::class, 'sendMessage']);
+    Route::get('/customer-service', [ChatController::class, 'customerService'])->name('chat.customer');
+    Route::post('/chat/send', [ChatController::class, 'sendMessage'])->name('chat.send');
+    
+    // Short Polling chat
+    Route::get('/chat/fetch/{room_id}', [ChatController::class, 'fetchPesans'])->name('chat.fetch');
 });
 
 // =========================

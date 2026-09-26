@@ -23,6 +23,7 @@
         @if(isset($produk))
             <input type="hidden" name="produk_id" value="{{ $produk->id }}">
             <input type="hidden" name="qty" value="{{ $qty ?? 1 }}">
+            <input type="hidden" name="jumlah" value="{{ $qty ?? 1 }}">
         @endif
 
         <div class="row">

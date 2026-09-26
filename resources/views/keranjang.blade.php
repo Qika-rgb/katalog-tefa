@@ -13,7 +13,7 @@
     @endif
 
     @php
-        // Normalisasi variabel (mendukung $items maupun $keranjangs)
+        // Normalisasi variabel (mendukung pengiriman $items maupun $keranjangs dari controller)
         $cartItems = $items ?? $keranjangs ?? collect();
     @endphp
 
