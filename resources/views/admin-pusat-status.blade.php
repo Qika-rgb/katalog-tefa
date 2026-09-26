@@ -16,7 +16,7 @@
 
 <body class="admin-body">
 
-<!-- SIDEBAR -->
+    <!-- SIDEBAR -->
     <div class="admin-sidebar">
         <a href="/">
             <img src="{{ asset('images/logo_tefa.png') }}" alt="Logo" class="admin-logo">
@@ -24,7 +24,7 @@
         <ul class="admin-nav">
             <!-- Menu Product Report -->
             <li>
-                <a href="/admin-pusat/product-report" class="{{ request()->is('admin-pusat/product-report') ? 'active-cs active-black-line' : '' }}">PRODUCT REPORT</a>
+                <a href="/admin-pusat/product-report" class="{{ request()->is('admin-pusat/product-report') || request()->is('admin-pusat/dashboard') ? 'active-cs active-black-line' : '' }}">PRODUCT REPORT</a>
             </li>
             
             <!-- Menu Customer Service -->
@@ -101,21 +101,34 @@
                     <!-- PRODUCT CARD -->
                     <div class="product-card">
 
-                        <!-- GAMBAR PRODUK -->
-                        <div class="product-img-wrapper">
+                        <!-- MEDIA PRODUK (GAMBAR ATAU VIDEO) -->
+                        <div class="product-img-wrapper" style="position: relative; overflow: hidden;">
 
-                            @if ($produk->foto)
+                            @php
+                                $fileMedia = $produk->foto ?? 'produk_dkv2.png';
+                                $isStorage = \Illuminate\Support\Str::startsWith($fileMedia, 'produk/');
+                                $mediaSrc = $isStorage ? asset('storage/' . $fileMedia) : asset('images/' . $fileMedia);
+                                $isVideo = \Illuminate\Support\Str::endsWith(strtolower($fileMedia), ['.mp4', '.webm', '.ogg', '.mov']);
+                            @endphp
 
-                                <img src="{{ asset('storage/' . $produk->foto) }}"
-                                     alt="{{ $produk->nama_produk }}">
-
+                            @if ($isVideo)
+                                <!-- RENDER VIDEO PLAYER / PREVIEW -->
+                                <video
+                                    src="{{ $mediaSrc }}"
+                                    autoplay
+                                    loop
+                                    muted
+                                    playsinline
+                                    style="width: 100%; height: 100%; object-fit: cover; display: block;"
+                                ></video>
                             @else
-
-                                <img src="{{ asset('images/produk_dkv2.png') }}"
-                                     alt="{{ $produk->nama_produk }}">
-
+                                <!-- RENDER GAMBAR BIASA -->
+                                <img
+                                    src="{{ $mediaSrc }}"
+                                    alt="{{ $produk->nama_produk }}"
+                                    style="width: 100%; height: 100%; object-fit: cover; display: block;"
+                                >
                             @endif
-
 
                             <!-- BUTTON CHECK -->
                             <a href="/pemesanan/{{ $produk->id }}"
@@ -133,14 +146,10 @@
                                 {{ $produk->nama_produk }}
                             </h3>
 
-
                             <p class="price">
-
                                 RP
-                                {{ number_format($produk->harga, 0, ',', '.') }}
-
+                                {{ number_format((float) preg_replace('/[^0-9]/', '', (string)$produk->harga), 0, ',', '.') }}
                             </p>
-
 
                             <div class="rating">
 

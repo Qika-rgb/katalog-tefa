@@ -74,8 +74,17 @@
                         <!-- BAGIAN KIRI: FOTO & DETAIL -->
                         <div style="display: flex; gap: 20px; align-items: center;">
                             <!-- FOTO PRODUK -->
+                            @php
+                                $foto = $item->produk->foto ?? 'default.png';
+                                if (\Illuminate\Support\Str::startsWith($foto, 'produk/')) {
+                                    $imgSrc = asset('storage/' . $foto);
+                                } else {
+                                    $imgSrc = asset('images/' . $foto);
+                                }
+                            @endphp
+
                             <img
-                                src="{{ asset('images/' . ($item->produk->foto ?? 'default.png')) }}"
+                                src="{{ $imgSrc }}"
                                 alt="{{ $item->produk->nama_produk ?? 'Produk' }}"
                                 class="cart-item-img"
                             >

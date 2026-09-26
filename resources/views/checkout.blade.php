@@ -45,7 +45,16 @@
             @forelse ($keranjangs as $item)
                 <div style="display: flex; align-items: center; gap: 20px; padding: 20px 0; border-bottom: 1px solid #ddd;">
                     
-                    <img src="{{ asset('images/' . ($item->produk->foto ?? 'default.png')) }}" alt="{{ $item->produk->nama_produk ?? 'Produk' }}" style="width: 100px; height: 100px; object-fit: cover; border-radius: 10px;">
+                    @php
+                        $foto = $item->produk->foto ?? 'default.png';
+                        if (\Illuminate\Support\Str::startsWith($foto, 'produk/')) {
+                            $imgSrc = asset('storage/' . $foto);
+                        } else {
+                            $imgSrc = asset('images/' . $foto);
+                        }
+                    @endphp
+
+                    <img src="{{ $imgSrc }}" alt="{{ $item->produk->nama_produk ?? 'Produk' }}" style="width: 100px; height: 100px; object-fit: cover; border-radius: 10px;">
 
                     <div style="flex: 1;">
                         <h3>{{ $item->produk->nama_produk ?? 'Nama Produk' }}</h3>
