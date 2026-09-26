@@ -30,7 +30,7 @@
 
     <!-- MAIN CONTENT -->
     <div class="admin-main">
-        
+
         <!-- Top Profile Dinamis -->
         <div class="admin-top-profile">
             @php
@@ -62,78 +62,77 @@
             </div>
         </div>
 
-        <!-- GRID DASHBOARD -->
-        <div class="dashboard-grid">
-            
-            <!-- KIRI: Satisfaction Rate -->
-            <div class="dash-card">
-                <h3 class="card-title">Satisfaction rate</h3>
-                
-                <div class="chart-container-vertical">
-                    <div class="v-bar bg-dark-red" style="height: 60%;">30</div>
-                    <div class="v-bar bg-bright-red" style="height: 100%;">50</div>
-                    <div class="v-bar bg-beige" style="height: 80%;">40</div>
-                    <div class="v-bar bg-brown" style="height: 40%;">20</div>
-                </div>
-                
-                <div class="labels-under">
-                    <div class="label-box bg-beige">baner</div>
-                    <div class="label-box bg-beige">ds</div>
-                    <div class="label-box bg-beige">stokba</div>
-                    <div class="label-box bg-brown">nametag</div>
+        <!-- Sales Results (Full Width) -->
+        <div class="dash-card" style="margin-bottom: 20px;">
+            <div class="sales-top-row">
+                <div>
+                    <h3 class="card-title">Sales results</h3>
+                    <div class="chart-container-horizontal">
+                        @forelse ($topProduk as $index => $produk)
+                            @php
+                                $warna = ['bg-bright-red', 'bg-dark-red', 'bg-beige', 'bg-brown'][$index % 4];
+                                $skalaMax = 25;
+                                $totalJumlah = $produk->pesanans_sum_jumlah ?? 0;
+                                $lebar = min(($totalJumlah / $skalaMax) * 100, 100);
+                            @endphp
+                            <div class="h-bar {{ $warna }}" style="width: {{ $lebar }}%;">{{ $produk->nama_produk }}</div>
+                        @empty
+                            <p style="font-size: 12px; color: #999;">Belum ada data pesanan.</p>
+                        @endforelse
+                    </div>
+                    <div class="scale-x">
+                        <span>0</span><span>5</span><span>10</span><span>15</span><span>20</span><span>25</span>
+                    </div>
                 </div>
 
-                <p class="chart-desc">Percentage of visitors from various channels who complete a desired action on a website.</p>
+                <!-- Box Highest Value -->
+                <div class="highest-value-box">
+                    <p>Highest Value</p>
+                    <h3>{{ $topProduk->first()->nama_produk ?? '-' }}</h3>
+                    <p class="desc">Produk ini paling banyak dipesan dibanding produk lain di jurusan ini.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Status Pesanan & Stats (Orders/Approved) sejajar -->
+        <div class="dashboard-grid">
+
+            <!-- KIRI: Status Pesanan -->
+            <div class="dash-card">
+                <h3 class="card-title">Status Pesanan</h3>
+
+                <div class="chart-container-vertical">
+                    @foreach ($statusData as $status => $jumlah)
+                        @php
+                            $warna = ['bg-dark-red', 'bg-bright-red', 'bg-beige', 'bg-brown', 'bg-dark-red'][$loop->index % 5];
+                            $tinggi = ($jumlah / $maxStatus) * 100;
+                        @endphp
+                        <div class="v-bar {{ $warna }}" style="height: {{ max($tinggi, 5) }}%;">{{ $jumlah }}</div>
+                    @endforeach
+                </div>
+
+                <div class="labels-under">
+                    @foreach ($statusData as $status => $jumlah)
+                        <div class="label-box bg-beige" style="font-size: 9px;">{{ $status }}</div>
+                    @endforeach
+                </div>
+
+                <p class="chart-desc">Jumlah pesanan produk jurusan ini di setiap tahap status.</p>
             </div>
 
-            <!-- KANAN: Kombinasi Konten -->
-            <div class="right-column">
-                
-                <!-- Sales Results -->
-                <div class="dash-card" style="margin-bottom: 20px;">
-                    <div class="sales-top-row">
-                        <div>
-                            <h3 class="card-title">Sales results</h3>
-                            <div class="chart-container-horizontal">
-                                @forelse ($topProduk as $index => $produk)
-                                    @php
-                                        $warna = ['bg-bright-red', 'bg-dark-red', 'bg-beige', 'bg-brown'][$index % 4];
-                                        $lebar = ($produk->pesanans_count / $maxPesanan) * 100;
-                                    @endphp
-                                    <div class="h-bar {{ $warna }}" style="width: {{ $lebar }}%;">{{ $produk->nama_produk }}</div>
-                                @empty
-                                    <p style="font-size: 12px; color: #999;">Belum ada data pesanan.</p>
-                                @endforelse
-                            </div>
-                            <div class="scale-x">
-                                <span>0</span><span>100</span><span>200</span><span>300</span><span>400</span><span>500</span>
-                            </div>
-                        </div>
-                        
-                        <!-- Box Highest Value -->
-                        <div class="highest-value-box">
-                            <p>Highest Value</p>
-                            <h3>{{ $topProduk->first()->nama_produk ?? '-' }}</h3>
-                            <p class="desc">Produk ini paling banyak dipesan dibanding produk lain di jurusan ini.</p>
-                        </div>
-                    </div>
+            <!-- KANAN: Orders & Approved -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h4>ORDERS</h4>
+                    <div class="number">{{ $totalOrders }}</div>
+                    <i class="fa-solid fa-clipboard-check icon-bg"></i>
                 </div>
 
-                <!-- Orders & Approved -->
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <h4>ORDERS</h4>
-                        <div class="number">{{ $totalOrders }}</div>
-                        <i class="fa-solid fa-clipboard-check icon-bg"></i>
-                    </div>
-
-                    <div class="stat-card">
-                        <h4>APPROVED</h4>
-                        <div class="number">{{ $totalApproved }}</div>
-                        <i class="fa-regular fa-square-check icon-bg"></i>
-                    </div>
+                <div class="stat-card">
+                    <h4>APPROVED</h4>
+                    <div class="number">{{ $totalApproved }}</div>
+                    <i class="fa-regular fa-square-check icon-bg"></i>
                 </div>
-
             </div>
 
         </div>
