@@ -1,16 +1,19 @@
 @extends('layouts.frontend')
 
 @section('content')
-<div class="container py-5">
-    <h2 class="mb-4 font-weight-bold">Checkout Pesanan</h2>
+<div class="checkout-wrapper">
+    <!-- Tombol Kembali & Judul Halaman -->
+    <div class="checkout-header-bar">
+        <a href="{{ url()->previous() != url()->current() ? url()->previous() : url('/katalog') }}" class="btn-back">
+            <i class="fa-solid fa-chevron-left"></i>
+        </a>
+        <h2 class="checkout-page-title">Checkout Pesanan</h2>
+    </div>
 
-    @if(session('error'))
-        <div class="alert alert-danger mb-4">{{ session('error') }}</div>
-    @endif
-
+    <!-- Alert Error Validasi -->
     @if ($errors->any())
-        <div class="alert alert-danger mb-4">
-            <ul class="mb-0 pl-3">
+        <div class="checkout-alert-danger">
+            <ul style="margin: 0; padding-left: 20px;">
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
                 @endforeach
@@ -20,95 +23,87 @@
 
     <form action="{{ route('checkout.store') }}" method="POST">
         @csrf
+
+        {{-- Hidden input jika checkout langsung per produk --}}
         @if(isset($produk))
             <input type="hidden" name="produk_id" value="{{ $produk->id }}">
             <input type="hidden" name="qty" value="{{ $qty ?? 1 }}">
-            <input type="hidden" name="jumlah" value="{{ $qty ?? 1 }}">
         @endif
 
-        <div class="row">
-            <!-- SISI KIRI: INFORMASI PENGIRIMAN & PEMESAN -->
-            <div class="col-md-7">
-                <div class="card shadow-sm border-0 p-4 mb-4">
-                    <h4 class="mb-3">Informasi Pengiriman & Pemesan</h4>
+        <div class="checkout-layout">
+            <!-- Kolom Kiri: Form Informasi Pemesan -->
+            <div class="checkout-card form-section">
+                <h3 class="checkout-section-title">
+                    <i class="fa-solid fa-address-card" style="color: #2563eb;"></i> Informasi Pengiriman & Pemesan
+                </h3>
 
-                    <div class="form-group mb-3">
-                        <label for="nama_pemesan" class="font-weight-bold">Nama Lengkap</label>
-                        <input type="text" name="nama_pemesan" id="nama_pemesan" class="form-control" value="{{ old('nama_pemesan', Auth::user()->name ?? '') }}" placeholder="Masukkan nama lengkap" required>
-                    </div>
+                <div class="form-group">
+                    <label for="nama_pemesan">Nama Lengkap</label>
+                    <input type="text" id="nama_pemesan" name="nama_pemesan" value="{{ old('nama_pemesan', Auth::user()->name ?? '') }}" placeholder="Masukkan nama lengkap Anda" required class="form-control">
+                </div>
 
-                    <div class="form-group mb-3">
-                        <label for="no_hp" class="font-weight-bold">Nomor Handphone / WhatsApp</label>
-                        <input type="text" name="no_hp" id="no_hp" class="form-control" value="{{ old('no_hp') }}" placeholder="Contoh: 081234567890" required>
-                    </div>
+                <div class="form-group">
+                    <label for="no_hp">Nomor Handphone / WhatsApp</label>
+                    <input type="text" id="no_hp" name="no_hp" value="{{ old('no_hp') }}" placeholder="Contoh: 081234567890" required class="form-control">
+                </div>
 
-                    <div class="form-group mb-3">
-                        <label for="alamat" class="font-weight-bold">Alamat Lengkap Pengiriman / Catatan</label>
-                        <textarea name="alamat" id="alamat" rows="3" class="form-control" placeholder="Masukkan alamat lengkap tujuan..." required>{{ old('alamat') }}</textarea>
-                    </div>
-
-                    <div class="form-group mb-3">
-                        <label for="metode_pembayaran" class="font-weight-bold">Metode Pembayaran</label>
-                        <select name="metode_pembayaran" id="metode_pembayaran" class="form-control" required>
-                            <option value="">-- Pilih Metode Pembayaran --</option>
-                            <option value="Transfer Bank" {{ old('metode_pembayaran') == 'Transfer Bank' ? 'selected' : '' }}>Transfer Bank (BCA/BRI/Mandiri)</option>
-                            <option value="QRIS" {{ old('metode_pembayaran') == 'QRIS' ? 'selected' : '' }}>QRIS / E-Wallet (GoPay/OVO/Dana)</option>
-                            <option value="COD" {{ old('metode_pembayaran') == 'COD' ? 'selected' : '' }}>Bayar di Tempat (COD)</option>
-                        </select>
-                    </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label for="alamat">Alamat Lengkap Pengiriman / Catatan Pesanan</label>
+                    <textarea id="alamat" name="alamat" rows="4" placeholder="Masukkan alamat lengkap tujuan pengiriman atau deskripsi pesanan spesifik..." required class="form-control">{{ old('alamat') }}</textarea>
                 </div>
             </div>
 
-            <!-- SISI KANAN: RINGKASAN PESANAN -->
-            <div class="col-md-5">
-                <div class="card shadow-sm border-0 p-4">
-                    <h4 class="mb-3">Ringkasan Pesanan</h4>
-                    <hr>
-                    
+            <!-- Kolom Kanan: Ringkasan Pesanan -->
+            <div class="checkout-summary-card">
+                <h3 class="checkout-section-title" style="margin-bottom: 16px;">
+                    <i class="fa-solid fa-receipt" style="color: #2563eb;"></i> Ringkasan Pesanan
+                </h3>
+
+                <div class="checkout-items-list">
                     @if(isset($items) && count($items) > 0)
-                        <ul class="list-group list-group-flush mb-3">
-                            @foreach($items as $item)
-                                @php
-                                    $hargaRaw = $item->produk->harga ?? 0;
-                                    $cleanPrice = (float) preg_replace('/[^0-9]/', '', (string)$hargaRaw);
-                                    $jumlahItem = $item->jumlah ?? $qty ?? 1;
-                                    $subtotal = $cleanPrice * $jumlahItem;
-
-                                    $foto = $item->produk->foto ?? 'default.png';
-                                    if (\Illuminate\Support\Str::startsWith($foto, 'produk/')) {
-                                        $imgSrc = asset('storage/' . $foto);
-                                    } else {
-                                        $imgSrc = asset('images/' . $foto);
-                                    }
-                                @endphp
-                                <li class="list-group-item d-flex align-items-center px-0 py-3 border-bottom">
-                                    <img src="{{ $imgSrc }}" 
-                                         alt="{{ $item->produk->nama_produk ?? $item->produk->nama ?? 'Produk' }}" 
-                                         style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px; margin-right: 15px;">
-
-                                    <div class="flex-grow-1">
-                                        <h6 class="my-0 font-weight-bold">{{ $item->produk->nama_produk ?? $item->produk->nama ?? 'Produk' }}</h6>
-                                        <small class="text-muted">Jumlah: {{ $jumlahItem }} x Rp {{ number_format($cleanPrice, 0, ',', '.') }}</small>
-                                    </div>
-                                    <span class="font-weight-bold text-dark">Rp {{ number_format($subtotal, 0, ',', '.') }}</span>
-                                </li>
-                            @endforeach
-                        </ul>
-                    @else
-                        <p class="text-muted text-center py-3">Tidak ada item yang dipilih.</p>
+                        @foreach($items as $item)
+                            @php
+                                $prod = $item->produk;
+                                $mediaFile = $prod->vidio ?? $prod->foto ?? 'default.png';
+                                $imgUrl = (str_contains($mediaFile, 'produk/') || str_contains($mediaFile, 'portofolio/')) 
+                                    ? asset('storage/' . $mediaFile) 
+                                    : asset('images/' . $mediaFile);
+                                $subtotalItem = $item->subtotal ?? ($prod->harga * $item->jumlah);
+                            @endphp
+                            <div class="checkout-item-row">
+                                <img src="{{ $imgUrl }}" alt="{{ $prod->nama_produk ?? 'Produk' }}" class="checkout-item-img">
+                                <div class="checkout-item-details">
+                                    <h4 class="checkout-item-name">{{ $prod->nama_produk ?? 'Produk' }}</h4>
+                                    <span class="checkout-item-meta">{{ $item->jumlah }}x Rp {{ number_format($prod->harga ?? 0, 0, ',', '.') }}</span>
+                                    <span class="checkout-item-subtotal">Rp {{ number_format($subtotalItem, 0, ',', '.') }}</span>
+                                </div>
+                            </div>
+                        @endforeach
                     @endif
-
-                    <div class="d-flex justify-content-between my-3">
-                        <strong class="h5 mb-0">Total Pembayaran:</strong>
-                        <strong class="h5 mb-0 text-primary">
-                            Rp {{ number_format($totalHarga ?? 0, 0, ',', '.') }}
-                        </strong>
-                    </div>
-
-                    <button type="submit" class="btn btn-success btn-lg w-100 shadow-sm mt-2">
-                        Buat Pesanan Sekarang
-                    </button>
                 </div>
+
+                <div class="checkout-divider"></div>
+
+                <div class="checkout-price-row">
+                    <span>Subtotal Produk</span>
+                    <span>Rp {{ number_format($totalHarga ?? 0, 0, ',', '.') }}</span>
+                </div>
+
+                <div class="checkout-price-row">
+                    <span>Biaya Layanan</span>
+                    <span style="color: #16a34a; font-weight: 600;">Gratis</span>
+                </div>
+
+                <div class="checkout-divider"></div>
+
+                <div class="checkout-price-row checkout-total-row">
+                    <span>Total Pembayaran</span>
+                    <span class="checkout-total-amount">Rp {{ number_format($totalHarga ?? 0, 0, ',', '.') }}</span>
+                </div>
+
+                <button type="submit" class="btn-submit-order">
+                    <i class="fa-solid fa-lock"></i> Buat Pesanan Sekarang
+                </button>
             </div>
         </div>
     </form>

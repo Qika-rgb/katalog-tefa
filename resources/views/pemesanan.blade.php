@@ -40,20 +40,9 @@
 
             <!-- SISI KANAN: DETAIL & FORM PEMESANAN -->
             <div>
-                <h1 style="font-size: 24px; font-weight: 800; color: #111827; margin-bottom: 10px; line-height: 1.3;">
+                <h1 style="font-size: 24px; font-weight: 800; color: #111827; margin-bottom: 12px; line-height: 1.3;">
                     {{ $produk->nama_produk ?? 'Nama Produk' }}
                 </h1>
-
-                <!-- Rating -->
-                <div style="display: flex; align-items: center; gap: 6px; color: #f59e0b; font-size: 14px; margin-bottom: 16px;">
-                    <span style="font-weight: 700; color: #111827;">4.5</span>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star-half-stroke"></i>
-                    <span style="color: #6b7280; font-size: 13px; margin-left: 6px;">| 50 RB Penilaian</span>
-                </div>
 
                 <!-- Harga -->
                 <div style="font-size: 24px; font-weight: 800; color: #dc2626; margin-bottom: 18px;">
@@ -84,19 +73,13 @@
                     <input type="hidden" name="produk_id" value="{{ $produk->id }}">
 
                     <!-- Kontrol Kuantitas -->
-                    <div style="margin-bottom: 20px;">
+                    <div style="margin-bottom: 24px;">
                         <label style="display: block; font-weight: 600; font-size: 13px; color: #374151; margin-bottom: 8px;">KUANTITAS</label>
                         <div style="display: inline-flex; align-items: center; border: 1px solid #d1d5db; border-radius: 8px; overflow: hidden;">
                             <button type="button" id="btnMinus" style="width: 38px; height: 38px; background: #f3f4f6; border: none; font-size: 18px; font-weight: bold; cursor: pointer;">-</button>
                             <input type="text" name="jumlah" id="qtyInput" value="1" readonly style="width: 48px; height: 38px; text-align: center; border: none; font-weight: 600; outline: none;">
                             <button type="button" id="btnPlus" style="width: 38px; height: 38px; background: #f3f4f6; border: none; font-size: 18px; font-weight: bold; cursor: pointer;">+</button>
                         </div>
-                    </div>
-
-                    <!-- Input Nomor Telepon -->
-                    <div style="margin-bottom: 24px;">
-                        <label style="display: block; font-weight: 600; font-size: 13px; color: #374151; margin-bottom: 8px;">NOMOR TELEPON / WHATSAPP</label>
-                        <input type="text" name="no_telepon" placeholder="Contoh: 081234567890" required style="width: 100%; padding: 11px 14px; border: 1px solid #d1d5db; border-radius: 8px; outline: none; font-size: 14px;">
                     </div>
 
                     <!-- Tombol Aksi -->
