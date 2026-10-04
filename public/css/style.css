@@ -3105,3 +3105,205 @@ body.bg-light {
 .btn-submit-order:active {
     transform: scale(0.99);
 }
+
+/* =========================================
+   PAGINATION KATALOG
+   ========================================= */
+
+.katalog-wrapper .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    list-style: none;
+    padding: 0;
+}
+
+.katalog-wrapper .pagination svg {
+    width: 20px !important;
+    height: 20px !important;
+    display: inline-block;
+}
+
+.katalog-wrapper .pagination a,
+.katalog-wrapper .pagination span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 38px;
+    height: 38px;
+    padding: 0 10px;
+    font-size: 14px !important;
+    line-height: 1;
+    text-decoration: none;
+    border-radius: 8px;
+}
+
+.katalog-wrapper .pagination a {
+    color: #000;
+    background-color: #fff;
+    border: 1px solid #e5e7eb;
+}
+
+.katalog-wrapper .pagination a:hover {
+    background-color: #f3f4f6;
+}
+
+.katalog-wrapper .pagination span[aria-current="page"] {
+    color: #fff;
+    background-color: #000;
+    border: 1px solid #000;
+}
+
+.katalog-wrapper .pagination span[aria-disabled="true"] {
+    color: #9ca3af;
+    background-color: #f3f4f6;
+    border: 1px solid #e5e7eb;
+}
+
+.katalog-wrapper .pagination svg * {
+    max-width: 20px !important;
+    max-height: 20px !important;
+}
+
+/* =========================================
+   FIX PAGINATION KATALOG LARAVEL
+   ========================================= */
+
+.katalog-wrapper nav[role="navigation"] {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    margin-top: 20px;
+    margin-bottom: 40px;
+    width: 100%;
+}
+
+.katalog-wrapper nav[role="navigation"] svg {
+    width: 20px !important;
+    height: 20px !important;
+    min-width: 20px !important;
+    min-height: 20px !important;
+    max-width: 20px !important;
+    max-height: 20px !important;
+}
+
+.katalog-wrapper nav[role="navigation"] a,
+.katalog-wrapper nav[role="navigation"] span {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.katalog-wrapper nav[role="navigation"] a {
+    text-decoration: none;
+}
+
+.katalog-wrapper nav[role="navigation"] svg path {
+    max-width: 20px !important;
+    max-height: 20px !important;
+}
+
+/* =========================================
+   PAGINATION KATALOG - FINAL
+   ========================================= */
+
+/* Pagination utama */
+.katalog-wrapper nav[role="navigation"] {
+    width: 100% !important;
+    margin-top: 25px !important;
+    margin-bottom: 40px !important;
+    display: flex !important;
+    justify-content: center !important;
+}
+
+/* Hilangkan versi mobile yang dobel */
+.katalog-wrapper nav[role="navigation"] > div:first-child {
+    display: none !important;
+}
+
+/* Bagian pagination desktop */
+.katalog-wrapper nav[role="navigation"] > div:nth-child(2) {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 12px !important;
+}
+
+/* Tulisan Showing... */
+.katalog-wrapper nav[role="navigation"] > div:nth-child(2) > div:first-child {
+    text-align: center !important;
+}
+
+.katalog-wrapper nav[role="navigation"] p {
+    margin: 0 !important;
+    font-size: 14px !important;
+    color: #333 !important;
+}
+
+/* Baris tombol pagination */
+.katalog-wrapper nav[role="navigation"] > div:nth-child(2) > div:last-child {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* Container tombol */
+.katalog-wrapper nav[role="navigation"] > div:nth-child(2) > div:last-child > span > div {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 5px !important;
+}
+
+/* Semua tombol */
+.katalog-wrapper nav[role="navigation"] a,
+.katalog-wrapper nav[role="navigation"] span[aria-current="page"],
+.katalog-wrapper nav[role="navigation"] span[aria-disabled="true"] {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-width: 36px !important;
+    height: 36px !important;
+    padding: 0 10px !important;
+    border-radius: 7px !important;
+    text-decoration: none !important;
+    font-size: 14px !important;
+    line-height: 1 !important;
+}
+
+/* Tombol yang bisa diklik */
+.katalog-wrapper nav[role="navigation"] a {
+    color: #4c1d95 !important;
+    background: #fff !important;
+}
+
+/* Hover */
+.katalog-wrapper nav[role="navigation"] a:hover {
+    background: #f3f0ff !important;
+}
+
+/* Halaman aktif */
+.katalog-wrapper nav[role="navigation"] span[aria-current="page"] {
+    background: #4c1d95 !important;
+    color: #fff !important;
+}
+
+/* Tombol disabled */
+.katalog-wrapper nav[role="navigation"] span[aria-disabled="true"] {
+    color: #aaa !important;
+    background: #f5f5f5 !important;
+}
+
+/* Panah SVG */
+.katalog-wrapper nav[role="navigation"] svg {
+    width: 16px !important;
+    height: 16px !important;
+    min-width: 16px !important;
+    min-height: 16px !important;
+    max-width: 16px !important;
+    max-height: 16px !important;
+}
