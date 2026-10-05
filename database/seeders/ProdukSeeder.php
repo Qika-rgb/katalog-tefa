@@ -13,7 +13,12 @@ class ProdukSeeder extends Seeder
     public function run(): void
     {
         DB::table('produks')->insert([
-            // --- KATEGORI RPL (0) ---
+
+            // =========================================================
+            // KATEGORI RPL (0)
+            // Semua harga disesuaikan menjadi Rp500.000
+            // =========================================================
+
             [
                 'nama_produk' => 'Website',
                 'deskripsi' => 'Jasa pembuatan website.',
@@ -23,15 +28,17 @@ class ProdukSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
             [
                 'nama_produk' => 'Jasa Pembuatan Aplikasi',
                 'deskripsi' => 'Jasa pembuatan aplikasi.',
-                'harga' => '1000000',
+                'harga' => '500000',
                 'foto' => 'produk_rpl3.png',
                 'kategori_id' => 0,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
             [
                 'nama_produk' => 'Jasa Web Service',
                 'deskripsi' => 'Jasa web service.',
@@ -42,7 +49,12 @@ class ProdukSeeder extends Seeder
                 'updated_at' => now(),
             ],
 
-            // --- KATEGORI ANIMASI (1) ---
+
+            // =========================================================
+            // KATEGORI ANIMASI (1)
+            // Harga disesuaikan berdasarkan layanan Kajur
+            // =========================================================
+
             [
                 'nama_produk' => 'Jasa Pembuatan Animasi',
                 'deskripsi' => 'Jasa pembuatan animasi.',
@@ -52,60 +64,67 @@ class ProdukSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
             [
                 'nama_produk' => 'Animasi Video Profesional',
                 'deskripsi' => 'Produk animasi motion graphics lengkap menggunakan format video.',
-                'harga' => '750000',
+                'harga' => '300000',
                 'foto' => 'vdanimasi.mp4',
                 'kategori_id' => 1,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
             [
                 'nama_produk' => 'Animasi Video 2D',
                 'deskripsi' => 'Produk animasi motion graphics lengkap menggunakan format video.',
-                'harga' => '750000',
+                'harga' => '150000',
                 'foto' => 'vdanimasi2.mp4',
                 'kategori_id' => 1,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
             [
                 'nama_produk' => 'Animasi 2D Karakter',
                 'deskripsi' => 'Pembuatan karakter animasi 2D kustom yang menarik.',
-                'harga' => '600000',
+                'harga' => '50000',
                 'foto' => 'animasi4.jpeg',
                 'kategori_id' => 1,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
             [
                 'nama_produk' => 'Animasi Storyboard & Visual',
                 'deskripsi' => 'Pembuatan konsep visual dan storyboard animasi.',
-                'harga' => '450000',
+                'harga' => '50000',
                 'foto' => 'animasi1.jpeg',
                 'kategori_id' => 1,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
             [
                 'nama_produk' => 'Animasi Eksklusif Modern',
                 'deskripsi' => 'Layanan pembuatan animasi berkualitas tinggi untuk promosi.',
-                'harga' => '850000',
+                'harga' => '200000',
                 'foto' => 'animasi3.jpeg',
                 'kategori_id' => 1,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
             [
                 'nama_produk' => 'Jasa Ilustrasi Digital & Cover Buku',
                 'deskripsi' => 'Wujudkan idemu melalui ilustrasi digital, cover novel, poster, dan karakter unik.',
-                'harga' => '100000',
+                'harga' => '75000',
                 'foto' => 'animasi5.jpeg',
                 'kategori_id' => 1,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
             [
                 'nama_produk' => 'Jasa Video Profil Sekolah & Dokumentasi',
                 'deskripsi' => 'Tampilkan jati diri sekolahmu melalui video profil profesional dan storytelling menarik.',
@@ -116,34 +135,41 @@ class ProdukSeeder extends Seeder
                 'updated_at' => now(),
             ],
 
-            // --- KATEGORI TKJ (2) ---
+
+            // =========================================================
+            // KATEGORI TKJ (2)
+            // =========================================================
+
             [
                 'nama_produk' => 'Instalasi Jaringan Nirkabel',
                 'deskripsi' => 'Layanan pemasangan dan konfigurasi jaringan nirkabel (wireless) yang andal dan aman.',
-                'harga' => '200000',
+                'harga' => '100000',
                 'foto' => 'produk_tkj_nirkabel.jpeg',
                 'kategori_id' => 2,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
             [
                 'nama_produk' => 'Koneksi Internet Tercepat dan Stabil',
                 'deskripsi' => 'Optimasi dan setup jaringan untuk memastikan koneksi internet yang stabil dan berkecepatan tinggi.',
-                'harga' => '150000',
+                'harga' => '300000',
                 'foto' => 'produk_tkj_internet.jpeg',
                 'kategori_id' => 2,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
             [
                 'nama_produk' => 'Jasa Instalasi Nirkabel',
                 'deskripsi' => 'Jasa setting perangkat akses poin, router, dan perangkat pendukung jaringan nirkabel area luas.',
-                'harga' => '200000',
+                'harga' => '100000',
                 'foto' => 'produk_tkj_setting.jpeg',
                 'kategori_id' => 2,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
             [
                 'nama_produk' => 'Jasa Service Software Profesional',
                 'deskripsi' => 'Perbaikan, instalasi ulang sistem operasi, dan pembersihan software komputer atau laptop.',
@@ -154,7 +180,13 @@ class ProdukSeeder extends Seeder
                 'updated_at' => now(),
             ],
 
-            // --- KATEGORI PSPT (3) ---
+
+            // =========================================================
+            // KATEGORI PSPT (3)
+            // Tidak ada daftar harga baru dari Kajur PSPT,
+            // jadi harga lama dipertahankan.
+            // =========================================================
+
             [
                 'nama_produk' => 'News Magazine',
                 'deskripsi' => 'Menerima publikasi media online dan visual, berita untuk semua dalam satu layanan.',
@@ -164,6 +196,7 @@ class ProdukSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
             [
                 'nama_produk' => 'Feature Media',
                 'deskripsi' => 'Menerima publikasi media feature sejarah, wisata, kuliner, dan lainnya secara informatif dan inspiratif.',
@@ -173,6 +206,7 @@ class ProdukSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
             [
                 'nama_produk' => 'Jasa Dokumenter',
                 'deskripsi' => 'Menerima publikasi media dokumenter perusahaan, instansi, atau organisasi dengan kualitas tinggi.',
@@ -182,6 +216,7 @@ class ProdukSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
             [
                 'nama_produk' => 'Acara Talk Show',
                 'deskripsi' => 'Menerima acara talk show live dan siaran tunda dengan studio & multicam profesional.',
@@ -191,6 +226,7 @@ class ProdukSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
             [
                 'nama_produk' => 'Pelatihan / Workshop Jurnalistik',
                 'deskripsi' => 'Pemberdayaan melalui informasi dan keterampilan bercerita, literasi digital, dan jurnalisme warga.',
@@ -200,6 +236,7 @@ class ProdukSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
             [
                 'nama_produk' => 'Pembuatan Film Drama',
                 'deskripsi' => 'Layanan produksi profesional untuk narasi dramatik yang bermakna, fokus pada emosi dan karakter.',
@@ -209,6 +246,7 @@ class ProdukSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
             [
                 'nama_produk' => 'Film Sinematik Berbasis AI',
                 'deskripsi' => 'Professional AI-Based Cinematic Film Production Services dengan AI storytelling dan cinematic rendering.',
@@ -218,6 +256,7 @@ class ProdukSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
             [
                 'nama_produk' => 'Iklan Layanan Masyarakat',
                 'deskripsi' => 'Pembuatan iklan layanan masyarakat untuk edukasi publik, penyuluhan kesehatan, dan keselamatan warga.',
@@ -227,6 +266,7 @@ class ProdukSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
             [
                 'nama_produk' => 'Jasa Podcast & Live Streaming',
                 'deskripsi' => 'Menerima acara podcast live dan siaran tunda (on-demand) dengan audio dan video berkualitas tinggi.',
@@ -237,16 +277,22 @@ class ProdukSeeder extends Seeder
                 'updated_at' => now(),
             ],
 
-            // --- KATEGORI DKV (4) ---
+
+            // =========================================================
+            // KATEGORI DKV (4)
+            // Harga rentang menggunakan harga minimum Kajur
+            // =========================================================
+
             [
                 'nama_produk' => 'Paperbag',
                 'deskripsi' => 'Pembuatan paperbag custom yang kuat dan ramah lingkungan.',
-                'harga' => '10000',
+                'harga' => '60000',
                 'foto' => 'produk_dkv2.png',
                 'kategori_id' => 4,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
             [
                 'nama_produk' => 'Jasa Design',
                 'deskripsi' => 'Jasa desain untuk poster, media promosi, dan kebutuhan visual lainnya.',
@@ -256,42 +302,47 @@ class ProdukSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
             [
                 'nama_produk' => 'Name Tag',
                 'deskripsi' => 'Pembuatan name tag untuk kegiatan sekolah, acara, dan organisasi.',
-                'harga' => '15000',
+                'harga' => '45000',
                 'foto' => 'produk_dkv1.png',
                 'kategori_id' => 4,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
             [
                 'nama_produk' => 'Gantungan Kunci',
                 'deskripsi' => 'Pembuatan gantungan kunci custom dengan cetakan berkualitas tinggi.',
-                'harga' => '10000',
+                'harga' => '5000',
                 'foto' => 'produk_dkv4.png',
                 'kategori_id' => 4,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
             [
                 'nama_produk' => 'Desain Kaos',
                 'deskripsi' => 'Jasa desain ilustrasi/vektor custom untuk kaos atau pakaian.',
-                'harga' => '75000',
+                'harga' => '120000',
                 'foto' => 'kaos desain.jpeg',
                 'kategori_id' => 4,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
             [
                 'nama_produk' => 'Desain Banner',
                 'deskripsi' => 'Layanan cetak banner promosi luar ruangan yang tahan air dan tajam.',
-                'harga' => '40000',
+                'harga' => '20000',
                 'foto' => 'banner.jpeg',
                 'kategori_id' => 4,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
             [
                 'nama_produk' => 'Desain Logo',
                 'deskripsi' => 'Pembuatan identitas visual atau logo profesional untuk branding usaha.',
@@ -301,71 +352,83 @@ class ProdukSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
             [
                 'nama_produk' => 'Desain Kemasan',
                 'deskripsi' => 'Desain kemasan/packaging produk yang menarik dan estetis.',
-                'harga' => '50000',
+                'harga' => '5000',
                 'foto' => 'kemasan.jpeg',
                 'kategori_id' => 4,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
             [
                 'nama_produk' => 'Undangan',
                 'deskripsi' => 'Jasa desain dan cetak berbagai jenis surat undangan.',
-                'harga' => '5000',
+                'harga' => '2000',
                 'foto' => 'undangan.jpeg',
                 'kategori_id' => 4,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
             [
                 'nama_produk' => 'Poster',
                 'deskripsi' => 'Desain dan cetak poster informatif atau promosi.',
-                'harga' => '15000',
+                'harga' => '10000',
                 'foto' => 'poster_tefa.jpeg',
                 'kategori_id' => 4,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
             [
                 'nama_produk' => 'Spanduk',
                 'deskripsi' => 'Layanan cetak spanduk outdoor yang awet dan tahan air.',
-                'harga' => '35000',
+                'harga' => '25000',
                 'foto' => 'spanduk.jpeg',
                 'kategori_id' => 4,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
             [
                 'nama_produk' => 'Baliho',
                 'deskripsi' => 'Pembuatan desain dan cetak baliho berukuran besar.',
-                'harga' => '50000',
+                'harga' => '30000',
                 'foto' => 'baliho.jpeg',
                 'kategori_id' => 4,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
 
-            // --- KATEGORI GIM (5) ---
+
+            // =========================================================
+            // KATEGORI GIM (5)
+            // Semua harga disesuaikan menjadi Rp500.000
+            // =========================================================
+
             [
                 'nama_produk' => 'Pembuatan Gim',
                 'deskripsi' => 'Jasa pembuatan gim.',
-                'harga' => '750000',
+                'harga' => '500000',
                 'foto' => 'produk_gim1.png',
                 'kategori_id' => 5,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
             [
                 'nama_produk' => 'Aset 3D',
                 'deskripsi' => 'Pembuatan aset 3D untuk kebutuhan desain, animasi, dan gim.',
-                'harga' => '150000',
+                'harga' => '500000',
                 'foto' => 'produk_gim2.png',
                 'kategori_id' => 5,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
         ]);
     }
 }
