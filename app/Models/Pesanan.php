@@ -13,9 +13,13 @@ class Pesanan extends Model
 
     protected $fillable = [
         'produk_id',
-        'user_id', // <-- PERBAIKAN: Diubah dari customer_id menjadi user_id
+        'user_id',
+        'nama_pemesan',
         'no_telepon',
+        'alamat',
+        'metode_pembayaran',
         'jumlah',
+        'total_harga',
         'status',
         'estimasi_selesai',
     ];
@@ -26,13 +30,13 @@ class Pesanan extends Model
         return $this->belongsTo(Produk::class, 'produk_id');
     }
 
-    // Relasi ke model User (menggunakan user_id)
+    // Relasi ke model User
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id'); // <-- PERBAIKAN: Sesuaikan foreign key-nya
+        return $this->belongsTo(User::class, 'user_id');
     }
 
-    // Relasi ke detail pesanan (daftar produk dalam 1 pesanan)
+    // Relasi ke detail pesanan
     public function detailPesanans()
     {
         return $this->hasMany(DetailPesanan::class, 'pesanan_id');
