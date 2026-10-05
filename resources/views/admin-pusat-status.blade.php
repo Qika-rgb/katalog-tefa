@@ -77,16 +77,14 @@
             <h1>PRODUCT REPORT</h1>
 
             <div class="header-actions">
-
-                <i class="fa-solid fa-clock-rotate-left"></i>
-
-                <i class="fa-regular fa-envelope"></i>
-
-                <span class="year-badge">
-                    2026
-                </span>
-
-            </div>
+                <a href="{{ route('admin.cetak-katalog', ['kategori' => request('kategori', 'all')]) }}" 
+                target="_blank" 
+                class="btn-cetak-katalog" 
+                style="display: inline-flex; align-items: center; gap: 8px; background-color: #1e293b; color: #ffffff; padding: 8px 18px; border-radius: 9999px; text-decoration: none; font-size: 13px; font-weight: 700; transition: background-color 0.2s ease;">
+                    <i class="fa-solid fa-print"></i>
+                <span>CETAK</span>
+                </a>
+        </div>
 
         </div>
 

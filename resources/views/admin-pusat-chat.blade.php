@@ -81,12 +81,6 @@
         <!-- Main Header -->
         <div class="admin-header-row">
             <h1>CUSTOMER SERVICE</h1>
-
-            <div class="header-actions">
-                <i class="fa-solid fa-clock-rotate-left"></i>
-                <i class="fa-regular fa-envelope"></i>
-                <span class="year-badge">2026</span>
-            </div>
         </div>
 
 

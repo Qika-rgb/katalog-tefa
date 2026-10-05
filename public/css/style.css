@@ -3307,3 +3307,250 @@ body.bg-light {
     max-width: 16px !important;
     max-height: 16px !important;
 }
+
+/* ===================================================
+   DESAIN ELEGAN CETAK KATALOG TEFA SMKN 4
+=================================================== */
+
+@page {
+    /* Menghilangkan header & footer otomatis browser (URL/tanggal) */
+    margin: 12mm 15mm;
+    size: A4 portrait;
+}
+
+.cetak-body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8fafc;
+    color: #1e293b;
+    margin: 0;
+    padding: 30px;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+}
+
+/* Container Lembar Kertas */
+.cetak-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 36px 40px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+}
+
+/* Toolbar Aksi Layar (Tidak Tercetak) */
+.no-print-bar {
+    max-width: 1000px;
+    margin: 0 auto 20px auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #ffffff;
+    padding: 12px 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.btn-action {
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+}
+
+.btn-print {
+    background-color: #2563eb;
+    color: #ffffff;
+}
+
+.btn-print:hover {
+    background-color: #1d4ed8;
+    transform: translateY(-1px);
+}
+
+.btn-back {
+    background-color: #f1f5f9;
+    color: #475569;
+}
+
+.btn-back:hover {
+    background-color: #e2e8f0;
+}
+
+/* Header & Kop Formal */
+.header-cetak {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 20px;
+    margin-bottom: 28px;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.header-left img {
+    height: 52px;
+    width: auto;
+    object-fit: contain;
+}
+
+.brand-text h2 {
+    margin: 0;
+    font-size: 19px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    color: #0f172a;
+}
+
+.brand-text p {
+    margin: 3px 0 0;
+    font-size: 12px;
+    color: #64748b;
+    font-weight: 500;
+}
+
+.header-right {
+    text-align: right;
+}
+
+.header-right .tag-katalog {
+    display: inline-block;
+    background: #eff6ff;
+    color: #2563eb;
+    border: 1px solid #bfdbfe;
+    padding: 4px 12px;
+    border-radius: 9999px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+}
+
+.header-right .date-text {
+    margin: 0;
+    font-size: 11px;
+    color: #94a3b8;
+}
+
+/* Grid & Kartu Produk */
+.katalog-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.katalog-item {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    page-break-inside: avoid;
+    break-inside: avoid;
+    transition: transform 0.2s ease;
+}
+
+.katalog-item .img-box {
+    width: 100%;
+    height: 165px;
+    background-color: #f1f5f9;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.katalog-item img,
+.katalog-item video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.katalog-item .content-box {
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.katalog-category {
+    display: inline-block;
+    align-self: flex-start;
+    font-size: 10px;
+    font-weight: 700;
+    color: #2563eb;
+    background: #eff6ff;
+    padding: 2px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.katalog-title {
+    font-size: 13.5px;
+    font-weight: 700;
+    margin: 0 0 6px 0;
+    color: #0f172a;
+    line-height: 1.35;
+}
+
+.katalog-price {
+    font-size: 14px;
+    font-weight: 800;
+    color: #dc2626;
+    margin-top: auto;
+}
+
+/* Footer Dokumen */
+.katalog-footer {
+    margin-top: 30px;
+    padding-top: 15px;
+    border-top: 1px dashed #cbd5e1;
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: #94a3b8;
+}
+
+/* Mode Print Spesifik */
+@media print {
+    body.cetak-body {
+        background: #ffffff !important;
+        padding: 0 !important;
+    }
+
+    .no-print-bar {
+        display: none !important;
+    }
+
+    .cetak-container {
+        padding: 0 !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        max-width: 100% !important;
+    }
+
+    .katalog-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 16px !important;
+    }
+
+    .katalog-item {
+        border: 1px solid #cbd5e1 !important;
+        box-shadow: none !important;
+    }
+}

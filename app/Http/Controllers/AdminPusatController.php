@@ -119,4 +119,20 @@ class AdminPusatController extends Controller
         $unread_chat = $this->getUnreadChat(); // Panggil notif
         return view('admin-pusat-done', compact('pesanans', 'unread_chat'));
     }
+
+    // STEP 1.1 — Cetak Katalog Produk
+    public function cetakKatalog(Request $request)
+    {
+        $kategori = $request->get('kategori');
+
+        $query = Produk::with('kategori');
+
+        if ($kategori && $kategori !== 'all') {
+            $query->where('kategori_id', $kategori);
+        }
+
+        $produks = $query->latest()->get();
+
+        return view('admin-pusat-cetak-katalog', compact('produks'));
+    }
 }
