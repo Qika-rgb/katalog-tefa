@@ -25,19 +25,16 @@ class Pesanan extends Model
         'estimasi_selesai',
     ];
 
-    // Relasi ke model Produk
     public function produk()
     {
         return $this->belongsTo(Produk::class, 'produk_id');
     }
 
-    // Relasi ke model User
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    // Relasi ke detail pesanan (daftar produk dalam 1 pesanan)
     public function detailPesanans()
     {
         return $this->hasMany(DetailPesanan::class, 'pesanan_id');
