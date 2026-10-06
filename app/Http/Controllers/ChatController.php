@@ -49,7 +49,7 @@ class ChatController extends Controller
             ->pluck('user_id');
 
        $users = User::whereIn('id', $userIds)
-    ->whereNotIn('id', [1, 2])
+    ->whereNotIn('role', ['admin_pusat', 'admin_jurusan'])
     ->get();
 
         /*
