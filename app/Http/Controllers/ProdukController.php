@@ -69,6 +69,39 @@ class ProdukController extends Controller
         return redirect()->back()->with('success', 'Produk berhasil ditambahkan!');
     }
 
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'nama_produk' => 'required|string|max:255',
+            'deskripsi'   => 'required|string',
+            'harga'       => 'required|numeric',
+            'foto'        => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+        ]);
+
+        $produk = Produk::findOrFail($id);
+
+        $data = [
+            'nama_produk' => $request->nama_produk,
+            'deskripsi'   => $request->deskripsi,
+            'harga'       => $request->harga,
+        ];
+
+        // Jika ada file gambar baru yang diupload
+        if ($request->hasFile('foto')) {
+            // Hapus foto lama dari storage jika bukan foto default
+            if ($produk->foto && \Illuminate\Support\Facades\Storage::disk('public')->exists($produk->foto)) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($produk->foto);
+            }
+            
+            // Simpan foto baru
+            $data['foto'] = $request->file('foto')->store('produk', 'public');
+        }
+
+        $produk->update($data);
+
+        return redirect()->back()->with('success', 'Data produk berhasil diperbarui!');
+    }
+
     // Halaman Katalog untuk Customer
     public function indexKatalog()
     {

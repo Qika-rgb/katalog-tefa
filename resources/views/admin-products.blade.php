@@ -35,15 +35,7 @@
         <div class="admin-top-profile">
             @php
                 $userJurusan = strtoupper(auth()->user()->jurusan ?? 'RPL');
-                $logoMap = [
-                    'RPL'     => 'logo_rpl.jpeg',
-                    'DKV'     => 'logo_dkv.jpeg',
-                    'TKJ'     => 'logo_tkj.jpeg',
-                    'ANIMASI' => 'logo_animasi.jpeg',
-                    'PSPT'    => 'logo_pspt.jpeg',
-                    'GIM'     => 'logo_gim.jpeg',
-                ];
-                $logoFile = $logoMap[$userJurusan] ?? 'logo_rpl.jpeg';
+                $logoMap = [                     'RPL'     => 'logo_rpl.jpeg',                     'DKV'     => 'logo_dkv.jpeg',                     'TKJ'     => 'logo_tkj.jpeg',                     'ANIMASI' => 'logo_animasi.jpeg',                     'PSPT'    => 'logo_pspt.jpeg',                     'GIM'     => 'logo_gim.jpeg',                 ];$logoFile = $logoMap[$userJurusan] ?? 'logo_rpl.jpeg';
             @endphp
             <div class="profile-pill">
                 <img src="{{ asset('images/' . $logoFile) }}" alt="Avatar">
@@ -83,14 +75,14 @@
 
             <div class="product-grid">
 
-                <!-- LOOPING PRODUK DINAMIS SESUAI DATABASE -->
+                <!-- LOOPING PRODUK DINAMIS -->
                 @forelse ($produks as $item)
                     <div class="product-card">
                         <div class="product-img-wrapper">
                             @php
-                                $foto = $item->foto ?? 'default.png';
+                                $foto =$item->foto ?? 'default.png';
                                 $isStorage = str_starts_with($foto, 'produk/');
-                                $imgSrc = $isStorage ? asset('storage/' . $foto) : asset('images/' . $foto);
+                                $imgSrc =$isStorage ? asset('storage/' . $foto) : asset('images/' .$foto);
                             @endphp
                             <img src="{{ $imgSrc }}" alt="{{ $item->nama_produk }}">
                             <a href="#" class="btn-update" 
@@ -98,22 +90,16 @@
                                data-nama="{{ $item->nama_produk }}" 
                                data-deskripsi="{{ $item->deskripsi }}" 
                                data-harga="{{ $item->harga }}" 
+                               data-kategori="{{ $item->kategori_id }}"
                                data-foto="{{ $imgSrc }}">UPDATE NOW</a>
                         </div>
                         <div class="product-info">
                             <h3>{{ Str::limit($item->nama_produk, 26) }}</h3>
                             <p class="price">
-                                RP {{ is_numeric($item->harga) ? number_format((float)$item->harga, 0, ',', '.') : $item->harga }}
+                                RP {{ is_numeric($item->harga) ? number_format((float)$item->harga, 0, ',', '.') :$item->harga }}
                             </p>
                             
-                            <!-- RATING & TOMBOL HAPUS -->
-                            <div class="rating" style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
-                                <div>
-                                    <i class="fa-solid fa-star"></i>
-                                    <span>5.0 + 0 terjual</span>
-                                </div>
-
-                                <!-- Form Hapus Produk -->
+                            <div class="rating" style="display: flex; justify-content: flex-end; align-items: center; margin-top: 8px;">
                                 <form action="{{ route('admin-jurusan.produk.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus produk ini?');" style="margin: 0;">
                                     @csrf
                                     @method('DELETE')
@@ -157,19 +143,9 @@
                 <div class="modal-body">
                     <div class="modal-left">
                         <label for="fotoInput" class="image-upload-box" style="cursor: pointer;">
-                            <img
-                                id="previewFoto"
-                                src="{{ asset('images/icon_gallery.png') }}"
-                                alt="Upload Gambar"
-                            >
+                            <img id="previewFoto" src="{{ asset('images/icon_gallery.png') }}" alt="Upload Gambar">
                         </label>
-                        <input
-                            type="file"
-                            id="fotoInput"
-                            name="foto"
-                            accept="image/jpeg,image/png,image/jpg,image/webp"
-                            style="display: none;"
-                        >
+                        <input type="file" id="fotoInput" name="foto" accept="image/jpeg,image/png,image/jpg,image/webp" style="display: none;">
                         <span class="upload-label">TAMBAHKAN GAMBAR</span>
                     </div>
 
@@ -188,9 +164,11 @@
                             <label>KATEGORI</label>
                             <select name="kategori_id" class="form-input" required>
                                 <option value="">-- Pilih Kategori --</option>
-                                @foreach ($kategoris as $kategori)
-                                    <option value="{{ $kategori->id }}">{{ $kategori->nama_kategori }}</option>
-                                @endforeach
+                                @if(isset($kategoris) && count($kategoris) > 0)
+                                    @foreach ($kategoris as $kategori)
+                                        <option value="{{ $kategori->id }}">{{ $kategori->nama_kategori }}</option>
+                                    @endforeach
+                                @endif
                             </select>
                         </div>
 
@@ -211,39 +189,48 @@
     <div class="modal-overlay" id="modalUpdateProduct">
         <div class="modal-card">
 
-            <button class="btn-back" id="btnBackUpdate"><i class="fa-solid fa-chevron-left"></i> BACK</button>
+            <button type="button" class="btn-back" id="btnBackUpdate"><i class="fa-solid fa-chevron-left"></i> BACK</button>
 
-            <div class="modal-body">
-                <div class="modal-left">
-                    <div class="image-upload-box">
-                        <img id="updatePreviewFoto" src="{{ asset('images/icon_gallery.png') }}" alt="Edit Gambar">
+            <form id="formUpdateProduct" method="POST" enctype="multipart/form-data" action="">
+                @csrf
+                @method('PUT')
+
+                <div class="modal-body">
+                    <div class="modal-left">
+                        <label for="updateFotoInput" class="image-upload-box" style="cursor: pointer;">
+                            <img id="updatePreviewFoto" src="{{ asset('images/icon_gallery.png') }}" alt="Edit Gambar">
+                        </label>
+                        <input type="file" id="updateFotoInput" name="foto" accept="image/jpeg,image/png,image/jpg,image/webp" style="display: none;">
+                        <span class="upload-label">KLIK GAMBAR UNTUK MENGGANTI</span>
                     </div>
-                    <span class="upload-label">GAMBAR PRODUK</span>
+
+                    <div class="modal-right">
+                        <div class="form-group">
+                            <label>NAMA</label>
+                            <input type="text" name="nama_produk" id="updateNamaProduk" class="form-input" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>DESKRIPSI</label>
+                            <input type="text" name="deskripsi" id="updateDeskripsi" class="form-input" required>
+                        </div>
+
+                        <div class="form-group col-harga">
+                            <label>HARGA JUAL</label>
+                            <input type="number" name="harga" id="updateHarga" class="form-input" required>
+                        </div>
+
+                        <div style="display: flex; gap: 10px; margin-top: 15px;">
+                            <button type="button" class="btn-simpan" id="btnCloseUpdate" style="background-color: #64748b; flex: 1;">TUTUP</button>
+                            <button type="submit" class="btn-simpan" style="background-color: #2563eb; flex: 1;">SIMPAN PERUBAHAN</button>
+                        </div>
+                    </div>
                 </div>
-
-                <div class="modal-right">
-                    <div class="form-group">
-                        <label>NAMA</label>
-                        <input type="text" id="updateNamaProduk" class="form-input" readonly>
-                    </div>
-
-                    <div class="form-group">
-                        <label>DESKRIPSI</label>
-                        <input type="text" id="updateDeskripsi" class="form-input" readonly>
-                    </div>
-
-                    <div class="form-group col-harga">
-                        <label>HARGA JUAL</label>
-                        <input type="text" id="updateHarga" class="form-input" readonly>
-                    </div>
-
-                    <button type="button" class="btn-simpan" id="btnCloseUpdate">TUTUP</button>
-                </div>
-            </div>
+            </form>
         </div>
     </div>
 
-    <!-- SCRIPT JAVASCRIPT UNTUK POP-UP -->
+    <!-- SCRIPT JAVASCRIPT POP-UP & PREVIEW -->
     <script>
         const modalAdd = document.getElementById('modalAddProduct');
         const btnAddNew = document.getElementById('btnAddNew');
@@ -262,6 +249,7 @@
         }
 
         const modalUpdate = document.getElementById('modalUpdateProduct');
+        const formUpdate = document.getElementById('formUpdateProduct');
         const btnUpdates = document.querySelectorAll('.btn-update');
         const btnBackUpdate = document.getElementById('btnBackUpdate');
         const btnCloseUpdate = document.getElementById('btnCloseUpdate');
@@ -270,14 +258,21 @@
         const updateDeskripsi = document.getElementById('updateDeskripsi');
         const updateHarga = document.getElementById('updateHarga');
         const updateFoto = document.getElementById('updatePreviewFoto');
+        const updateFotoInput = document.getElementById('updateFotoInput');
 
         btnUpdates.forEach(function(btn) {
             btn.addEventListener('click', function(e) {
                 e.preventDefault();
+                const id = this.dataset.id;
+                
+                // Set endpoint action route dinamis sesuai ID produk
+                formUpdate.action = `/admin-jurusan/produk/${id}`;
+
                 if(updateNama) updateNama.value = this.dataset.nama || '';
                 if(updateDeskripsi) updateDeskripsi.value = this.dataset.deskripsi || '';
                 if(updateHarga) updateHarga.value = this.dataset.harga || '';
                 if(updateFoto && this.dataset.foto) updateFoto.src = this.dataset.foto;
+
                 modalUpdate.style.display = 'flex';
             });
         });
@@ -298,15 +293,28 @@
             if (event.target === modalUpdate) modalUpdate.style.display = 'none';
         });
 
+        // Preview Tambah Gambar
         const fotoInput = document.getElementById('fotoInput');
         const previewFoto = document.getElementById('previewFoto');
-
         if (fotoInput) {
             fotoInput.addEventListener('change', function(e) {
                 if (e.target.files && e.target.files[0]) {
                     const reader = new FileReader();
                     reader.onload = function(event) {
                         previewFoto.src = event.target.result;
+                    };
+                    reader.readAsDataURL(e.target.files[0]);
+                }
+            });
+        }
+
+        // Preview Edit Gambar
+        if (updateFotoInput) {
+            updateFotoInput.addEventListener('change', function(e) {
+                if (e.target.files && e.target.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        updateFoto.src = event.target.result;
                     };
                     reader.readAsDataURL(e.target.files[0]);
                 }

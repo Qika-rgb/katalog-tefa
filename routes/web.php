@@ -170,3 +170,24 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('/admin-pusat/cetak-katalog', [App\Http\Controllers\AdminPusatController::class, 'cetakKatalog'])->name('admin.cetak-katalog');
+
+// =========================
+// ROUTE ADMIN JURUSAN
+// =========================
+Route::middleware(['auth'])->prefix('admin-jurusan')->name('admin-jurusan.')->group(function () {
+    // ... (kode route dashboard di sini tidak perlu diubah) ...
+
+    Route::get('/produk/create', [ProdukController::class, 'create'])->name('produk.create');
+    Route::post('/produk/store', [ProdukController::class, 'store'])->name('produk.store');
+    
+    // TAMBAHKAN BARIS INI UNTUK MENGATASI ERROR 404:
+    Route::put('/produk/{id}', [ProdukController::class, 'update'])->name('produk.update');
+    
+    Route::delete('/produk/delete/{id}', [ProdukController::class, 'destroy'])->name('produk.destroy');
+
+    // Route Kelola Portofolio Khusus Admin Jurusan
+    Route::get('/portofolio', [PortofolioController::class, 'adminIndex'])->name('portofolio.index');
+    Route::post('/portofolio/store', [PortofolioController::class, 'store'])->name('portofolio.store');
+    Route::post('/portofolio/update/{id}', [PortofolioController::class, 'update'])->name('portofolio.update');
+    Route::delete('/portofolio/delete/{id}', [PortofolioController::class, 'destroy'])->name('portofolio.destroy');
+});

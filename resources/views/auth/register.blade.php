@@ -70,13 +70,6 @@
             <button type="submit" class="btn-main">Get Started</button>
         </form>
 
-        <div class="divider">or sign up with</div>
-
-        <div class="social-buttons">
-            <button class="btn-social"><i class="fa-brands fa-google"></i></button>
-            <button class="btn-social"><i class="fa-brands fa-facebook"></i></button>
-            <button class="btn-social"><i class="fa-brands fa-apple"></i></button>
-        </div>
     </div>
 
     <!-- SCRIPT SHOW/HIDE PASSWORD -->

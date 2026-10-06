@@ -14,18 +14,18 @@
 
 <body class="login-body">
 
-        <!-- =========================================
-            BACKGROUND VIDEO & OVERLAY
-        ========================================== -->
-        <!-- Tambahan atribut poster="...bg-login.jpg" sebagai gambar cadangan -->
-        <video autoplay loop muted playsinline style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0;">
-            <source src="{{ asset('videos/bg-login.mp4') }}" type="video/mp4">
-        </video>
-        
-        <!-- Lapisan tipis agar kotak form tetap terbaca jelas -->
-        <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.4); z-index: 1;"></div>
-    <div class="login-page">
-        <!-- BACKGROUND PATTERN LAMA (Bisa dipertahankan atau dihapus, efeknya tertutup video) -->
+    <!-- =========================================
+        BACKGROUND VIDEO & OVERLAY
+    ========================================== -->
+    <video autoplay loop muted playsinline style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0;">
+        <source src="{{ asset('videos/bg-login.mp4') }}" type="video/mp4">
+    </video>
+    
+    <!-- Lapisan tipis agar kotak form tetap terbaca jelas -->
+    <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.4); z-index: 1;"></div>
+    
+    <div class="login-page" style="position: relative; z-index: 2;">
+        <!-- BACKGROUND PATTERN LAMA -->
         <div class="login-background"></div>
 
         <div class="login-card">
@@ -89,28 +89,12 @@
                 <button type="submit" class="login-button">login</button>
             </form>
 
-            <div class="or-login">
-                <span>or continue with</span>
-            </div>
-
-            <!-- SOCIAL LOGIN -->
-            <div class="social-login">
-                <button type="button" class="social-button" aria-label="Login with Google">
-                    <i class="fa-brands fa-google google-icon"></i>
-                </button>
-                <button type="button" class="social-button" aria-label="Login with Facebook">
-                    <i class="fa-brands fa-facebook facebook-icon"></i>
-                </button>
-                <button type="button" class="social-button" aria-label="Login with Apple">
-                    <i class="fa-brands fa-apple apple-icon"></i>
-                </button>
-            </div>
-
             <!-- REGISTER LINK -->
-            <div class="register-link">
+            <div class="register-link" style="margin-top: 25px; text-align: center;">
                 <span>Don't have an account?</span>
-                <a href="{{ route('register') }}">sign up here</a>
+                <a href="{{ route('register') }}" style="color: #dc2626; font-weight: 700; text-decoration: none;">sign up here</a>
             </div>
+            
         </div>
     </div>
 
