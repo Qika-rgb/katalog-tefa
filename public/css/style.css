@@ -3554,3 +3554,38 @@ body.bg-light {
         box-shadow: none !important;
     }
 }
+
+/* Wrapper Tabel Cetak agar Thead Berulang */
+.table-print-wrapper {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    background: #ffffff;
+    border-collapse: collapse;
+    border: none;
+}
+
+.table-print-wrapper thead {
+    display: table-header-group; /* Kunci agar browser mengulang header di setiap lembar */
+}
+
+.table-print-wrapper tbody {
+    display: table-row-group;
+}
+
+.table-print-wrapper td {
+    padding: 0;
+    border: none;
+}
+
+/* Pastikan kartu produk tidak terpotong di tengah halaman */
+.katalog-item {
+    page-break-inside: avoid;
+    break-inside: avoid;
+}
+
+@media print {
+    .table-print-wrapper {
+        max-width: 100% !important;
+    }
+}
