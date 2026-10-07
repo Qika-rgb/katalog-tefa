@@ -26,7 +26,7 @@ class AdminPusatController extends Controller
 
         $query = Produk::with('kategori');
 
-        if ($kategori && $kategori !== 'all') {
+        if ($kategori !== null && $kategori !== '' && $kategori !== 'all') {
             $query->where('kategori_id', $kategori);
         }
 
@@ -127,10 +127,9 @@ class AdminPusatController extends Controller
 
         $query = Produk::with('kategori');
 
-        if ($kategori && $kategori !== 'all') {
+        if ($kategori !== null && $kategori !== '' && $kategori !== 'all') {
             $query->where('kategori_id', $kategori);
-        }
-
+    }
         $produks = $query->latest()->get();
 
         return view('admin-pusat-cetak-katalog', compact('produks'));
