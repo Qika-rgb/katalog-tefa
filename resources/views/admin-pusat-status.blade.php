@@ -143,11 +143,7 @@
                                 >
                             @endif
 
-                            <!-- BUTTON CHECK -->
-                            <a href="/pemesanan/{{ $produk->id }}"
-                               class="btn-update">
-                                CHECK
-                            </a>
+                          
 
                         </div>
 
