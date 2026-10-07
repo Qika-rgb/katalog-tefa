@@ -62,17 +62,40 @@
             <h1>RIWAYAT PESANAN SELESAI</h1>
         </div>
 
-        <!-- DAFTAR KARTU PESANAN SELESAI -->
-        @forelse($pesanans as $pesanan)
-            <div class="admin-order-card" style="border-left: 5px solid #28a745;">
+        <!-- DAFTAR KARTU PESANAN SELESAI & DITOLAK -->
+            @forelse($pesanans as $pesanan)
+            @php
+                // Logika Warna Berdasarkan Status
+                $isDitolak = strtolower($pesanan->status) === 'ditolak';
+                $themeColor = $isDitolak ? '#dc2626' : '#28a745'; 
+                $iconClass = $isDitolak ? 'fa-xmark-circle' : 'fa-check-circle';
+                $statusBadge = $isDitolak ? '(DITOLAK)' : '(SELESAI)';
+                
+                // Logika Jalur Gambar (Pengecekan Fisik File, Lebih Aman)
+                $produk = $pesanan->produk;
+                $fotoPath = asset('images/logo_tefa.png'); // Gambar default (fallback)
+
+                if ($produk && $produk->foto) {
+                    // Cek di folder storage (hasil upload)
+                    if (file_exists(public_path('storage/' . $produk->foto))) {
+                        $fotoPath = asset('storage/' . $produk->foto);
+                    } 
+                    // Cek di folder images bawaan (seperti default.png)
+                    elseif (file_exists(public_path('images/' . $produk->foto))) {
+                        $fotoPath = asset('images/' . $produk->foto);
+                    }
+                }
+            @endphp
+
+            <div class="admin-order-card" style="border-left: 5px solid {{ $themeColor }};">
                 <img 
-                    src="{{ asset('images/' . ($pesanan->produk->foto ?? 'default.png')) }}" 
-                    alt="{{ $pesanan->produk->nama_produk ?? 'Produk DKV' }}" 
+                    src="{{ $fotoPath }}" 
+                    alt="{{ $produk->nama_produk ?? 'Produk DKV' }}" 
                     class="admin-order-img"
                 >
 
-                <div class="admin-order-info">
-                    <h3>Pesanan #{{ $pesanan->id }} <span style="color: #28a745; font-size: 14px;">(SELESAI)</span></h3>
+                <div class="admin-order-info">  
+                    <h3>Pesanan #{{ $pesanan->id }} <span style="color: {{ $themeColor }}; font-size: 14px;">{{ $statusBadge }}</span></h3>
 
                     <p>
                         NAMA PRODUK :
@@ -91,19 +114,19 @@
 
                     <p>
                         STATUS :
-                        <strong style="color: #28a745;">{{ strtoupper($pesanan->status) }}</strong>
+                        <strong style="color: {{ $themeColor }};">{{ strtoupper($pesanan->status) }}</strong>
                     </p>
                 </div>
 
                 <div style="text-align: right;">
-                    <span class="badge-done" style="background: #28a745; color: white; padding: 8px 16px; border-radius: 20px; font-weight: bold; font-size: 12px;">
-                        <i class="fa-solid fa-check-circle"></i> SUDAH DIAMBIL
+                    <span class="badge-done" style="background: {{ $themeColor }}; color: white; padding: 8px 16px; border-radius: 20px; font-weight: bold; font-size: 12px;">
+                        <i class="fa-solid {{ $iconClass }}"></i> {{ strtoupper($pesanan->status) }}
                     </span>
                 </div>
             </div>
         @empty
             <div style="text-align: center; padding: 40px; background: #fff; border-radius: 10px;">
-                <p>Belum ada pesanan yang selesai (Sudah Diambil).</p>
+                <p>Belum ada pesanan yang selesai atau ditolak.</p>
             </div>
         @endforelse
 
