@@ -40,15 +40,17 @@
                     <button type="button" class="cs-preset-btn" onclick="kirimPreset(this)">Mengapa saya tidak bisa login ke akun lama saya?</button>
                 </div>
 
-                @foreach ($messages as $message)
-                    <div class="{{ $message->sender === 'admin' ? 'cs-bot-msg' : 'cs-user-msg' }}">
-                        {{ $message->message }}
-                    </div>
-                @endforeach  
+                @if(isset($messages))
+                    @foreach ($messages as $message)
+                        <div class="{{ $message->sender === 'admin' ? 'cs-bot-msg' : 'cs-user-msg' }}">
+                            {{ $message->message }}
+                        </div>
+                    @endforeach  
+                @endif
             </div>
 
             <!-- INPUT CHAT (FOOTER) -->
-            <form action="/chat/send" method="POST" class="user-cs-footer">
+            <form action="/chat/send" method="POST" class="user-cs-footer" id="chatForm">
                 @csrf
 
                 <input type="hidden" name="user_id" value="{{ $room_id ?? 1 }}">
@@ -59,6 +61,7 @@
                 <input
                     type="text"
                     name="message"
+                    id="chatInput"
                     placeholder="selamat datang! ada yang bisa saya bantu ??"
                     autocomplete="off"
                     required
@@ -72,6 +75,24 @@
     </div>
 
     <script>
+    // ============================================
+    // FUNGSI UNTUK TOMBOL PRESET (QUICK REPLY)
+    // ============================================
+    function kirimPreset(btnElement) {
+        // 1. Ambil teks dari tombol yang diklik
+        const textToCopy = btnElement.innerText;
+        
+        // 2. Masukkan teks tersebut ke dalam kolom input
+        const chatInput = document.getElementById('chatInput');
+        chatInput.value = textToCopy;
+        
+        // 3. Otomatis kirim (submit) form-nya
+        document.getElementById('chatForm').submit();
+    }
+
+    // ============================================
+    // FUNGSI UNTUK REFRESH CHAT OTOMATIS
+    // ============================================
     document.addEventListener("DOMContentLoaded", function () {
         const roomId = "{{ $room->id ?? ($room_id ?? 1) }}"; 
 
