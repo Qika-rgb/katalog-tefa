@@ -18,12 +18,11 @@
                 <!-- Tombol Back mengarah ke halaman Home -->
                 <a href="/" class="back-btn"><i class="fa-solid fa-chevron-left"></i></a>
                 
-                <div class="cs-title">
+                <div class="cs-title"> 
                     <img src="{{ asset('images/foto_profil.png') }}" alt="CS Avatar">
-                    <h2>CUSTOMER SERVICE</h2>
+                    <h2>CUSTOMER SERVICE</h2> 
                 </div>
                 
-                <a href="#" class="history-btn"><i class="fa-solid fa-clipboard-list"></i></a>
             </div>
 
             <!-- AREA CHAT (BODY) -->

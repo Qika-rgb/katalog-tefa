@@ -9,7 +9,8 @@ body, html {
     color: #000;
 }
 
-/* NAVBAR STYLING */
+/* NAVBAR STYLING
+*/
 .navbar {
     display: flex;
     align-items: center;
@@ -2180,8 +2181,9 @@ body.bg-light {
 /* Header */
 .user-cs-header {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
+    gap: 15px;
     padding: 15px 25px;
     border-bottom: 2px solid #000;
     background: #fff;
