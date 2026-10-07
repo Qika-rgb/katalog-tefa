@@ -112,7 +112,7 @@ class AdminPusatController extends Controller
     public function done()
     {
         $pesanans = Pesanan::with('produk')
-            ->where('status', 'Sudah Diambil')
+            ->whereIn('status', ['Sudah Diambil', 'Ditolak']) // <-- Menambahkan status Ditolak
             ->latest()
             ->get();
 
