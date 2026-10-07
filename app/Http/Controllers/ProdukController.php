@@ -16,7 +16,8 @@ class ProdukController extends Controller
         $user = Auth::user();
         $jurusan = strtoupper(trim($user->jurusan ?? ''));
 
-        // Pemetaan jurusan ke kategori_id (0: RPL, 1: Animasi, 2: TKJ, 3: PSPT, 4: DKV, 5: Gim)
+        // Pemetaan jurusan ke kategori_id
+        // 0: RPL, 1: Animasi, 2: TKJ, 3: PSPT, 4: DKV, 5: GIM
         $jurusanMap = [
             'RPL'     => 0,
             'ANIMASI' => 1,
@@ -28,12 +29,13 @@ class ProdukController extends Controller
 
         $kategoriId = $jurusanMap[$jurusan] ?? null;
 
-        // Ambil produk khusus jurusan yang sedang login berdasarkan kategori_id
+        // Ambil produk khusus jurusan yang sedang login
         if ($kategoriId !== null) {
-            $produks = Produk::where('kategori_id', $kategoriId)->latest()->get();
+            $produks = Produk::where('kategori_id', $kategoriId)
+                ->latest()
+                ->get();
         } else {
-            // Cadangan jika kolom jurusan di tabel users bernilai teks langsung
-            $produks = Produk::where('jurusan', $user->jurusan)->latest()->get();
+            $produks = collect();
         }
 
         $kategoris = Kategori::all();
@@ -48,58 +50,108 @@ class ProdukController extends Controller
             'nama_produk' => 'required|string|max:255',
             'deskripsi'   => 'required|string',
             'harga'       => 'required|numeric',
-            'kategori_id' => 'required',
             'foto'        => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
+        $user = Auth::user();
+        $jurusan = strtoupper(trim($user->jurusan ?? ''));
+
+        // Pemetaan jurusan admin ke kategori_id
+        $jurusanMap = [
+            'RPL'     => 0,
+            'ANIMASI' => 1,
+            'TKJ'     => 2,
+            'PSPT'    => 3,
+            'DKV'     => 4,
+            'GIM'     => 5,
+        ];
+
+        // Cek apakah admin mempunyai jurusan yang valid
+        if (!isset($jurusanMap[$jurusan])) {
+            return redirect()
+                ->back()
+                ->withErrors(['jurusan' => 'Jurusan admin tidak valid.']);
+        }
+
+        // kategori_id otomatis berdasarkan jurusan admin yang login
+        $kategoriId = $jurusanMap[$jurusan];
+
+        // Upload foto jika ada
         $fotoPath = null;
+
         if ($request->hasFile('foto')) {
             $fotoPath = $request->file('foto')->store('produk', 'public');
         }
 
+        // Simpan produk dengan kategori otomatis sesuai jurusan admin
         Produk::create([
             'nama_produk' => $request->nama_produk,
             'deskripsi'   => $request->deskripsi,
             'harga'       => $request->harga,
-            'kategori_id' => $request->kategori_id,
-            'jurusan'     => Auth::user()->jurusan,
+            'kategori_id' => $kategoriId,
             'foto'        => $fotoPath,
         ]);
 
-        return redirect()->back()->with('success', 'Produk berhasil ditambahkan!');
+        return redirect()
+            ->back()
+            ->with('success', 'Produk berhasil ditambahkan!');
     }
 
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'nama_produk' => 'required|string|max:255',
-            'deskripsi'   => 'required|string',
-            'harga'       => 'required|numeric',
-            'foto'        => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
-        ]);
+   public function update(Request $request, $id)
+{
+    $request->validate([
+        'nama_produk' => 'required|string|max:255',
+        'deskripsi'   => 'required|string',
+        'harga'       => 'required|numeric',
+        'foto'        => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+    ]);
 
-        $produk = Produk::findOrFail($id);
+    $user = Auth::user();
+    $jurusan = strtoupper(trim($user->jurusan ?? ''));
 
-        $data = [
-            'nama_produk' => $request->nama_produk,
-            'deskripsi'   => $request->deskripsi,
-            'harga'       => $request->harga,
-        ];
+    $jurusanMap = [
+        'RPL'     => 0,
+        'ANIMASI' => 1,
+        'TKJ'     => 2,
+        'PSPT'    => 3,
+        'DKV'     => 4,
+        'GIM'     => 5,
+    ];
 
-        // Jika ada file gambar baru yang diupload
-        if ($request->hasFile('foto')) {
-            // Hapus foto lama dari storage jika bukan foto default
-            if ($produk->foto && \Illuminate\Support\Facades\Storage::disk('public')->exists($produk->foto)) {
-                \Illuminate\Support\Facades\Storage::disk('public')->delete($produk->foto);
-            }
-            
-            // Simpan foto baru
-            $data['foto'] = $request->file('foto')->store('produk', 'public');
+    if (!isset($jurusanMap[$jurusan])) {
+        return redirect()
+            ->back()
+            ->withErrors(['jurusan' => 'Jurusan admin tidak valid.']);
+    }
+
+    $kategoriId = $jurusanMap[$jurusan];
+
+    // Hanya bisa mengedit produk dari jurusan admin yang login
+    $produk = Produk::where('id', $id)
+        ->where('kategori_id', $kategoriId)
+        ->firstOrFail();
+
+    $data = [
+        'nama_produk' => $request->nama_produk,
+        'deskripsi'   => $request->deskripsi,
+        'harga'       => $request->harga,
+    ];
+
+    // Jika ada file gambar baru yang diupload
+    if ($request->hasFile('foto')) {
+        // Hapus foto lama dari storage jika bukan foto default
+        if ($produk->foto && \Illuminate\Support\Facades\Storage::disk('public')->exists($produk->foto)) {
+            \Illuminate\Support\Facades\Storage::disk('public')->delete($produk->foto);
         }
 
-        $produk->update($data);
+        // Simpan foto baru
+        $data['foto'] = $request->file('foto')->store('produk', 'public');
+    }
 
-        return redirect()->back()->with('success', 'Data produk berhasil diperbarui!');
+    $produk->update($data);
+
+    return redirect()->back()->with('success', 'Data produk berhasil diperbarui!');
+
     }
 
     // Halaman Katalog untuk Customer
@@ -124,16 +176,39 @@ class ProdukController extends Controller
     }
 
     public function destroy($id)
-    {
-        $produk = Produk::findOrFail($id);
+{
+    $user = Auth::user();
+    $jurusan = strtoupper(trim($user->jurusan ?? ''));
 
-        // Hapus file gambar jika tersimpan di folder storage
-        if ($produk->foto && Storage::disk('public')->exists($produk->foto)) {
-            Storage::disk('public')->delete($produk->foto);
-        }
+    $jurusanMap = [
+        'RPL'     => 0,
+        'ANIMASI' => 1,
+        'TKJ'     => 2,
+        'PSPT'    => 3,
+        'DKV'     => 4,
+        'GIM'     => 5,
+    ];
 
-        $produk->delete();
-
-        return redirect()->back()->with('success', 'Produk berhasil dihapus!');
+    if (!isset($jurusanMap[$jurusan])) {
+        return redirect()
+            ->back()
+            ->withErrors(['jurusan' => 'Jurusan admin tidak valid.']);
     }
+
+    $kategoriId = $jurusanMap[$jurusan];
+
+    // Hanya bisa menghapus produk dari jurusan admin yang login
+    $produk = Produk::where('id', $id)
+        ->where('kategori_id', $kategoriId)
+        ->firstOrFail();
+
+    // Hapus file gambar jika tersimpan di folder storage
+    if ($produk->foto && Storage::disk('public')->exists($produk->foto)) {
+        Storage::disk('public')->delete($produk->foto);
+    }
+
+    $produk->delete();
+
+    return redirect()->back()->with('success', 'Produk berhasil dihapus!');
+}
 }

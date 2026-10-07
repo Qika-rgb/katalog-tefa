@@ -35,8 +35,17 @@
         <div class="admin-top-profile">
             @php
                 $userJurusan = strtoupper(auth()->user()->jurusan ?? 'RPL');
-                $logoMap = [                     'RPL'     => 'logo_rpl.jpeg',                     'DKV'     => 'logo_dkv.jpeg',                     'TKJ'     => 'logo_tkj.jpeg',                     'ANIMASI' => 'logo_animasi.jpeg',                     'PSPT'    => 'logo_pspt.jpeg',                     'GIM'     => 'logo_gim.jpeg',                 ];$logoFile = $logoMap[$userJurusan] ?? 'logo_rpl.jpeg';
+                $logoMap = [
+                    'RPL'     => 'logo_rpl.jpeg',
+                    'DKV'     => 'logo_dkv.jpeg',
+                    'TKJ'     => 'logo_tkj.jpeg',
+                    'ANIMASI' => 'logo_animasi.jpeg',
+                    'PSPT'    => 'logo_pspt.jpeg',
+                    'GIM'     => 'logo_gim.jpeg',
+                ];
+                $logoFile = $logoMap[$userJurusan] ?? 'logo_rpl.jpeg';
             @endphp
+
             <div class="profile-pill">
                 <img src="{{ asset('images/' . $logoFile) }}" alt="Avatar">
                 TEFA {{ auth()->user()->jurusan ?? 'JURUSAN' }}
@@ -80,29 +89,34 @@
                     <div class="product-card">
                         <div class="product-img-wrapper">
                             @php
-                                $foto =$item->foto ?? 'default.png';
+                                $foto = $item->foto ?? 'default.png';
                                 $isStorage = str_starts_with($foto, 'produk/');
-                                $imgSrc =$isStorage ? asset('storage/' . $foto) : asset('images/' .$foto);
+                                $imgSrc = $isStorage ? asset('storage/' . $foto) : asset('images/' . $foto);
                             @endphp
+
                             <img src="{{ $imgSrc }}" alt="{{ $item->nama_produk }}">
-                            <a href="#" class="btn-update" 
-                               data-id="{{ $item->id }}" 
-                               data-nama="{{ $item->nama_produk }}" 
-                               data-deskripsi="{{ $item->deskripsi }}" 
-                               data-harga="{{ $item->harga }}" 
+
+                            <a href="#" class="btn-update"
+                               data-id="{{ $item->id }}"
+                               data-nama="{{ $item->nama_produk }}"
+                               data-deskripsi="{{ $item->deskripsi }}"
+                               data-harga="{{ $item->harga }}"
                                data-kategori="{{ $item->kategori_id }}"
                                data-foto="{{ $imgSrc }}">UPDATE NOW</a>
                         </div>
+
                         <div class="product-info">
                             <h3>{{ Str::limit($item->nama_produk, 26) }}</h3>
+
                             <p class="price">
-                                RP {{ is_numeric($item->harga) ? number_format((float)$item->harga, 0, ',', '.') :$item->harga }}
+                                RP {{ is_numeric($item->harga) ? number_format((float)$item->harga, 0, ',', '.') : $item->harga }}
                             </p>
-                            
+
                             <div class="rating" style="display: flex; justify-content: flex-end; align-items: center; margin-top: 8px;">
                                 <form action="{{ route('admin-jurusan.produk.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus produk ini?');" style="margin: 0;">
                                     @csrf
                                     @method('DELETE')
+
                                     <button type="submit" style="background: transparent; border: none; color: #dc2626; cursor: pointer; font-size: 13px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; padding: 2px 6px; border-radius: 4px; transition: 0.2s;" onmouseover="this.style.backgroundColor='#fee2e2'" onmouseout="this.style.backgroundColor='transparent'">
                                         <i class="fa-regular fa-trash-can"></i> Hapus
                                     </button>
@@ -135,21 +149,28 @@
     <div class="modal-overlay" id="modalAddProduct">
         <div class="modal-card">
 
-            <button type="button" class="btn-back" id="btnBackModal"><i class="fa-solid fa-chevron-left"></i> BACK</button>
+            <button type="button" class="btn-back" id="btnBackModal">
+                <i class="fa-solid fa-chevron-left"></i> BACK
+            </button>
 
             <form action="{{ route('admin-jurusan.produk.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
                 <div class="modal-body">
                     <div class="modal-left">
+
                         <label for="fotoInput" class="image-upload-box" style="cursor: pointer;">
                             <img id="previewFoto" src="{{ asset('images/icon_gallery.png') }}" alt="Upload Gambar">
                         </label>
+
                         <input type="file" id="fotoInput" name="foto" accept="image/jpeg,image/png,image/jpg,image/webp" style="display: none;">
+
                         <span class="upload-label">TAMBAHKAN GAMBAR</span>
+
                     </div>
 
                     <div class="modal-right">
+
                         <div class="form-group">
                             <label>NAMA</label>
                             <input type="text" name="nama_produk" class="form-input" required>
@@ -160,16 +181,15 @@
                             <input type="text" name="deskripsi" class="form-input" required>
                         </div>
 
+                        <!-- JURUSAN OTOMATIS SESUAI ADMIN YANG LOGIN -->
                         <div class="form-group">
-                            <label>KATEGORI</label>
-                            <select name="kategori_id" class="form-input" required>
-                                <option value="">-- Pilih Kategori --</option>
-                                @if(isset($kategoris) && count($kategoris) > 0)
-                                    @foreach ($kategoris as $kategori)
-                                        <option value="{{ $kategori->id }}">{{ $kategori->nama_kategori }}</option>
-                                    @endforeach
-                                @endif
-                            </select>
+                            <label>JURUSAN</label>
+                            <input
+                                type="text"
+                                class="form-input"
+                                value="TEFA {{ strtoupper(auth()->user()->jurusan ?? 'JURUSAN') }}"
+                                readonly
+                            >
                         </div>
 
                         <div class="form-group col-harga">
@@ -178,6 +198,7 @@
                         </div>
 
                         <button type="submit" class="btn-simpan">SIMPAN</button>
+
                     </div>
                 </div>
             </form>
@@ -189,22 +210,30 @@
     <div class="modal-overlay" id="modalUpdateProduct">
         <div class="modal-card">
 
-            <button type="button" class="btn-back" id="btnBackUpdate"><i class="fa-solid fa-chevron-left"></i> BACK</button>
+            <button type="button" class="btn-back" id="btnBackUpdate">
+                <i class="fa-solid fa-chevron-left"></i> BACK
+            </button>
 
             <form id="formUpdateProduct" method="POST" enctype="multipart/form-data" action="">
                 @csrf
                 @method('PUT')
 
                 <div class="modal-body">
+
                     <div class="modal-left">
+
                         <label for="updateFotoInput" class="image-upload-box" style="cursor: pointer;">
                             <img id="updatePreviewFoto" src="{{ asset('images/icon_gallery.png') }}" alt="Edit Gambar">
                         </label>
+
                         <input type="file" id="updateFotoInput" name="foto" accept="image/jpeg,image/png,image/jpg,image/webp" style="display: none;">
+
                         <span class="upload-label">KLIK GAMBAR UNTUK MENGGANTI</span>
+
                     </div>
 
                     <div class="modal-right">
+
                         <div class="form-group">
                             <label>NAMA</label>
                             <input type="text" name="nama_produk" id="updateNamaProduk" class="form-input" required>
@@ -221,12 +250,19 @@
                         </div>
 
                         <div style="display: flex; gap: 10px; margin-top: 15px;">
-                            <button type="button" class="btn-simpan" id="btnCloseUpdate" style="background-color: #64748b; flex: 1;">TUTUP</button>
-                            <button type="submit" class="btn-simpan" style="background-color: #2563eb; flex: 1;">SIMPAN PERUBAHAN</button>
+                            <button type="button" class="btn-simpan" id="btnCloseUpdate" style="background-color: #64748b; flex: 1;">
+                                TUTUP
+                            </button>
+
+                            <button type="submit" class="btn-simpan" style="background-color: #2563eb; flex: 1;">
+                                SIMPAN PERUBAHAN
+                            </button>
                         </div>
+
                     </div>
                 </div>
             </form>
+
         </div>
     </div>
 
@@ -242,6 +278,7 @@
                 modalAdd.style.display = 'flex';
             });
         }
+
         if(btnBackAdd) {
             btnBackAdd.addEventListener('click', function() {
                 modalAdd.style.display = 'none';
@@ -264,7 +301,7 @@
             btn.addEventListener('click', function(e) {
                 e.preventDefault();
                 const id = this.dataset.id;
-                
+
                 // Set endpoint action route dinamis sesuai ID produk
                 formUpdate.action = `/admin-jurusan/produk/${id}`;
 
@@ -282,6 +319,7 @@
                 modalUpdate.style.display = 'none';
             });
         }
+
         if(btnCloseUpdate) {
             btnCloseUpdate.addEventListener('click', function() {
                 modalUpdate.style.display = 'none';
@@ -296,13 +334,16 @@
         // Preview Tambah Gambar
         const fotoInput = document.getElementById('fotoInput');
         const previewFoto = document.getElementById('previewFoto');
+
         if (fotoInput) {
             fotoInput.addEventListener('change', function(e) {
                 if (e.target.files && e.target.files[0]) {
                     const reader = new FileReader();
+
                     reader.onload = function(event) {
                         previewFoto.src = event.target.result;
                     };
+
                     reader.readAsDataURL(e.target.files[0]);
                 }
             });
@@ -313,13 +354,16 @@
             updateFotoInput.addEventListener('change', function(e) {
                 if (e.target.files && e.target.files[0]) {
                     const reader = new FileReader();
+
                     reader.onload = function(event) {
                         updateFoto.src = event.target.result;
                     };
+
                     reader.readAsDataURL(e.target.files[0]);
                 }
             });
         }
     </script>
+
 </body>
 </html>

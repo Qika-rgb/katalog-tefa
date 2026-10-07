@@ -19,13 +19,15 @@ class produk extends Model
         'kategori_id',
     ];
 
-    // Relasi ke tabel kategoris
+    // Relasi produk ke kategori
     public function kategori()
-{
-    return $this->belongsTo(Kategori::class, 'kategori_id');
-}
+    {
+        return $this->belongsTo(Kategori::class, 'kategori_id');
+    }
+
+    // Relasi produk ke pesanan
     public function pesanans()
-{
-    return $this->hasMany(Pesanan::class, 'produk_id');
-}  
+    {
+        return $this->hasMany(Pesanan::class, 'produk_id');
+    }
 }

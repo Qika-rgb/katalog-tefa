@@ -189,8 +189,8 @@ class ProdukSeeder extends Seeder
 
             [
                 'nama_produk' => 'News Magazine',
-                'deskripsi' => 'Menerima publikasi media online dan visual, berita untuk semua dalam satu layanan.',
-                'harga' => '250000',
+                'deskripsi' => 'Pembuatan artikel atau berita di portal berita online atau majalah TEFA. ',
+                'harga' => '100000',
                 'foto' => 'produk_news_magazine.png',
                 'kategori_id' => 3,
                 'created_at' => now(),
@@ -200,7 +200,7 @@ class ProdukSeeder extends Seeder
             [
                 'nama_produk' => 'Feature Media',
                 'deskripsi' => 'Menerima publikasi media feature sejarah, wisata, kuliner, dan lainnya secara informatif dan inspiratif.',
-                'harga' => '250000',
+                'harga' => '150000',
                 'foto' => 'produk_feature.png',
                 'kategori_id' => 3,
                 'created_at' => now(),
@@ -220,7 +220,7 @@ class ProdukSeeder extends Seeder
             [
                 'nama_produk' => 'Acara Talk Show',
                 'deskripsi' => 'Menerima acara talk show live dan siaran tunda dengan studio & multicam profesional.',
-                'harga' => '750000',
+                'harga' => '500000',
                 'foto' => 'dkv_1.jpeg',
                 'kategori_id' => 3,
                 'created_at' => now(),
@@ -230,7 +230,7 @@ class ProdukSeeder extends Seeder
             [
                 'nama_produk' => 'Pelatihan / Workshop Jurnalistik',
                 'deskripsi' => 'Pemberdayaan melalui informasi dan keterampilan bercerita, literasi digital, dan jurnalisme warga.',
-                'harga' => '350000',
+                'harga' => '500000',
                 'foto' => 'produk_jurnalistik.jpeg',
                 'kategori_id' => 3,
                 'created_at' => now(),
@@ -250,7 +250,7 @@ class ProdukSeeder extends Seeder
             [
                 'nama_produk' => 'Film Sinematik Berbasis AI',
                 'deskripsi' => 'Professional AI-Based Cinematic Film Production Services dengan AI storytelling dan cinematic rendering.',
-                'harga' => '1000000',
+                'harga' => '100000',
                 'foto' => 'produk_ai_cinematic.jpeg',
                 'kategori_id' => 3,
                 'created_at' => now(),
@@ -260,7 +260,7 @@ class ProdukSeeder extends Seeder
             [
                 'nama_produk' => 'Iklan Layanan Masyarakat',
                 'deskripsi' => 'Pembuatan iklan layanan masyarakat untuk edukasi publik, penyuluhan kesehatan, dan keselamatan warga.',
-                'harga' => '400000',
+                'harga' => '750000',
                 'foto' => 'produk_iklan_layanan.jpeg',
                 'kategori_id' => 3,
                 'created_at' => now(),
@@ -270,7 +270,7 @@ class ProdukSeeder extends Seeder
             [
                 'nama_produk' => 'Jasa Podcast & Live Streaming',
                 'deskripsi' => 'Menerima acara podcast live dan siaran tunda (on-demand) dengan audio dan video berkualitas tinggi.',
-                'harga' => '300000',
+                'harga' => '150000',
                 'foto' => 'produk_podcast.jpeg',
                 'kategori_id' => 3,
                 'created_at' => now(),
