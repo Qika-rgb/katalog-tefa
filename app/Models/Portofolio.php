@@ -11,9 +11,21 @@ class Portofolio extends Model
 
     protected $fillable = [
         'judul',
-        'kategori_id',
-        'pembuat',
         'deskripsi',
+        'pembuat',
         'gambar',
+        'kategori_id',
     ];
+
+    // Relasi: 1 Portofolio memiliki banyak gambar slider
+    public function images()
+    {
+        return $this->hasMany(PortofolioImage::class);
+    }
+
+    // Relasi: 1 Portofolio memiliki banyak anggota tim
+    public function teams()
+    {
+        return $this->hasMany(PortofolioTeam::class);
+    }
 }

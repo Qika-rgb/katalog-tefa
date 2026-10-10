@@ -191,3 +191,8 @@ Route::middleware(['auth'])->prefix('admin-jurusan')->name('admin-jurusan.')->gr
     Route::post('/portofolio/update/{id}', [PortofolioController::class, 'update'])->name('portofolio.update');
     Route::delete('/portofolio/delete/{id}', [PortofolioController::class, 'destroy'])->name('portofolio.destroy');
 });
+
+Route::get('/portofolio/{id}', [\App\Http\Controllers\PortofolioController::class, 'show'])->name('portofolio.show');
+
+Route::delete('/admin-jurusan/portofolio/image/{id}', [\App\Http\Controllers\PortofolioController::class, 'destroyImage'])->name('admin-jurusan.portofolio.image.destroy');
+Route::delete('/admin-jurusan/portofolio/team/{id}', [\App\Http\Controllers\PortofolioController::class, 'destroyTeam'])->name('admin-jurusan.portofolio.team.destroy');

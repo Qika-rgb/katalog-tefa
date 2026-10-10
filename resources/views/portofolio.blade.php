@@ -49,22 +49,31 @@
                 @php
                     $info = $namaJurusan[$item->kategori_id] ?? ['nama' => 'TEFA', 'badge' => 'badge-rpl'];
                 @endphp
-                <div class="portfolio-card">
-                    <div class="card-thumb">
-                        <img src="{{ asset('storage/' . $item->gambar) }}" alt="{{ $item->judul }}">
-                        <span class="badge-jurusan {{ $info['badge'] }}">{{ $info['nama'] }}</span>
-                    </div>
-                    <div class="card-body">
-                        <h3 class="card-title">{{ $item->judul }}</h3>
-                        <p class="card-desc">{{ $item->deskripsi }}</p>
-                        <div class="card-footer">
-                            <div class="author-info">
-                                <i class="fa-solid fa-users-gear"></i>
-                                <span>{{ $item->pembuat }}</span>
+                
+                <!-- =============== AWAL PERUBAHAN =============== -->
+                <!-- Ini adalah tag link yang membuat kartunya bisa diklik -->
+                <a href="{{ route('portofolio.show', $item->id) }}" style="text-decoration: none; color: inherit; display: block; transition: transform 0.2s ease-in-out;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
+                    
+                    <div class="portfolio-card">
+                        <div class="card-thumb">
+                            <img src="{{ asset('storage/' . $item->gambar) }}" alt="{{ $item->judul }}">
+                            <span class="badge-jurusan {{ $info['badge'] }}">{{ $info['nama'] }}</span>
+                        </div>
+                        <div class="card-body">
+                            <h3 class="card-title">{{ $item->judul }}</h3>
+                            <p class="card-desc">{{ $item->deskripsi }}</p>
+                            <div class="card-footer">
+                                <div class="author-info">
+                                    <i class="fa-solid fa-users-gear"></i>
+                                    <span>{{ $item->pembuat }}</span>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+
+                </a>
+                <!-- =============== AKHIR PERUBAHAN =============== -->
+
             @endforeach
         </div>
     @else
