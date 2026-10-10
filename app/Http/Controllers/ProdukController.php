@@ -12,62 +12,88 @@ class ProdukController extends Controller
 {
     // Form & Daftar produk untuk Admin Jurusan
     public function create()
-    {
-        $user = Auth::user();
-        $jurusan = strtoupper(trim($user->jurusan ?? ''));
 
-        // Pemetaan jurusan ke kategori_id (0: RPL, 1: Animasi, 2: TKJ, 3: PSPT, 4: DKV, 5: Gim)
-        $jurusanMap = [
-            'RPL'     => 0,
-            'ANIMASI' => 1,
-            'TKJ'     => 2,
-            'PSPT'    => 3,
-            'DKV'     => 4,
-            'GIM'     => 5,
-        ];
+{
+    $user = Auth::user();
+    $jurusan = strtoupper(trim($user->jurusan ?? ''));
 
-        $kategoriId = $jurusanMap[$jurusan] ?? null;
+    $jurusanMap = [
+        'RPL'     => 0,
+        'ANIMASI' => 1,
+        'TKJ'     => 2,
+        'PSPT'    => 3,
+        'DKV'     => 4,
+        'GIM'     => 5,
+    ];
 
-        // Ambil produk khusus jurusan yang sedang login berdasarkan kategori_id
-        if ($kategoriId !== null) {
-            $produks = Produk::where('kategori_id', $kategoriId)->latest()->get();
-        } else {
-            // Cadangan jika kolom jurusan di tabel users bernilai teks langsung
-            $produks = Produk::where('jurusan', $user->jurusan)->latest()->get();
-        }
+    $kategoriId = $jurusanMap[$jurusan] ?? null;
 
-        $kategoris = Kategori::all();
-
-        return view('admin-products', compact('produks', 'kategoris'));
+    if ($kategoriId === null) {
+        abort(403, 'Jurusan akun admin belum terdaftar.');
     }
 
+    $produks = Produk::where('kategori_id', $kategoriId)
+        ->latest()
+        ->get();
+
+    $kategoris = Kategori::where('id', $kategoriId)->get();
+
+    return view('admin-products', compact('produks', 'kategoris'));
+}
     // Proses simpan produk baru
-    public function store(Request $request)
-    {
-        $request->validate([
-            'nama_produk' => 'required|string|max:255',
-            'deskripsi'   => 'required|string',
-            'harga'       => 'required|numeric',
-            'kategori_id' => 'required',
-            'foto'        => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
-        ]);
+   
+public function store(Request $request)
+{
+    $request->validate([
+        'nama_produk' => 'required|string|max:255',
+        'deskripsi'   => 'required|string',
+        'harga'       => 'required|numeric',
+        'foto'        => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+    ]);
 
-        $fotoPath = null;
-        if ($request->hasFile('foto')) {
-            $fotoPath = $request->file('foto')->store('produk', 'public');
-        }
+    $user = Auth::user();
+    $jurusan = strtoupper(trim($user->jurusan ?? ''));
 
-        Produk::create([
-            'nama_produk' => $request->nama_produk,
-            'deskripsi'   => $request->deskripsi,
-            'harga'       => $request->harga,
-            'kategori_id' => $request->kategori_id,
-            'jurusan'     => Auth::user()->jurusan,
-            'foto'        => $fotoPath,
-        ]);
+    $jurusanMap = [
+        'RPL'     => 0,
+        'ANIMASI' => 1,
+        'TKJ'     => 2,
+        'PSPT'    => 3,
+        'DKV'     => 4,
+        'GIM'     => 5,
+    ];
 
-        return redirect()->back()->with('success', 'Produk berhasil ditambahkan!');
+    $kategoriId = $jurusanMap[$jurusan] ?? null;
+
+    if ($kategoriId === null) {
+        return redirect()->back()
+            ->withErrors(['jurusan' => 'Jurusan akun admin belum terdaftar.']);
     }
+
+    $kategori = Kategori::find($kategoriId);
+
+    if (!$kategori) {
+        return redirect()->back()
+            ->withErrors(['kategori' => 'Kategori jurusan tidak ditemukan di database.']);
+    }
+
+    $fotoPath = null;
+
+    if ($request->hasFile('foto')) {
+        $fotoPath = $request->file('foto')->store('produk', 'public');
+    }
+
+    Produk::create([
+        'nama_produk' => $request->nama_produk,
+        'deskripsi'   => $request->deskripsi,
+        'harga'       => $request->harga,
+        'kategori_id' => $kategoriId,
+        'jurusan'     => $jurusan,
+        'foto'        => $fotoPath,
+    ]);
+
+    return redirect()->back()->with('success', 'Produk berhasil ditambahkan!');
+}
 
     public function update(Request $request, $id)
     {
