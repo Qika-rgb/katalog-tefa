@@ -160,18 +160,7 @@
                             <input type="text" name="deskripsi" class="form-input" required>
                         </div>
 
-                        <div class="form-group">
-                            <label>KATEGORI</label>
-                            <select name="kategori_id" class="form-input" required>
-                                <option value="">-- Pilih Kategori --</option>
-                                @if(isset($kategoris) && count($kategoris) > 0)
-                                    @foreach ($kategoris as $kategori)
-                                        <option value="{{ $kategori->id }}">{{ $kategori->nama_kategori }}</option>
-                                    @endforeach
-                                @endif
-                            </select>
-                        </div>
-
+                      
                         <div class="form-group col-harga">
                             <label>HARGA JUAL</label>
                             <input type="number" name="harga" class="form-input" required>
