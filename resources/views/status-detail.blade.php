@@ -61,13 +61,7 @@
                     alt="Store"
                 >
 
-                <span>
-                    TEFA DKV
-                    <i class="fa-solid fa-chevron-right"
-                       style="font-size: 10px; margin-left:5px;">
-                    </i>
-                </span>
-
+               
             </div>
 
             <div class="text-take-it">
