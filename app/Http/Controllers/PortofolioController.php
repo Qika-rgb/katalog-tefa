@@ -185,7 +185,6 @@ class PortofolioController extends Controller
     // atau nanti kita buatkan form update khusus untuk slider dan tim secara terpisah.
     public function update(Request $request, $id)
     {
-        // ... (Kode update lama Anda biarkan saja dulu) ...
         $user = Auth::user();
         $portofolio = Portofolio::findOrFail($id);
 
@@ -198,12 +197,20 @@ class PortofolioController extends Controller
         }
 
         $request->validate([
-            'judul'     => 'required|string|max:255',
-            'pembuat'   => 'required|string|max:255',
-            'deskripsi' => 'required|string',
-            'gambar'    => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'judul'                 => 'required|string|max:255',
+            'pembuat'               => 'required|string|max:255',
+            'deskripsi'             => 'required|string',
+            'gambar'                => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'slider_images.*'       => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'existing_team_nama.*'  => 'nullable|string|max:255',
+            'existing_team_peran.*' => 'nullable|string|max:255',
+            'existing_team_foto.*'  => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'team_nama.*'           => 'nullable|string|max:255',
+            'team_peran.*'          => 'nullable|string|max:255',
+            'team_foto.*'           => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
+        // 1. Update data info utama
         $data = [
             'judul'     => $request->judul,
             'pembuat'   => $request->pembuat,
@@ -219,7 +226,64 @@ class PortofolioController extends Controller
 
         $portofolio->update($data);
 
-        return redirect()->back()->with('success', 'Info utama Portofolio berhasil diperbarui!');
+        // 2. Tambah Slider Gambar Baru (jika ada)
+        if ($request->hasFile('slider_images')) {
+            foreach ($request->file('slider_images') as $image) {
+                $pathSlider = $image->store('portofolio/slider', 'public');
+                PortofolioImage::create([
+                    'portofolio_id' => $portofolio->id,
+                    'gambar'        => $pathSlider,
+                ]);
+            }
+        }
+
+        // 3. Update Anggota Tim yang Sudah Ada (termasuk ganti foto)
+        if ($request->has('existing_team_nama')) {
+            foreach ($request->existing_team_nama as $teamId => $nama) {
+                $teamMember = PortofolioTeam::where('portofolio_id', $portofolio->id)->find($teamId);
+                if ($teamMember) {
+                    $teamData = [
+                        'nama'  => $nama,
+                        'peran' => $request->existing_team_peran[$teamId] ?? $teamMember->peran,
+                    ];
+
+                    // Cek jika ada foto baru yang diunggah untuk anggota ini
+                    if ($request->hasFile("existing_team_foto.{$teamId}")) {
+                        if ($teamMember->foto && Storage::disk('public')->exists($teamMember->foto)) {
+                            Storage::disk('public')->delete($teamMember->foto);
+                        }
+                        $teamData['foto'] = $request->file("existing_team_foto.{$teamId}")->store('portofolio/team', 'public');
+                    }
+
+                    $teamMember->update($teamData);
+                }
+            }
+        }
+
+        // 4. Tambah Anggota Tim Baru (jika ada)
+        if ($request->has('team_nama')) {
+            $teamNamas = $request->team_nama;
+            $teamPerans = $request->team_peran;
+            $teamFotos = $request->file('team_foto');
+
+            for ($i = 0; $i < count($teamNamas); $i++) {
+                if (!empty($teamNamas[$i])) {
+                    $fotoTimPath = null;
+                    if (isset($teamFotos[$i])) {
+                        $fotoTimPath = $teamFotos[$i]->store('portofolio/team', 'public');
+                    }
+
+                    PortofolioTeam::create([
+                        'portofolio_id' => $portofolio->id,
+                        'nama'          => $teamNamas[$i],
+                        'peran'         => $teamPerans[$i] ?? 'Anggota',
+                        'foto'          => $fotoTimPath,
+                    ]);
+                }
+            }
+        }
+
+        return redirect()->back()->with('success', 'Portofolio berhasil diperbarui beserta tim dan gambarnya!');
     }
 
     public function show($id)

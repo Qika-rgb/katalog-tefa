@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
     
     <!-- PANGGIL CSS UTAMA ANDA -->
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}?v={{ time() }}">
 </head>
 <body class="detail-body">
 
@@ -68,8 +68,6 @@
             <div class="team-grid">
                 @foreach($portofolio->teams as $team)
                     <div class="team-card">
-                        <span class="team-role">{{ $team->peran }}</span>
-                        
                         @php
                             $fotoTim = $team->foto ? asset('storage/' . $team->foto) : asset('images/foto_profil.png');
                         @endphp

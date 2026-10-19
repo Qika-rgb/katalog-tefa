@@ -213,10 +213,13 @@
 
                     <!-- ANGGOTA TIM YANG SUDAH ADA -->
                     <div class="dynamic-section">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
                             <h3><i class="fa-solid fa-users"></i> Anggota Tim Saat Ini</h3>
                             <button type="button" class="btn-add-row" id="btnAddTeamUpdate"><i class="fa-solid fa-plus"></i> Tambah Anggota</button>
                         </div>
+                        <p style="font-size: 12px; color: #64748b; margin-bottom: 12px;">
+                            <i class="fa-solid fa-circle-info"></i> Anda dapat mengedit nama/peran, atau memilih file baru pada input foto untuk mengganti foto anggota.
+                        </p>
                         
                         <div id="existingTeamsContainer" style="margin-bottom: 15px;">
                             <!-- Dimuat lewat JS -->
@@ -350,9 +353,12 @@
                     teams.forEach(team => {
                         const teamBox = document.createElement('div');
                         teamBox.className = 'team-member-row';
+                        const fotoUrl = team.foto ? `/storage/${team.foto}` : '/images/foto_profil.png';
                         teamBox.innerHTML = `
-                            <input type="text" value="${team.nama}" disabled class="form-input" style="background: #f1f5f9;">
-                            <input type="text" value="${team.peran}" disabled class="form-input" style="background: #f1f5f9;">
+                            <img src="${fotoUrl}" alt="${team.nama}" style="width: 42px; height: 42px; border-radius: 8px; object-fit: cover; border: 1px solid #cbd5e1; flex-shrink: 0;" title="Foto saat ini">
+                            <input type="text" name="existing_team_nama[${team.id}]" value="${team.nama}" class="form-input" placeholder="Nama Anggota" required style="flex: 1.2;">
+                            <input type="text" name="existing_team_peran[${team.id}]" value="${team.peran}" class="form-input" placeholder="Peran" style="flex: 1;">
+                            <input type="file" name="existing_team_foto[${team.id}]" class="form-input" accept="image/*" title="Pilih foto baru untuk mengganti foto ini" style="flex: 1.2; font-size: 11px; padding: 6px;">
                             <button type="button" class="btn-remove-row" onclick="deleteTeamMember(${team.id})" title="Hapus anggota"><i class="fa-solid fa-trash"></i></button>
                         `;
                         existingTeamsContainer.appendChild(teamBox);

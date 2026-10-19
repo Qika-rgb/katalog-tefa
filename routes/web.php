@@ -10,6 +10,7 @@ use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PesananController;
 use App\Http\Controllers\PortofolioController;
+use App\Http\Controllers\UserDashboardController;
 use App\Models\Pesanan;
 use App\Models\Produk;
 use App\Models\Kategori;
@@ -54,17 +55,7 @@ Route::get('/status/detail', function (Illuminate\Http\Request $request) {
 // =========================
 // ROUTE DASHBOARD GENERAL (redirect berdasarkan role)
 // =========================
-Route::get('/dashboard', function () {
-    $role = auth()->user()->role;
-
-    if ($role === 'admin_pusat' || $role === 'admin pusat') {
-        return redirect()->route('admin-pusat.dashboard');
-    } elseif ($role === 'admin_jurusan' || $role === 'admin jurusan') {
-        return redirect()->route('admin-jurusan.dashboard');
-    }
-
-    return redirect('/katalog');
-})->middleware(['auth'])->name('dashboard');
+Route::get('/dashboard', [UserDashboardController::class, 'index'])->middleware(['auth'])->name('dashboard');
 
 // =========================
 // ROUTE ADMIN PUSAT (Terproteksi Role)
