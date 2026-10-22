@@ -84,6 +84,8 @@
 
     </div>
 
+    @include('components.footer')
+
     <!-- SCRIPT UNTUK MENJALANKAN SLIDER SWIPER.JS -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
     <script>

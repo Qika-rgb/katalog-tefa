@@ -289,3 +289,20 @@
                 <div class="tracking-icon">
                     <i class="fa-regular fa-handshake"></i>
                 </div>
+
+                <div class="tracking-text">
+                    Barang Sudah diambil
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@include('components.footer')
+
+</body>
+</html>
