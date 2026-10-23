@@ -75,7 +75,7 @@ class AdminPusatController extends Controller
     // STEP 5 — Status Pesanan (Proses Berjalan)
     public function statusPesanan()
     {
-        $pesanans = Pesanan::with('produk')
+        $pesanans = Pesanan::with(['user', 'produk.kategori'])
             ->whereIn('status', ['Tahap Pembuatan', 'Pengemasan', 'Siap Diambil'])
             ->latest()
             ->get();
@@ -111,7 +111,7 @@ class AdminPusatController extends Controller
     // STEP 7 — Menampilkan Pesanan Selesai
     public function done()
     {
-        $pesanans = Pesanan::with('produk')
+        $pesanans = Pesanan::with(['user', 'produk'])
             ->whereIn('status', ['Sudah Diambil', 'Ditolak']) // <-- Menambahkan status Ditolak
             ->latest()
             ->get();

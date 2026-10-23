@@ -70,10 +70,36 @@
 
         <!-- DAFTAR KARTU PESANAN DALAM PROSES -->
         @forelse($pesanans as $pesanan)
+            @php
+                $produk = $pesanan->produk;
+                
+                // Menentukan foto produk (storage -> images -> default)
+                $fotoProduk = asset('images/logo_tefa.png');
+                if ($produk && $produk->foto) {
+                    if (file_exists(public_path('storage/' . $produk->foto))) {
+                        $fotoProduk = asset('storage/' . $produk->foto);
+                    } elseif (file_exists(public_path('images/' . $produk->foto))) {
+                        $fotoProduk = asset('images/' . $produk->foto);
+                    }
+                }
+
+                // Nama TEFA & Logo Jurusan
+                $namaJurusan = strtoupper($produk->kategori->nama_kategori ?? 'TEFA');
+                $logoMap = [
+                    'RPL'     => 'logo_rpl.jpeg',
+                    'DKV'     => 'logo_dkv.jpeg',
+                    'TKJ'     => 'icon_tkj.png',
+                    'ANIMASI' => 'logo_animasi.jpeg',
+                    'PSPT'    => 'logo_pspt.jpeg',
+                    'GIM'     => 'logo_gim.jpeg',
+                ];
+                $logoJurusan = asset('images/' . ($logoMap[$namaJurusan] ?? 'foto_profil.png'));
+            @endphp
+
             <div class="admin-order-card">
                 <img 
-                    src="{{ asset('images/' . ($pesanan->produk->foto ?? 'default.png')) }}" 
-                    alt="{{ $pesanan->produk->nama_produk ?? 'Produk DKV' }}" 
+                    src="{{ $fotoProduk }}" 
+                    alt="{{ $produk->nama_produk ?? 'Produk' }}" 
                     class="admin-order-img"
                 >
 
@@ -81,8 +107,18 @@
                     <h3>Informasi Pesanan #{{ $pesanan->id }}</h3>
 
                     <p>
+                        NAMA PEMESAN :
+                        <strong>{{ $pesanan->nama_pemesan ?? $pesanan->user->name ?? 'Customer' }}</strong>
+                    </p>
+
+                    <p>
+                        EMAIL :
+                        <strong>{{ $pesanan->user->email ?? '-' }}</strong>
+                    </p>
+
+                    <p>
                         NAMA PRODUK :
-                        <strong>{{ $pesanan->produk->nama_produk ?? 'Produk DKV' }}</strong>
+                        <strong>{{ $produk->nama_produk ?? 'Produk' }}</strong>
                     </p>
 
                     <p>
@@ -92,7 +128,7 @@
 
                     <p>
                         NO. TELEPON :
-                        <strong>{{ $pesanan->no_telepon }}</strong>
+                        <strong>{{ $pesanan->no_telepon ?? $pesanan->no_hp ?? '-' }}</strong>
                     </p>
 
                     <p>
@@ -104,9 +140,11 @@
                 <button 
                     class="btn-outline-blue-capsule btn-buka-modal" 
                     data-id="{{ $pesanan->id }}"
-                    data-nama="{{ $pesanan->produk->nama_produk ?? 'Produk DKV' }}"
+                    data-nama="{{ $produk->nama_produk ?? 'Produk' }}"
                     data-status="{{ $pesanan->status }}"
-                    data-foto="{{ asset('images/' . ($pesanan->produk->foto ?? 'default.png')) }}"
+                    data-foto="{{ $fotoProduk }}"
+                    data-tefa="TEFA {{ $namaJurusan }}"
+                    data-logo="{{ $logoJurusan }}"
                 >
                     UBAH STATUS
                 </button>
@@ -130,7 +168,8 @@
                 <div class="modal-status-title">
                     <h2 id="modalNamaProduk">Nama Produk</h2>
                     <div class="modal-status-profile">
-                        <img src="{{ asset('images/foto_profil.png') }}" alt="Avatar"> TEFA DKV
+                        <img id="modalLogoTefa" src="{{ asset('images/foto_profil.png') }}" alt="Avatar">
+                        <span id="modalNamaTefa">TEFA</span>
                     </div>
                 </div>
             </div>
@@ -157,6 +196,8 @@
         const formUbahStatus = document.getElementById('formUbahStatus');
         const modalNamaProduk = document.getElementById('modalNamaProduk');
         const modalFotoProduk = document.getElementById('modalFotoProduk');
+        const modalLogoTefa = document.getElementById('modalLogoTefa');
+        const modalNamaTefa = document.getElementById('modalNamaTefa');
 
         btnBukaModal.forEach(btn => {
             btn.addEventListener('click', function(e) {
@@ -164,9 +205,14 @@
                 const pesananId = this.getAttribute('data-id');
                 const namaProduk = this.getAttribute('data-nama');
                 const fotoProduk = this.getAttribute('data-foto');
+                const namaTefa = this.getAttribute('data-tefa');
+                const logoTefa = this.getAttribute('data-logo');
 
                 modalNamaProduk.textContent = namaProduk;
                 modalFotoProduk.src = fotoProduk;
+                if (modalNamaTefa) modalNamaTefa.textContent = namaTefa || 'TEFA';
+                if (modalLogoTefa && logoTefa) modalLogoTefa.src = logoTefa;
+
                 formUbahStatus.action = `/admin-pusat/ubah-status/${pesananId}`;
 
                 modalStatus.style.display = 'flex';

@@ -24,6 +24,15 @@ class ChatController extends Controller
     public function fetchPesans($room_id)
     {
         try {
+            // Jika yang mengakses sedang berada di admin chat dan membuka room user ini,
+            // tandai pesan yang belum dibaca dari user menjadi terbaca
+            if (auth()->check() && auth()->user()->role === 'admin_pusat') {
+                Message::where('user_id', $room_id)
+                    ->where('sender', '!=', 'admin')
+                    ->where('is_read', false)
+                    ->update(['is_read' => true]);
+            }
+
             // Ambil pesan berdasarkan user_id
             $pesans = Message::where('user_id', $room_id)
                 ->orderBy('created_at', 'asc')
@@ -40,28 +49,51 @@ class ChatController extends Controller
     public function adminChat(Request $request)
     {
         /*
-         * Ambil semua user yang pernah mengirim chat.
-         * Jadi tidak hanya user ID 1.
+         * Ambil semua user yang memiliki riwayat chat,
+         * diurutkan berdasarkan waktu pesan terakhir (terbaru di atas),
+         * dan sertakan jumlah pesan unread dari customer.
          */
-        $userIds = Message::whereNotNull('user_id')
-            ->where('sender', 'user')
-            ->distinct()
-            ->pluck('user_id');
-
-       $users = User::whereIn('id', $userIds)
-    ->whereNotIn('role', ['admin_pusat', 'admin_jurusan'])
-    ->get();
+        $users = User::whereNotIn('role', ['admin_pusat', 'admin_jurusan'])
+            ->whereHas('messages')
+            ->withCount(['messages as unread_count' => function ($q) {
+                $q->where('sender', '!=', 'admin')->where('is_read', false);
+            }])
+            ->withMax('messages', 'created_at')
+            ->orderByDesc('messages_max_created_at')
+            ->get();
 
         /*
          * User yang sedang dipilih di Admin.
-         * Kalau belum memilih, otomatis pilih user pertama
-         * yang pernah chat.
+         * Kalau belum memilih, otomatis pilih user pertama (pesan terbaru).
          */
         $selectedUserId = $request->user_id;
 
         if (!$selectedUserId) {
             $selectedUserId = $users->first()->id ?? null;
         }
+
+        /*
+         * Tandai pesan dari user yang sedang dibuka menjadi terbaca (is_read = true).
+         */
+        if ($selectedUserId) {
+            Message::where('user_id', $selectedUserId)
+                ->where('sender', '!=', 'admin')
+                ->where('is_read', false)
+                ->update(['is_read' => true]);
+
+            // Refresh status unread_count untuk user yang aktif di list
+            $activeUser = $users->firstWhere('id', $selectedUserId);
+            if ($activeUser) {
+                $activeUser->unread_count = 0;
+            }
+        }
+
+        /*
+         * Total unread chat untuk badge menu sidebar
+         */
+        $unread_chat = Message::where('sender', '!=', 'admin')
+            ->where('is_read', false)
+            ->count();
 
         /*
          * Ambil semua pesan hanya dari user yang sedang dipilih.
@@ -77,7 +109,8 @@ class ChatController extends Controller
         return view('admin-pusat-chat', compact(
             'messages',
             'users',
-            'selectedUserId'
+            'selectedUserId',
+            'unread_chat'
         ));
     }
 

@@ -98,8 +98,18 @@
                     <h3>Pesanan #{{ $pesanan->id }} <span style="color: {{ $themeColor }}; font-size: 14px;">{{ $statusBadge }}</span></h3>
 
                     <p>
+                        NAMA PEMESAN :
+                        <strong>{{ $pesanan->nama_pemesan ?? $pesanan->user->name ?? 'Customer' }}</strong>
+                    </p>
+
+                    <p>
+                        EMAIL :
+                        <strong>{{ $pesanan->user->email ?? '-' }}</strong>
+                    </p>
+
+                    <p>
                         NAMA PRODUK :
-                        <strong>{{ $pesanan->produk->nama_produk ?? 'Produk DKV' }}</strong>
+                        <strong>{{ $pesanan->produk->nama_produk ?? 'Produk' }}</strong>
                     </p>
 
                     <p>
@@ -109,7 +119,7 @@
 
                     <p>
                         NO. TELEPON :
-                        <strong>{{ $pesanan->no_telepon }}</strong>
+                        <strong>{{ $pesanan->no_telepon ?? $pesanan->no_hp ?? '-' }}</strong>
                     </p>
 
                     <p>

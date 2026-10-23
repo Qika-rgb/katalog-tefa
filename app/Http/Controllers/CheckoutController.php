@@ -59,11 +59,14 @@ class CheckoutController extends Controller
             $qty = (int) $request->input('qty', 1);
 
             Pesanan::create([
-                'user_id'    => $user->id,
-                'produk_id'  => $produk->id,
-                'no_telepon' => $request->no_hp,
-                'jumlah'     => $qty,
-                'status'     => 'Pending',
+                'user_id'      => $user->id,
+                'nama_pemesan' => $request->nama_pemesan,
+                'produk_id'    => $produk->id,
+                'no_hp'        => $request->no_hp,
+                'no_telepon'   => $request->no_hp,
+                'alamat'       => $request->alamat,
+                'jumlah'       => $qty,
+                'status'       => 'Pending',
             ]);
 
             return redirect()->route('pesanan.status')->with('success', 'Pesanan berhasil dibuat!');
@@ -78,11 +81,14 @@ class CheckoutController extends Controller
 
         foreach ($items as $item) {
             Pesanan::create([
-                'user_id'    => $user->id,
-                'produk_id'  => $item->produk_id,
-                'no_telepon' => $request->no_hp,
-                'jumlah'     => $item->jumlah,
-                'status'     => 'Pending',
+                'user_id'      => $user->id,
+                'nama_pemesan' => $request->nama_pemesan,
+                'produk_id'    => $item->produk_id,
+                'no_hp'        => $request->no_hp,
+                'no_telepon'   => $request->no_hp,
+                'alamat'       => $request->alamat,
+                'jumlah'       => $item->jumlah,
+                'status'       => 'Pending',
             ]);
         }
 

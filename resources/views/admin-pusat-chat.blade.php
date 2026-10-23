@@ -93,7 +93,7 @@
                 @forelse($users as $user)
 
                     <a href="{{ url('/admin-pusat/chat?user_id=' . $user->id) }}"
-                       class="contact-item"
+                       class="contact-item {{ $selectedUserId == $user->id ? 'active' : '' }}"
                        style="text-decoration: none; color: inherit;">
 
                         <img src="{{ asset('images/foto_profil.png') }}"
@@ -103,6 +103,10 @@
                         <span class="contact-name">
                             {{ strtoupper($user->name) }}
                         </span>
+
+                        @if($user->unread_count > 0)
+                            <span class="chat-unread-badge">{{ $user->unread_count }}</span>
+                        @endif
 
                     </a>
 

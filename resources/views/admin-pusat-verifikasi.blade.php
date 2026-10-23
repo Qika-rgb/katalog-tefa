@@ -98,8 +98,18 @@
                     </p>
 
                     <p>
-                        NAMA PEMESAN / TELEPON :
-                        <strong>{{ $pesanan->no_telepon ?? 'Customer' }}</strong>
+                        NAMA PEMESAN :
+                        <strong>{{ $pesanan->nama_pemesan ?? $pesanan->user->name ?? 'Customer' }}</strong>
+                    </p>
+
+                    <p>
+                        EMAIL :
+                        <strong>{{ $pesanan->user->email ?? '-' }}</strong>
+                    </p>
+
+                    <p>
+                        NO. TELEPON :
+                        <strong>{{ $pesanan->no_telepon ?? $pesanan->no_hp ?? '-' }}</strong>
                     </p>
 
                     <p>

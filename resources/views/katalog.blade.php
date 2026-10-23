@@ -87,18 +87,28 @@
 <!-- SCRIPT SLIDER BANNER -->
 <script>
     const bannerSemua = {
-        title: "WELCOME TO SMKN 4 TANJUNGPINANG",
-        img: "{{ asset('images/icon_sekolah.png') }}"
+        title: "SELAMAT DATANG DI<br>KATALOG KAMI",
+        bg: "linear-gradient(to right, #60EFFF, #0061FF)",
+        img: "{{ asset('images/icon_welcome.png') }}",
+        bottom: "0px",
+        right: "20px",
+        height: "200px"
     };
 
     const banners = [
-        { title: "WELCOME TO TEFA REKAYASA PERANGKAT LUNAK", bg: "linear-gradient(to right, #ab6f4f, #e24215)", img: "{{ asset('images/icon_rpl.png') }}" },
-        { title: "WELCOME TO TEFA ANIMASI", bg: "linear-gradient(to right, #38bdf8, #08405c)", img: "{{ asset('images/icon_animasi.png') }}" },
-        { title: "WELCOME TO TEFA TKJ", bg: "linear-gradient(to right, #34d399, #065139)", img: "{{ asset('images/icon_tkj.png') }}" },
-        { title: "WELCOME TO TEFA PSPT", bg: "linear-gradient(to right, #facc15, #573e07)", img: "{{ asset('images/icon_pspt.png') }}" },
-        { title: "WELCOME TO TEFA DKV", bg: "linear-gradient(to right, #dc2626, #991b1b)", img: "{{ asset('images/icon_dkv2.png') }}" },
-        { title: "WELCOME TO TEFA PENGEMBANGAN GIM", bg: "linear-gradient(to right, #4f46e5, #090542)", img: "{{ asset('images/icon_gim.png') }}" }
-    ];
+        { 
+                title: "WELCOME TO TEFA REKAYASA PERANGKAT LUNAK", 
+                bg: "linear-gradient(to right, #FD1B00, #FC5200, #F68C25, #FDC02A)", 
+                img: "{{ asset('images/icon_rpl.png') }}",
+                bottom: "0px", // <-- Atur ketinggian khusus icon RPL di sini
+                height: "270px"
+            },
+            { title: "WELCOME TO TEFA ANIMASI", bg: "linear-gradient(to right, #38bdf8, #08405c)", img: "{{ asset('images/icon_animasi.png') }}" },
+            { title: "WELCOME TO TEFA TEKNIK KOMPUTER DAN JARINGAN", bg: "linear-gradient(to right, #10B981, #052E16)", img: "{{ asset('images/icon_tkj.png') }}" },
+            { title: "WELCOME TO TEFA PRODUKSI SIARAN DAN PROGRAM TELEVISI", bg: "linear-gradient(to right, #eac793, #F3C623, #FFB22C, #FA812F)", img: "{{ asset('images/icon_pspt.png') }}" },
+            { title: "WELCOME TO TEFA DESAIN KOMUNIKASI VISUAL", bg: "linear-gradient(to right, #6b0f1a, #4a0711, #1a0205)", img: "{{ asset('images/icon_dkv2.png') }}" },
+            { title: "WELCOME TO TEFA PENGEMBANGAN GIM", bg: "linear-gradient(to right, #4f46e5, #090542)", img: "{{ asset('images/icon_gim.png') }}" }
+        ];
 
     let currentIndex = 0;
     let isSemuaJurusan = false;
@@ -116,24 +126,39 @@
 
     if (kategoriParam === 'all' || kategoriParam === null) {
         isSemuaJurusan = true;
-        bannerBg.style.background = `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('${bannerSemua.img}') center 20%/cover no-repeat`;
-        bannerTitle.textContent = bannerSemua.title;
-        bannerTitle.style.textShadow = '2px 2px 10px rgba(0,0,0,0.8)';
-        bannerTextContainer.style.textAlign = 'center';
-        bannerTextContainer.style.width = '100%';
-        if(bannerImg) bannerImg.style.display = 'none';
+        bannerBg.style.background = bannerSemua.bg;
+        bannerTitle.innerHTML = bannerSemua.title;
+        bannerTitle.style.fontSize = '42px';
+        bannerTitle.style.lineHeight = '1.2';
+        bannerTitle.style.textShadow = 'none';
+        bannerTextContainer.style.textAlign = 'left';
+        bannerTextContainer.style.width = 'auto';
+        bannerTextContainer.style.marginLeft = '40px';
+        if(bannerImg) {
+            bannerImg.style.display = 'block';
+            bannerImg.src = bannerSemua.img;
+            bannerImg.style.right = bannerSemua.right || '0px';
+            bannerImg.style.bottom = bannerSemua.bottom || '0px';
+            bannerImg.style.height = bannerSemua.height || '200px';
+        }
         if (katalogTitle) katalogTitle.textContent = "CATALOG SEMUA PRODUK";
     } else {
         isSemuaJurusan = false;
         currentIndex = parseInt(kategoriParam);
         bannerBg.style.background = banners[currentIndex].bg;
-        bannerTitle.textContent = banners[currentIndex].title;
+        bannerTitle.innerHTML = banners[currentIndex].title;
+        bannerTitle.style.fontSize = '32px';
+        bannerTitle.style.lineHeight = '1.2';
         bannerTitle.style.textShadow = 'none';
         bannerTextContainer.style.textAlign = 'left';
         bannerTextContainer.style.width = 'auto';
-        if(bannerImg) {
+        bannerTextContainer.style.marginLeft = '0px';
+                if(bannerImg) {
             bannerImg.style.display = 'block';
             bannerImg.src = banners[currentIndex].img;
+            bannerImg.style.right = banners[currentIndex].right || '0px';
+            bannerImg.style.bottom = banners[currentIndex].bottom || '0px';
+            bannerImg.style.height = banners[currentIndex].height || '200px'; // <-- Tambahkan baris ini
         }
         if (katalogTitle) {
             const namaJurusan = banners[currentIndex].title.replace('WELCOME TO TEFA ', '');

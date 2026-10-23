@@ -14,5 +14,6 @@ class Message extends Model
         'pesanan_id',
         'sender',
         'message',
+        'is_read',
     ];
 }
