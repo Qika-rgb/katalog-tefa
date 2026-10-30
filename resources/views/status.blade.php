@@ -25,7 +25,12 @@
             <span class="text-blue">STATUS</span>
         </div>
 
-        <div class="nav-icons">
+        <div class="nav-icons" style="align-items: center; display: flex; gap: 16px;">
+            <div class="lang-switcher">
+                <a href="{{ route('lang.switch', 'id') }}" class="lang-btn {{ app()->getLocale() == 'id' ? 'active' : '' }}" title="Bahasa Indonesia">ID</a>
+                <span class="lang-divider">|</span>
+                <a href="{{ route('lang.switch', 'en') }}" class="lang-btn {{ app()->getLocale() == 'en' ? 'active' : '' }}" title="English">EN</a>
+            </div>
             <a href="/keranjang" style="color: inherit; text-decoration: none;">
                 <i class="fa-solid fa-cart-shopping"></i>
             </a>

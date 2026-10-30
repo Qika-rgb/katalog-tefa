@@ -18,28 +18,33 @@
     <!-- NAVBAR SEDERHANA -->
     <header class="detail-navbar">
         <img src="{{ asset('images/logo_tefa.png') }}" alt="Logo TEFA">
-        <nav class="detail-nav-links">
-            <a href="/" class="link-home">HOME</a>
-            <a href="/portofolio" class="link-porto">PORTOFOLIO</a>
+        <nav class="detail-nav-links" style="display: flex; align-items: center; gap: 20px;">
+            <a href="/" class="link-home">{{ __('messages.nav_home') }}</a>
+            <a href="/portofolio" class="link-porto">{{ __('messages.nav_portofolio') }}</a>
+            <div class="lang-switcher">
+                <a href="{{ route('lang.switch', 'id') }}" class="lang-btn {{ app()->getLocale() == 'id' ? 'active' : '' }}" title="Bahasa Indonesia">ID</a>
+                <span class="lang-divider">|</span>
+                <a href="{{ route('lang.switch', 'en') }}" class="lang-btn {{ app()->getLocale() == 'en' ? 'active' : '' }}" title="English">EN</a>
+            </div>
         </nav>
     </header>
 
     <!-- KONTEN UTAMA -->
     <div class="detail-container">
-        <a href="/portofolio" class="back-link"><i class="fa-solid fa-chevron-left"></i> KEMBALI KE PORTOFOLIO</a>
+        <a href="/portofolio" class="back-link"><i class="fa-solid fa-chevron-left"></i> {{ __('messages.portfolio_back') }}</a>
         
-        <div class="detail-header">
+        <div class="detail-header" style="align-items: flex-start;">
             <div>
                 <h1 class="detail-title">{{ $portofolio->judul }}</h1>
                 <p style="color: #6b7280; font-weight: 600; margin-top: 5px;"><i class="fa-solid fa-building"></i> {{ $portofolio->pembuat }}</p>
             </div>
-            <img src="{{ asset('images/logo_tefa.png') }}" alt="Logo" style="height: 50px;">
+            <img src="{{ asset('images/logo_tefa.png') }}" alt="Logo" style="height: 140px; width: auto; object-fit: contain; margin-top: -40px; margin-right: -80px;">
         </div>
 
         <p class="detail-desc">{{ $portofolio->deskripsi }}</p>
 
         <!-- SWIPER SLIDER UNTUK GAMBAR -->
-        <h3 class="team-section-title">Halaman / Preview Proyek</h3>
+        <h3 class="team-section-title">{{ __('messages.portfolio_project_preview') }}</h3>
         <div class="swiper mySwiper">
             <div class="swiper-wrapper">
                 
@@ -62,7 +67,7 @@
         </div>
 
         <!-- DAFTAR TIM PROYEK -->
-        <h3 class="team-section-title">Tim Pembuat Proyek</h3>
+        <h3 class="team-section-title">{{ __('messages.portfolio_team_title') }}</h3>
         
         @if($portofolio->teams->count() > 0)
             <div class="team-grid">
@@ -79,7 +84,7 @@
                 @endforeach
             </div>
         @else
-            <p style="color: #6b7280; font-style: italic;">Data tim belum ditambahkan untuk proyek ini.</p>
+            <p style="color: #6b7280; font-style: italic;">{{ __('messages.portfolio_team_empty') }}</p>
         @endif
 
     </div>

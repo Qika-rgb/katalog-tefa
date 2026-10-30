@@ -21,6 +21,16 @@ use App\Models\Kategori;
 require __DIR__.'/auth.php';
 
 // =========================
+// GANTI BAHASA (MULTI LANGUAGE)
+// =========================
+Route::get('/lang/{locale}', function ($locale) {
+    if (in_array($locale, ['id', 'en'])) {
+        session(['locale' => $locale]);
+    }
+    return redirect()->back();
+})->name('lang.switch');
+
+// =========================
 // HALAMAN UTAMA & KATALOG
 // =========================
 Route::get('/', function () {

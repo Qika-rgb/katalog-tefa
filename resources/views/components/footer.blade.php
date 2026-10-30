@@ -12,7 +12,7 @@
             </div>
 
             <div class="footer-social">
-                <span class="social-label">Ikuti Kami :</span>
+                <span class="social-label">{{ __('messages.footer_follow') }}</span>
                 <a href="https://instagram.com/katalog.skanfour" target="_blank" rel="noopener noreferrer" class="social-icon instagram" title="Instagram @katalog.skanfour">
                     <i class="fa-brands fa-instagram"></i>
                 </a>
@@ -27,24 +27,24 @@
             <div class="footer-col">
                 <h4>Katalog TEFA</h4>
                 <p class="footer-about">
-                    Teaching Factory (TEFA) SMKN 4 Tanjungpinang menghadirkan karya, produk kreatif, dan jasa profesional berstandar industri hasil karya siswa-siswi kejuruan.
+                    {{ __('messages.footer_tagline') }}
                 </p>
             </div>
 
             <!-- Kolom 2: Navigasi Cepat -->
             <div class="footer-col">
-                <h4>Navigasi</h4>
+                <h4>{{ __('messages.footer_navigation') }}</h4>
                 <ul class="footer-links">
-                    <li><a href="/">Home</a></li>
-                    <li><a href="/katalog?kategori=all">Katalog Produk</a></li>
-                    <li><a href="/status">Status Pesanan</a></li>
-                    <li><a href="/portofolio">Portofolio Siswa</a></li>
+                    <li><a href="/">{{ __('messages.nav_home') }}</a></li>
+                    <li><a href="/katalog?kategori=all">{{ __('messages.footer_catalog_link') }}</a></li>
+                    <li><a href="/status">{{ __('messages.footer_status_link') }}</a></li>
+                    <li><a href="/portofolio">{{ __('messages.footer_portfolio_link') }}</a></li>
                 </ul>
             </div>
 
             <!-- Kolom 3: Hubungi Kami -->
             <div class="footer-col">
-                <h4>Hubungi Kami</h4>
+                <h4>{{ __('messages.footer_contact') }}</h4>
                 <ul class="footer-contact-list">
                     <li>
                         <i class="fa-brands fa-whatsapp"></i>
@@ -61,7 +61,7 @@
                     <li>
                         <i class="fa-solid fa-headset"></i>
                         <a href="/customer-service">
-                            Live Customer Service
+                            Live {{ __('messages.customer_service') }}
                         </a>
                     </li>
                 </ul>
@@ -72,7 +72,7 @@
 
         <!-- Bottom Copyright -->
         <div class="footer-bottom">
-            <p>&copy; {{ date('Y') }} TEFA SMKN 4 Tanjungpinang. All rights reserved.</p>
+            <p>&copy; {{ date('Y') }} TEFA SMKN 4 Tanjungpinang. {{ __('messages.footer_copyright') }}</p>
         </div>
     </div>
 </footer>

@@ -3,15 +3,15 @@
 @section('content')
 <div class="portfolio-wrapper">
     <div class="portfolio-header">
-        <h1>PORTOFOLIO TEFA</h1>
-        <p>Karya dan proyek unggulan karya siswa-siswi SMKN 4 Tanjungpinang dari berbagai program keahlian.</p>
+        <h1>{{ __('messages.portfolio_header_title') }}</h1>
+        <p>{{ __('messages.portfolio_header_desc') }}</p>
     </div>
 
     <!-- Filter Tabs dengan Logo Jurusan -->
     <div class="filter-tabs">
         <a href="{{ url('/portofolio') }}" class="filter-tab tab-all {{ $kategoriAktif == 'all' ? 'active' : '' }}">
             <i class="fa-solid fa-shapes"></i>
-            <span>Semua</span>
+            <span>{{ __('messages.portfolio_filter_all') }}</span>
         </a>
 
         @foreach($daftarJurusan as $jurusan)
@@ -79,7 +79,7 @@
     @else
         <div class="empty-state">
             <i class="fa-regular fa-folder-open"></i>
-            <p>Belum ada portofolio untuk kategori ini.</p>
+            <p>{{ __('messages.portfolio_empty') }}</p>
         </div>
     @endif
 </div>

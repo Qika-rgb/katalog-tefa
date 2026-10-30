@@ -19,7 +19,7 @@
     </div>
 
     <!-- JUDUL KATALOG -->
-    <h2 class="katalog-section-title">CATALOG SEMUA PRODUK</h2>
+    <h2 class="katalog-section-title">{{ __('messages.catalog_all_title') }}</h2>
 
     <!-- GRID PRODUK DARI DATABASE -->
     <div class="product-grid">
@@ -48,7 +48,7 @@
                             <img src="{{ $mediaUrl }}" alt="{{ $item->nama_produk ?? '' }}" style="width: 100%; height: 200px; object-fit: contain;">
                         @endif
 
-                        <a href="/pemesanan/{{ $item->id }}" class="btn-order">ORDER NOW</a>
+                        <a href="/pemesanan/{{ $item->id }}" class="btn-order">{{ __('messages.order_now') }}</a>
                     </div>
 
                     <!-- Info Teks -->
@@ -71,7 +71,7 @@
                 </div>
             @endforeach
         @else
-            <p style="grid-column: 1 / -1; text-align: center; color: #6b7280; padding: 30px;">Belum ada produk yang tersedia.</p>
+            <p style="grid-column: 1 / -1; text-align: center; color: #6b7280; padding: 30px;">{{ __('messages.no_products') }}</p>
         @endif
     </div>
 
@@ -87,7 +87,7 @@
 <!-- SCRIPT SLIDER BANNER -->
 <script>
     const bannerSemua = {
-        title: "SELAMAT DATANG DI<br>KATALOG KAMI",
+        title: "{!! __('messages.welcome_banner_title') !!}",
         bg: "linear-gradient(to right, #60EFFF, #0061FF)",
         img: "{{ asset('images/icon_welcome.png') }}",
         bottom: "0px",
@@ -141,7 +141,7 @@
             bannerImg.style.bottom = bannerSemua.bottom || '0px';
             bannerImg.style.height = bannerSemua.height || '200px';
         }
-        if (katalogTitle) katalogTitle.textContent = "CATALOG SEMUA PRODUK";
+        if (katalogTitle) katalogTitle.textContent = "{{ __('messages.catalog_all_title') }}";
     } else {
         isSemuaJurusan = false;
         currentIndex = parseInt(kategoriParam);
@@ -162,7 +162,7 @@
         }
         if (katalogTitle) {
             const namaJurusan = banners[currentIndex].title.replace('WELCOME TO TEFA ', '');
-            katalogTitle.textContent = "CATALOG " + namaJurusan;
+            katalogTitle.textContent = "{{ __('messages.catalog_title_prefix') }}" + namaJurusan;
         }
     }
 

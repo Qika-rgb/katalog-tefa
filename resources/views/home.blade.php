@@ -6,12 +6,12 @@
     <!-- 1. DKV -->
     <div class="row">
         <div class="text-content">
-            <h2>TEFA<br>DESAIN KOMUNIKASI VISUAL</h2>
-            <p>Membangun fondasi digital yang tangguh, aman, dan terintegrasi. Dari perakitan perangkat keras, manajemen jaringan komputer, hingga konfigurasi server, kami siap menghadirkan solusi infrastruktur IT yang handal dan berstandar industri.</p>
+            <h2>TEFA<br>{{ __('messages.dkv') }}</h2>
+            <p>{{ __('messages.home_dkv_desc') }}</p>
 
             <!-- DKV (Kategori ID: 4) -->
             <a href="{{ url('/portofolio?kategori=4') }}" class="btn-dark">
-                LIHAT PORTOFOLIO
+                {{ __('messages.see_portfolio') }}
             </a>
         </div>
 
@@ -24,12 +24,12 @@
     <!-- 2. GAME / GIM -->
     <div class="row reverse">
         <div class="text-content">
-            <h2>TEFA<br>PENGEMBANGAN GIM</h2>
-            <p>Membangun fondasi digital yang tangguh, aman, dan terintegrasi. Dari perakitan perangkat keras, manajemen jaringan komputer, hingga konfigurasi server, kami siap menghadirkan solusi infrastruktur IT yang handal dan berstandar industri.</p>
+            <h2>TEFA<br>{{ __('messages.gim') }}</h2>
+            <p>{{ __('messages.home_gim_desc') }}</p>
 
             <!-- GIM (Kategori ID: 5) -->
             <a href="{{ url('/portofolio?kategori=5') }}" class="btn-dark">
-                LIHAT PORTOFOLIO
+                {{ __('messages.see_portfolio') }}
             </a>
         </div>
 
@@ -42,12 +42,12 @@
     <!-- 3. TKJ -->
     <div class="row">
         <div class="text-content">
-            <h2>TEFA<br>TEKNIK KOMPUTER JARINGAN</h2>
-            <p>Membangun fondasi digital yang tangguh, aman, dan terintegrasi. Dari perakitan perangkat keras, manajemen jaringan komputer, hingga konfigurasi server, kami siap menghadirkan solusi infrastruktur IT yang handal dan berstandar industri.</p>
+            <h2>TEFA<br>{{ __('messages.tkj') }}</h2>
+            <p>{{ __('messages.home_tkj_desc') }}</p>
 
             <!-- TKJ (Kategori ID: 2) -->
             <a href="{{ url('/portofolio?kategori=2') }}" class="btn-dark">
-                LIHAT PORTOFOLIO
+                {{ __('messages.see_portfolio') }}
             </a>
         </div>
 
@@ -60,12 +60,12 @@
     <!-- 4. RPL -->
     <div class="row reverse">
         <div class="text-content">
-            <h2>TEFA<br>REKAYASA PERANGKAT LUNAK</h2>
-            <p>Menerjemahkan ide dan logika menjadi solusi digital yang fungsional, efisien, dan andal. Dari perancangan sistem, pengembangan aplikasi web dan seluler, hingga manajemen basis data, kami siap menghadirkan produk perangkat lunak berstandar industri.</p>
+            <h2>TEFA<br>{{ __('messages.rpl') }}</h2>
+            <p>{{ __('messages.home_rpl_desc') }}</p>
 
             <!-- RPL (Kategori ID: 0) -->
             <a href="{{ url('/portofolio?kategori=0') }}" class="btn-dark">
-                LIHAT PORTOFOLIO
+                {{ __('messages.see_portfolio') }}
             </a>
         </div>
 
@@ -78,12 +78,12 @@
     <!-- 5. PSPT -->
     <div class="row">
         <div class="text-content">
-            <h2>TEFA<br>PRODUK SIARAN PROGRAM TELEVISI</h2>
-            <p>Menghidupkan cerita di layar kaca melalui produksi audio-visual yang kreatif, dinamis, dan berkualitas tinggi. Dari tahap pra-produksi, produksi di studio maupun lapangan, hingga pasca-produksi, kami siap menghadirkan tayangan visual yang bernyawa dan berstandar industri.</p>
+            <h2>TEFA<br>{{ __('messages.pspt') }}</h2>
+            <p>{{ __('messages.home_pspt_desc') }}</p>
 
             <!-- PSPT (Kategori ID: 3) -->
             <a href="{{ url('/portofolio?kategori=3') }}" class="btn-dark">
-                LIHAT PORTOFOLIO
+                {{ __('messages.see_portfolio') }}
             </a>
         </div>
 
@@ -96,12 +96,12 @@
     <!-- 6. ANIMASI -->
     <div class="row reverse">
         <div class="text-content">
-            <h2>TEFA<br>ANIMASI</h2>
-            <p>Menghidupkan karakter dan imajinasi melalui gerakan visual yang dinamis dan ekspresif. Dari pembuatan konsep, pemodelan objek, hingga teknik animasi 2D dan 3D, kami siap menghadirkan cerita interaktif yang memukau dan berstandar industri.</p>
+            <h2>TEFA<br>{{ __('messages.animasi') }}</h2>
+            <p>{{ __('messages.home_animasi_desc') }}</p>
 
             <!-- ANIMASI (Kategori ID: 1) -->
             <a href="{{ url('/portofolio?kategori=1') }}" class="btn-dark">
-                LIHAT PORTOFOLIO
+                {{ __('messages.see_portfolio') }}
             </a>
         </div>
 
