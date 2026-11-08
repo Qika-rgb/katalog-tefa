@@ -5,17 +5,21 @@
 
     <!-- BAGIAN BANNER -->
     <div class="banner-container">
-        <i class="fa-solid fa-chevron-left banner-arrow" id="prevBanner"></i>
+        <button type="button" class="banner-arrow" id="prevBanner" aria-label="Kategori Sebelumnya">
+            <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+        </button>
         
         <div class="banner-content" id="bannerBg">
             <div class="banner-text" id="bannerTextContainer">
                 <h1 id="bannerTitle">WELCOME TO TEFA REKAYASA PERANGKAT LUNAK</h1>
             </div>
             
-            <img src="{{ asset('images/icon_rpl.png') }}" alt="Banner Icon" class="banner-img" id="bannerImg">
+            <img src="{{ asset('images/icon_rpl.png') }}" alt="Banner Icon" class="banner-img" id="bannerImg" width="270" height="200" fetchpriority="high">
         </div>
 
-        <i class="fa-solid fa-chevron-right banner-arrow" id="nextBanner"></i>
+        <button type="button" class="banner-arrow" id="nextBanner" aria-label="Kategori Selanjutnya">
+            <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+        </button>
     </div>
 
     <!-- JUDUL KATALOG -->
@@ -40,12 +44,12 @@
                     <!-- Kotak Media -->
                     <div class="product-img-wrapper" style="position: relative; background-color: #ffffff; height: 200px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 5px;">
                         @if(in_array($extension, ['mp4', 'webm', 'ogg', 'mov']))
-                            <video width="100%" height="100%" autoplay loop muted playsinline style="object-fit: cover; width: 100%; height: 100%;">
+                            <video width="100%" height="100%" autoplay loop muted playsinline preload="metadata" style="object-fit: cover; width: 100%; height: 100%;">
                                 <source src="{{ $mediaUrl }}" type="video/mp4">
                                 Browser Anda tidak mendukung pemutaran video.
                             </video>
                         @else
-                            <img src="{{ $mediaUrl }}" alt="{{ $item->nama_produk ?? '' }}" style="width: 100%; height: 200px; object-fit: contain;">
+                            <img src="{{ $mediaUrl }}" alt="{{ $item->nama_produk ?? 'Produk TEFA' }}" loading="lazy" decoding="async" width="280" height="200" style="width: 100%; height: 200px; object-fit: contain;">
                         @endif
 
                         <a href="/pemesanan/{{ $item->id }}" class="btn-order">{{ __('messages.order_now') }}</a>
@@ -191,5 +195,26 @@
             }
         }
     });
+
+    // Touch Swipe Gesture Support for Mobile Devices
+    let touchStartX = 0;
+    let touchEndX = 0;
+    if (bannerBg) {
+        bannerBg.addEventListener('touchstart', function(e) {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        bannerBg.addEventListener('touchend', function(e) {
+            touchEndX = e.changedTouches[0].screenX;
+            const diffX = touchEndX - touchStartX;
+            if (diffX < -50) {
+                // Swipe Left -> Next
+                btnNext.click();
+            } else if (diffX > 50) {
+                // Swipe Right -> Prev
+                btnPrev.click();
+            }
+        }, { passive: true });
+    }
 </script>
 @endsection

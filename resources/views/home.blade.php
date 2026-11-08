@@ -16,7 +16,7 @@
         </div>
 
         <div class="img-content">
-            <img src="{{ asset('images/tefa_dkv.png') }}" alt="Ilustrasi DKV">
+            <img src="{{ asset('images/tefa_dkv.png') }}" alt="Ilustrasi TEFA DKV" width="450" height="350" fetchpriority="high">
         </div>
     </div>
 
@@ -34,7 +34,7 @@
         </div>
 
         <div class="img-content">
-            <img src="{{ asset('images/tefa_gim.png') }}" alt="Ilustrasi Game">
+            <img src="{{ asset('images/tefa_gim.png') }}" alt="Ilustrasi TEFA Game" loading="lazy" decoding="async" width="450" height="350">
         </div>
     </div>
 
@@ -52,7 +52,7 @@
         </div>
 
         <div class="img-content">
-            <img src="{{ asset('images/tefa_tkj.png') }}" alt="Ilustrasi TKJ">
+            <img src="{{ asset('images/tefa_tkj.png') }}" alt="Ilustrasi TEFA TKJ" loading="lazy" decoding="async" width="450" height="350">
         </div>
     </div>
 
@@ -70,7 +70,7 @@
         </div>
 
         <div class="img-content">
-            <img src="{{ asset('images/tefa_rpl.png') }}" alt="Ilustrasi RPL">
+            <img src="{{ asset('images/tefa_rpl.png') }}" alt="Ilustrasi TEFA RPL" loading="lazy" decoding="async" width="450" height="350">
         </div>
     </div>
 
@@ -88,7 +88,7 @@
         </div>
 
         <div class="img-content">
-            <img src="{{ asset('images/tefa_pspt.png') }}" alt="Ilustrasi PSPT">
+            <img src="{{ asset('images/tefa_pspt.png') }}" alt="Ilustrasi TEFA PSPT" loading="lazy" decoding="async" width="450" height="350">
         </div>
     </div>
 
@@ -106,7 +106,7 @@
         </div>
 
         <div class="img-content">
-            <img src="{{ asset('images/tefa_animasi.png') }}" alt="Ilustrasi Animasi">
+            <img src="{{ asset('images/tefa_animasi.png') }}" alt="Ilustrasi TEFA Animasi" loading="lazy" decoding="async" width="450" height="350">
         </div>
     </div>
 

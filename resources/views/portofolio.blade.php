@@ -56,7 +56,7 @@
                     
                     <div class="portfolio-card">
                         <div class="card-thumb">
-                            <img src="{{ asset('storage/' . $item->gambar) }}" alt="{{ $item->judul }}">
+                            <img src="{{ asset('storage/' . $item->gambar) }}" alt="{{ $item->judul }}" loading="lazy" decoding="async" width="300" height="200" style="object-fit: cover; width: 100%; height: 100%;">
                             <span class="badge-jurusan {{ $info['badge'] }}">{{ $info['nama'] }}</span>
                         </div>
                         <div class="card-body">

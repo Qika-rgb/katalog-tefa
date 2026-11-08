@@ -1,9 +1,12 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Status Pesanan</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Status Pesanan - Katalog TEFA</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/logo_tefa.png') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
@@ -19,26 +22,26 @@
     <!-- HEADER -->
     <div class="pemesanan-header">
         <div class="pemesanan-title">
-            <a href="/katalog">
-                <i class="fa-solid fa-chevron-left"></i>
+            <a href="/katalog" class="icon-touch-btn" aria-label="Kembali ke Katalog">
+                <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
             </a>
             <span class="text-blue">STATUS</span>
         </div>
 
-        <div class="nav-icons" style="align-items: center; display: flex; gap: 16px;">
-            <div class="lang-switcher">
+        <div class="nav-icons" style="align-items: center; display: flex; gap: 8px;">
+            <div class="lang-switcher" aria-label="Language Selector">
                 <a href="{{ route('lang.switch', 'id') }}" class="lang-btn {{ app()->getLocale() == 'id' ? 'active' : '' }}" title="Bahasa Indonesia">ID</a>
                 <span class="lang-divider">|</span>
                 <a href="{{ route('lang.switch', 'en') }}" class="lang-btn {{ app()->getLocale() == 'en' ? 'active' : '' }}" title="English">EN</a>
             </div>
-            <a href="/keranjang" style="color: inherit; text-decoration: none;">
-                <i class="fa-solid fa-cart-shopping"></i>
+            <a href="/keranjang" class="icon-touch-btn" aria-label="{{ __('messages.cart') }}" title="{{ __('messages.cart') }}">
+                <i class="fa-solid fa-cart-shopping" aria-hidden="true"></i>
             </a>
-            <a href="/register" style="color: inherit; text-decoration: none;">
-                <i class="fa-regular fa-user"></i>
+            <a href="/register" class="icon-touch-btn" aria-label="{{ __('messages.login_register') }}" title="{{ __('messages.login_register') }}">
+                <i class="fa-regular fa-user" aria-hidden="true"></i>
             </a>
-            <a href="/customer-service" style="color: inherit; text-decoration: none;">
-                    <i class="fa-solid fa-headset"></i>
+            <a href="/customer-service" class="icon-touch-btn" aria-label="{{ __('messages.customer_service') }}" title="{{ __('messages.customer_service') }}">
+                <i class="fa-solid fa-headset" aria-hidden="true"></i>
             </a>
         </div>
     </div>
