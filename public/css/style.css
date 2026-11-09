@@ -287,12 +287,18 @@ HALAMAN KATALOG
     display: flex;
     align-items: center;
     color: white;
-    height: 120px;
+    height: 200px;
     
     /* DUA BARIS INI KUNCI AGAR GAMBAR TERPOTONG RAPI */
     position: relative; 
     overflow: hidden; 
 }
+
+.banner-text {
+    position: relative;
+    z-index: 15; /* Memastikan teks berada di depan gambar icon (z-index: 10) */
+}
+
 .banner-text h1 {
     font-size: 26px;
     font-weight: 800;
@@ -3923,11 +3929,6 @@ body.bg-light {
     .banner-content {
         padding: 20px;
         height: auto;
-        text-align: center;
-    }
-
-    .banner-img {
-        display: none;
     }
 
     .banner-arrow {
@@ -5156,28 +5157,6 @@ body.bg-light {
     box-sizing: border-box !important;
 }
 
-/* 5. Banner Navigation Arrow Button Semantics */
-button.banner-arrow {
-    background: rgba(255, 255, 255, 0.85);
-    border: none;
-    border-radius: 50%;
-    width: 44px;
-    height: 44px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    transition: background-color 0.2s, transform 0.15s;
-    color: #1e293b;
-    font-size: 18px;
-}
-
-button.banner-arrow:hover {
-    background: #ffffff;
-    transform: scale(1.08);
-}
-
 /* ==========================================================================
    MEDIA QUERY KHUSUS LAYAR HP / MOBILE (Max-width: 768px)
    ========================================================================== */
@@ -5192,7 +5171,7 @@ button.banner-arrow:hover {
     }
 
     .nav-left {
-        gap: 8px !important;
+        gap: 6px !important;
     }
 
     /* Munculkan Tombol Hamburger di HP (Persis Foto 1) */
@@ -5203,6 +5182,7 @@ button.banner-arrow:hover {
     .site-logo {
         height: 34px !important;
         max-width: 110px !important;
+        margin-left: -16px !important;
     }
 
     /* Sembunyikan Menu Teks Desktop di HP */
@@ -5307,25 +5287,68 @@ button.banner-arrow:hover {
     }
 
     .banner-content {
-        padding: 24px 18px !important;
-        min-height: 180px;
-        border-radius: 14px;
+        padding: 20px 16px !important;
+        height: 170px !important;
+        min-height: 170px !important;
+        border-radius: 16px !important;
+        position: relative !important;
+        overflow: hidden !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: flex-start !important;
+        text-align: left !important;
         touch-action: pan-y;
         user-select: none;
         width: 100% !important;
         box-sizing: border-box !important;
     }
 
-    #bannerTitle {
-        font-size: 20px !important;
-        line-height: 1.3 !important;
-        text-align: center !important;
-    }
-
     #bannerTextContainer {
         margin: 0 !important;
-        text-align: center !important;
-        width: 100% !important;
+        text-align: left !important;
+        width: 58% !important;
+        max-width: 58% !important;
+        position: relative !important;
+        z-index: 15 !important;
+    }
+
+    #bannerTitle {
+        font-size: 17px !important;
+        line-height: 1.25 !important;
+        text-align: left !important;
+        margin: 0 !important;
+        word-break: break-word !important;
+        text-shadow: 0 1px 4px rgba(0, 0, 0, 0.25) !important;
+    }
+
+    .banner-img {
+        display: block !important;
+        position: absolute !important;
+        right: -5px !important;
+        bottom: 0 !important;
+        height: 165px !important;
+        max-height: 168px !important;
+        max-width: 50% !important;
+        object-fit: contain !important;
+        object-position: bottom right !important;
+        z-index: 10 !important;
+    }
+
+    @media (max-width: 380px) {
+        #bannerTextContainer {
+            width: 55% !important;
+            max-width: 55% !important;
+        }
+
+        #bannerTitle {
+            font-size: 14.5px !important;
+        }
+
+        .banner-img {
+            height: 145px !important;
+            max-height: 145px !important;
+            max-width: 48% !important;
+        }
     }
 
     /* Portofolio Detail Mobile */

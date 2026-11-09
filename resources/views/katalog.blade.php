@@ -5,21 +5,17 @@
 
     <!-- BAGIAN BANNER -->
     <div class="banner-container">
-        <button type="button" class="banner-arrow" id="prevBanner" aria-label="Kategori Sebelumnya">
-            <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
-        </button>
+        <i class="fa-solid fa-chevron-left banner-arrow" id="prevBanner"></i>
         
         <div class="banner-content" id="bannerBg">
             <div class="banner-text" id="bannerTextContainer">
                 <h1 id="bannerTitle">WELCOME TO TEFA REKAYASA PERANGKAT LUNAK</h1>
             </div>
             
-            <img src="{{ asset('images/icon_rpl.png') }}" alt="Banner Icon" class="banner-img" id="bannerImg" width="270" height="200" fetchpriority="high">
+            <img src="{{ asset('images/icon_rpl.png') }}" alt="Banner Icon" class="banner-img" id="bannerImg">
         </div>
 
-        <button type="button" class="banner-arrow" id="nextBanner" aria-label="Kategori Selanjutnya">
-            <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
-        </button>
+        <i class="fa-solid fa-chevron-right banner-arrow" id="nextBanner"></i>
     </div>
 
     <!-- JUDUL KATALOG -->
@@ -101,12 +97,13 @@
 
     const banners = [
         { 
-                title: "WELCOME TO TEFA REKAYASA PERANGKAT LUNAK", 
-                bg: "linear-gradient(to right, #FD1B00, #FC5200, #F68C25, #FDC02A)", 
-                img: "{{ asset('images/icon_rpl.png') }}",
-                bottom: "0px", // <-- Atur ketinggian khusus icon RPL di sini
-                height: "270px"
-            },
+            title: "WELCOME TO TEFA REKAYASA PERANGKAT LUNAK", 
+            bg: "linear-gradient(to right, #FD1B00, #FC5200, #F68C25, #FDC02A)", 
+            img: "{{ asset('images/icon_rpl.png') }}",
+            bottom: "0px",
+            right: "20px",
+            height: "210px"
+        },
             { title: "WELCOME TO TEFA ANIMASI", bg: "linear-gradient(to right, #38bdf8, #08405c)", img: "{{ asset('images/icon_animasi.png') }}" },
             { title: "WELCOME TO TEFA TEKNIK KOMPUTER DAN JARINGAN", bg: "linear-gradient(to right, #10B981, #052E16)", img: "{{ asset('images/icon_tkj.png') }}" },
             { title: "WELCOME TO TEFA PRODUKSI SIARAN DAN PROGRAM TELEVISI", bg: "linear-gradient(to right, #eac793, #F3C623, #FFB22C, #FA812F)", img: "{{ asset('images/icon_pspt.png') }}" },
