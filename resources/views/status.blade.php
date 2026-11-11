@@ -73,7 +73,7 @@
                                <h5>TEFA {{ strtoupper($produk->kategori->nama_kategori ?? 'JURUSAN') }}</h5>
                                 <p>Jumlah: <strong>{{ $detail->jumlah }}</strong></p>
                                 <p>Harga: <strong>RP {{ number_format($detail->harga ?? 0, 0, ',', '.') }}</strong></p>
-                                <a href="/status/detail?pesanan_id={{ $pesanan->id }}" class="btn-lihat-detail">
+                                <a href="{{ route('pesanan.detail', ['pesanan_id' => $pesanan->id]) }}" class="btn-lihat-detail">
                                     LIHAT LEBIH DETAIL TENTANG PESANANMU
                                 </a>
                             </div>
@@ -106,7 +106,7 @@
                             <h4>{{ $produk->nama_produk ?? 'Produk DKV' }}</h4>
                             <h5>TEFA {{ strtoupper($produk->kategori->nama_kategori ?? 'JURUSAN') }}</h5>
                             <p>Jumlah: <strong>{{ $pesanan->jumlah }}</strong></p>
-                            <a href="/status/detail?pesanan_id={{ $pesanan->id }}" class="btn-lihat-detail">
+                            <a href="{{ route('pesanan.detail', ['pesanan_id' => $pesanan->id]) }}" class="btn-lihat-detail">
                                 LIHAT LEBIH DETAIL TENTANG PESANANMU
                             </a>
                         </div>

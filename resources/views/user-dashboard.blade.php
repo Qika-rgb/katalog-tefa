@@ -191,7 +191,7 @@
                         <span class="status-pill {{ $badgeClass }}">
                             <i class="fa-solid fa-circle-dot"></i> {{ strtoupper($status) }}
                         </span>
-                        <a href="/status/detail?pesanan_id={{ $pesanan->id }}" class="btn-order-detail">
+                        <a href="{{ route('pesanan.detail', ['pesanan_id' => $pesanan->id]) }}" class="btn-order-detail">
                             Lihat Detail
                         </a>
                     </div>

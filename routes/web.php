@@ -55,11 +55,18 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/status', [PesananController::class, 'status'])->name('pesanan.status');
     Route::post('/pesanan/store', [PesananController::class, 'store'])->name('pesanan.store');
-});
 
-Route::get('/status/detail', function (Illuminate\Http\Request $request) {
-    $pesanan = Pesanan::with('produk')->findOrFail($request->pesanan_id);
-    return view('status-detail', compact('pesanan'));
+    Route::get('/status/detail', function (Illuminate\Http\Request $request) {
+        $user = auth()->user();
+        $pesanan = Pesanan::with('produk')->findOrFail($request->pesanan_id);
+
+        // Jika bukan admin (pusat / jurusan), pastikan pesanan ini miliknya
+        if (!in_array($user->role, ['admin_pusat', 'admin_jurusan']) && $pesanan->user_id !== $user->id) {
+            abort(403, 'Anda tidak memiliki akses untuk melihat pesanan ini.');
+        }
+
+        return view('status-detail', compact('pesanan'));
+    })->name('pesanan.detail');
 });
 
 // =========================
