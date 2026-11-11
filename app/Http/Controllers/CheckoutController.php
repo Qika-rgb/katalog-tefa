@@ -66,6 +66,7 @@ class CheckoutController extends Controller
                 'no_telepon'   => $request->no_hp,
                 'alamat'       => $request->alamat,
                 'jumlah'       => $qty,
+                'total_harga'  => $produk->harga * $qty,
                 'status'       => 'Pending',
             ]);
 
@@ -88,6 +89,7 @@ class CheckoutController extends Controller
                 'no_telepon'   => $request->no_hp,
                 'alamat'       => $request->alamat,
                 'jumlah'       => $item->jumlah,
+                'total_harga'  => $item->produk->harga * $item->jumlah,
                 'status'       => 'Pending',
             ]);
         }
