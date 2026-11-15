@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\produk;
+use App\Models\Produk;
 use Illuminate\Http\Request;
 
 class KatalogController extends Controller
