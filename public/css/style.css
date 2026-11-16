@@ -5442,4 +5442,28 @@ body.bg-light {
         padding: 0 14px !important;
         box-sizing: border-box !important;
     }
+
+    /* Katalog Wrapper Mobile — padding kanan-kiri simetris */
+    .katalog-wrapper {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 20px 0 !important;
+        padding: 0 14px !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Product Grid Mobile — 2 kolom, tidak overflow */
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 12px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Judul Katalog Mobile */
+    .katalog-wrapper > h2,
+    .katalog-wrapper > .katalog-title {
+        font-size: 18px !important;
+        margin-bottom: 14px !important;
+    }
 }
