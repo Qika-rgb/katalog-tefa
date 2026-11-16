@@ -2355,6 +2355,8 @@ body.bg-light {
     padding: 20px 25px;
     border-top: 2px solid #000;
     background: #fff;
+    width: 100%;
+    box-sizing: border-box;
 }
 .add-btn {
     background: none; border: none;
@@ -5465,5 +5467,28 @@ body.bg-light {
     .katalog-wrapper > .katalog-title {
         font-size: 18px !important;
         margin-bottom: 14px !important;
+    }
+
+    /* Customer Service Chat Footer Mobile */
+    .user-cs-footer {
+        padding: 12px 14px !important;
+        gap: 10px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    .user-cs-footer input {
+        font-size: 13px !important;
+        padding: 10px 14px !important;
+    }
+
+    .send-btn {
+        font-size: 20px !important;
+        flex-shrink: 0 !important;
+    }
+
+    .add-btn {
+        font-size: 24px !important;
+        flex-shrink: 0 !important;
     }
 }
