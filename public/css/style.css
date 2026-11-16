@@ -5452,6 +5452,7 @@ body.bg-light {
         margin: 20px 0 !important;
         padding: 0 14px !important;
         box-sizing: border-box !important;
+        overflow-x: hidden !important;
     }
 
     /* Product Grid Mobile — 2 kolom, tidak overflow */
@@ -5490,5 +5491,35 @@ body.bg-light {
     .add-btn {
         font-size: 24px !important;
         flex-shrink: 0 !important;
+    }
+
+    /* Product Card Mobile — cegah overflow di layar sempit */
+    .product-card {
+        width: 100% !important;
+        min-width: 0 !important;
+        box-sizing: border-box !important;
+        overflow: hidden !important;
+    }
+
+    .product-img-wrapper {
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    .btn-order {
+        font-size: 10px !important;
+        padding: 7px 10px !important;
+        white-space: nowrap !important;
+        max-width: 90% !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+    }
+
+    .product-info h3 {
+        font-size: 12px !important;
+    }
+
+    .product-info .price {
+        font-size: 13px !important;
     }
 }
